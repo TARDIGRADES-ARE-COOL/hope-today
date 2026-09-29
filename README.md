@@ -30,7 +30,7 @@ Web app (later)
       │
 Agent harness ── the loop, guardrails, budgets, tracing
       │
-      ├── Model adapter   → Claude API now, open models (Ollama / vLLM) later
+      ├── Model adapter   → OpenAI API now, open models (Ollama / vLLM) later
       ├── News MCP server → search_news, fetch_article
       ├── Deck MCP server → render_deck
       └── Storage         → preferences, seen stories, cache
@@ -41,7 +41,7 @@ Agent harness ── the loop, guardrails, budgets, tracing
 | Decision | Choice | Why |
 |---|---|---|
 | Agent style | **Full agent**: one loop, the model decides the steps | Keeps orchestration simple, so the focus stays on MCP tool design and the harness |
-| Model | **Claude API first**, open-source later | Build on a stable model; swap behind an adapter once evals exist |
+| Model | **OpenAI API first** (`gpt-4o-mini`), open-source later | Build on a stable model; swap behind an adapter once evals exist |
 | Model interface | Single `chat(messages, tools)` adapter | Changing models touches one file |
 | Tools | Exposed via **MCP servers** | Tools are reusable by any MCP client (this harness, Claude Desktop, etc.) |
 | Sources | The Guardian Open Platform + RSS (free) | Full article text, no cost; paid APIs only if coverage is thin |
@@ -116,7 +116,7 @@ hope-today/
 ├── templates/
 │   └── deck.html       # slide template
 ├── evals/
-├── .env.example        # ANTHROPIC_API_KEY, GUARDIAN_API_KEY
+├── .env.example        # OPENAI_API_KEY, GUARDIAN_API_KEY
 └── README.md
 ```
 
@@ -124,7 +124,7 @@ hope-today/
 
 ## Stack
 
-Python 3.11+ · `anthropic` SDK · official `mcp` Python SDK · `requests` / `feedparser` · `pydantic` · Jinja2 · later FastAPI, Docker, Ollama
+Python 3.11+ · `openai` SDK · official `mcp` Python SDK · `requests` / `feedparser` · `pydantic` · Jinja2 · later FastAPI, Docker, Ollama
 
 ---
 
