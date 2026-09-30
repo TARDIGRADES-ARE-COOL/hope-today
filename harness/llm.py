@@ -13,14 +13,17 @@ client = OpenAI()
 
 
 def chat(messages, tools=None):
-    response = client.chat.completions.create(
-        model=MODEL,
-        max_tokens=1024,
-        messages=[{"role": "system", "content": SYSTEM_PROMPT}] + messages,
-    )
+    kwargs = {
+        "model": MODEL,
+        "max_tokens": 1024,
+        "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + messages,
+    }
+    # Only send tools when we have some; OpenAI rejects tools=None.
+    if tools:
+        kwargs["tools"] = tools
+
+    response = client.chat.completions.create(**kwargs)
     return response.choices[0].message
-
-
 
 
 if __name__ == "__main__":
