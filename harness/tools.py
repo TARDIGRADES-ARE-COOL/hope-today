@@ -1,34 +1,57 @@
-def search_news(query, since=None):
-    """
-    Search for news articles related to the given query.
+import os
+from datetime import date, timedelta
 
-    Fake for now: returns hardcoded stories so we can learn tool calling
-    without a real news API. Phase 2 replaces this with the Guardian.
+import requests
+from dotenv import load_dotenv
 
-    Args:
-        query (str): The search query.
-        since (str, optional): Only return stories after this date (ignored for now).
+load_dotenv()
+GUARDIAN_KEY = os.environ["GUARDIAN_API_KEY"]
 
-    Returns:
-        list: A list of news articles related to the query.
-    """
-    return [
-        {
-            "title": f"Big breakthrough in {query} surprises scientists",
-            "url": "https://example.com/breakthrough",
-            "snippet": f"Researchers say the new {query} discovery could help millions.",
-        },
-        {
-            "title": "Scientists teach octopus to play chess",
-            "url": "https://example.com/octopus-chess",
-            "snippet": "The octopus, named Gerald, won 3 of 5 games against a grad student.",
-        },
-        {
-            "title": "Village plants one million trees in a single weekend",
-            "url": "https://example.com/million-trees",
-            "snippet": "Volunteers aged 6 to 92 took part in the record-breaking effort.",
-        },
-    ]
+
+def find_topics(query):
+    params = {
+        "q": query,
+        "type": "keyword",
+        "api-key": GUARDIAN_KEY,
+    }
+
+    response = requests.get("https://content.guardianapis.com/tags", params=params)
+    results = response.json()["response"]["results"]
+
+    # Keep only what the model needs to pick a tag; every extra field costs tokens.
+    topics = []
+    for item in results:
+        topics.append({"id": item["id"], "title": item["webTitle"]})
+    return topics
+
+
+def search_news(tag, since=None):
+    """Recent Guardian articles for a tag id from find_topics."""
+    if since is None:
+        since = (date.today() - timedelta(days=7)).isoformat()   # default: last week
+
+    params = {
+        "tag": tag,
+        "type": "article",
+        "order-by": "newest",
+        "from-date": since,
+        "show-fields": "trailText",
+        "api-key": GUARDIAN_KEY,
+    }
+
+    response = requests.get("https://content.guardianapis.com/search", params=params)
+    results = response.json()["response"]["results"]
+
+    # Same idea as find_topics: only what the model needs to judge and present a story.
+    stories = []
+    for item in results:
+        stories.append({
+            "title": item["webTitle"],
+            "url": item["webUrl"],
+            "snippet": item["fields"]["trailText"],
+            "date": item["webPublicationDate"][:10],
+        })
+    return stories
 
 
 # The model never sees the Python function above. It only sees this
@@ -37,35 +60,49 @@ TOOL_SCHEMAS = [
     {
         "type": "function",
         "function": {
-            "name": "search_news",
-            "description": "Search today's news for stories about a topic.",
+            "name": "find_topics",
+            "description": (
+                "Find Guardian topic tags for a subject. Returns tag ids and titles. "
+                "Call this first, then pick the tag that best matches what the user means."
+            ),
             "parameters": {
                 "type": "object",
                 "properties": {
                     "query": {
                         "type": "string",
-                        "description": "The topic to search for, e.g. 'space exploration'.",
-                    },
-                    "since": {
-                        "type": "string",
-                        "description": "Optional ISO date (YYYY-MM-DD); only return stories after it.",
+                        "description": "A short subject, e.g. 'ocean' or 'climate'.",
                     },
                 },
                 "required": ["query"],
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_news",
+            "description": "Get recent news articles for a Guardian tag.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "tag": {
+                        "type": "string",
+                        "description": "A tag id from find_topics, e.g. 'environment/oceans'.",
+                    },
+                    "since": {
+                        "type": "string",
+                        "description": "Optional ISO date (YYYY-MM-DD); only return stories after it.",
+                    },
+                },
+                "required": ["tag"],
+            },
+        },
+    },
 ]
 
 # Maps the name the model asks for to the Python function that runs it.
-TOOLS = {"search_news": search_news}
+TOOLS = {"find_topics": find_topics, "search_news": search_news}
 
 
 if __name__ == "__main__":
-    from llm import chat
-
-    print(search_news("space"))
-    print()
-
-    reply = chat([{"role": "user", "content": "any good space news?"}], TOOL_SCHEMAS)
-    print(reply.tool_calls)
+    print(find_topics("ocean"))

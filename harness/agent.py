@@ -2,7 +2,7 @@ import json
 from llm import chat
 from tools import TOOL_SCHEMAS, TOOLS
 
-messages = [{"role": "user", "content": "any good space news?"}]
+messages = [{"role": "user", "content": "any good ocean news?"}]
 
 while True:
     print(len(messages))                     # history grows each pass
