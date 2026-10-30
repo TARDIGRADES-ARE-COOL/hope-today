@@ -5,6 +5,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hope Today · {{ title }}</title>
+  {#- Link previews (WhatsApp, iMessage, Discord...). Never mentions the answer. -#}
+  {% if site_url %}
+  <meta name="description" content="{{ preview_text }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hope Today">
+  <meta property="og:title" content="{{ preview_title }}">
+  <meta property="og:description" content="{{ preview_text }}">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:image" content="{{ site_url }}og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Hope Today: a pixel-art sunrise behind a paper card">
+  <meta name="twitter:card" content="summary_large_image">
+  {% endif %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">

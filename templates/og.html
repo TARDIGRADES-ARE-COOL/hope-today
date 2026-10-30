@@ -1,0 +1,30 @@
+<!doctype html>
+{#- The link-preview image (1200x630). Rendered once to assets/og.png; see harness/og_image.py. -#}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@800&family=Literata:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --backdrop-dim: 1; }
+    /* Background on html only: a body background would be painted over the dawn behind it. */
+    html { background: #2c3620; }
+    html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+    body { display: grid; place-items: center; font-family: "Literata", Georgia, serif; color: #1c1c1c; }
+    .card { background: #e3e2da; width: 640px; padding: 40px 48px; display: grid; gap: 18px; }
+    h1 { margin: 0; font-family: "Rokkitt", sans-serif; font-weight: 800; text-transform: uppercase;
+         font-size: 104px; line-height: 0.9; letter-spacing: -0.01em; display: flex; justify-content: space-between; }
+    p { margin: 0; font-size: 30px; line-height: 1.35; }
+    .boxes { display: flex; gap: 8px; }
+    .boxes span { width: 52px; height: 52px; background: #b2bdc5; }
+    .boxes span:first-child { background: #2c3620; }
+  </style>
+</head>
+<body>
+  {% include "_dawn.html" %}
+  <div class="card">
+    <h1><span>Hope</span> <span>Today</span></h1>
+    <p>One word puzzle a day. Solve it to unlock today's good news.</p>
+    <div class="boxes"><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+</body>
+</html>

@@ -13,6 +13,9 @@ from deck import env
 ROOT = Path(__file__).resolve().parent.parent
 DAILY = ROOT / "daily"
 SITE = ROOT / "_site"
+SITE_URL = "https://tardigrades-are-cool.github.io/hope-today/"     # where GitHub Pages serves it
+PREVIEW_TITLE = "Hope Today: a daily good-news puzzle"
+PREVIEW_TEXT = "One word puzzle a day. Solve it to unlock today's good news."
 
 
 def render_day(day_dir, out_dir):
@@ -20,12 +23,15 @@ def render_day(day_dir, out_dir):
     d = json.loads((day_dir / "day.json").read_text(encoding="utf-8"))
     p = d["puzzle"]
     out_dir.mkdir(parents=True, exist_ok=True)
+    previews = dict(site_url=SITE_URL, preview_title=PREVIEW_TITLE, preview_text=PREVIEW_TEXT)
     (out_dir / "index.html").write_text(env.get_template("puzzle.html").render(
+        **previews, page_url=f"{SITE_URL}{day_dir.name}/",
         today=d["date"], puzzle=p, branch=None, branch_b64="",     # Branch out is switched off
         puzzle_id=hashlib.sha1((p["sentence"] or p.get("image", "")).encode()).hexdigest()[:8],
         answer_b64=base64.b64encode(d["answer"].encode()).decode(),
     ), encoding="utf-8")
     (out_dir / "deck.html").write_text(env.get_template("deck.html").render(
+        **previews, page_url=f"{SITE_URL}{day_dir.name}/deck.html",
         title=f"Good news: {d['topic']}", user_answer="", topic=d["topic"],
         stories=d["stories"], today=d["date"],
     ), encoding="utf-8")
@@ -38,6 +44,7 @@ def build():
     days = sorted(d for d in DAILY.glob("20??-??-??") if (d / "day.json").exists())
     for day in days:
         render_day(day, SITE / day.name)
+    shutil.copy(ROOT / "assets" / "og.png", SITE / "og.png")          # the link-preview picture
 
     # Home page: send players to the newest puzzle.
     target = f"{days[-1].name}/" if days else None
@@ -47,6 +54,17 @@ def build():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hope Today</title>
+  <meta name="description" content="{PREVIEW_TEXT}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hope Today">
+  <meta property="og:title" content="{PREVIEW_TITLE}">
+  <meta property="og:description" content="{PREVIEW_TEXT}">
+  <meta property="og:url" content="{SITE_URL}">
+  <meta property="og:image" content="{SITE_URL}og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Hope Today: a pixel-art sunrise behind a paper card">
+  <meta name="twitter:card" content="summary_large_image">
   {f'<meta http-equiv="refresh" content="0; url={target}">' if target else ''}
 </head>
 <body style="background:#2c3620;color:#e3e2da;font-family:Georgia,serif;padding:2rem">
