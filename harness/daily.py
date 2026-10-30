@@ -5,6 +5,8 @@ import sys
 from datetime import date, timedelta
 from pathlib import Path
 
+from wordfreq import zipf_frequency
+
 from clues import make_puzzle, theme_hint
 from deck import env, render_deck
 from llm import client
@@ -13,6 +15,9 @@ from tools import IMAGES, fetch_article, search_news
 DAILY = Path(__file__).resolve().parent.parent / "daily"
 HISTORY = DAILY / "history.json"
 TOPIC_COOLDOWN_DAYS = 30
+# How common an answer must be (Zipf scale: 'nature' 5.0, 'coral' 3.9, 'otter' 3.4,
+# 'kelp' 2.9, 'wildland' 2.4). Below this, most players would never guess it.
+MIN_COMMONNESS = 3.3
 
 # Runs once a day for everyone, so a stronger model than the agent's is cheap here.
 JUDGE_MODEL = "gpt-5.4-mini"
@@ -152,6 +157,8 @@ def answer_problems(answer, blocked):
         problems.append(f"answer '{answer}' must be one word of 4-9 letters")
     if word in blocked:
         problems.append(f"answer '{word}' was used in the last {TOPIC_COOLDOWN_DAYS} days")
+    if word.isalpha() and zipf_frequency(word.lower(), "en") < MIN_COMMONNESS:
+        problems.append(f"answer '{word}' is too rare for players to guess; use a more everyday word")
     return problems
 
 
