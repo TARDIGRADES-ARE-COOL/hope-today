@@ -204,22 +204,48 @@ def build_hints(kind, sentence, answer, highlight, day_number=0):
     return hints, {"answer": answer, "steps": steps}
 
 
+SOLVER_MODEL = "gpt-5.4-mini"     # a separate model plays the role of a player
+
+
+def solver_guesses(hint, length):
+    """A second model sees only the hint and the letter count, like a player would."""
+    response = client.chat.completions.create(
+        model=SOLVER_MODEL,
+        messages=[{"role": "user", "content": (
+            f"A word puzzle hint: \"{hint}\". The answer is one English word of {length} letters. "
+            "Give your 5 best guesses."
+        )}],
+        response_format={"type": "json_schema", "json_schema": {"name": "guesses", "strict": True, "schema": {
+            "type": "object", "properties": {"guesses": {"type": "array", "items": {"type": "string"}}},
+            "required": ["guesses"], "additionalProperties": False}}},
+    )
+    return [g.strip().upper() for g in json.loads(response.choices[0].message.content)["guesses"]]
+
+
 def theme_hint(answer, topic, sentence):
-    """Level 2: a playful nudge about the meaning. Code checks it never gives the answer away."""
+    """Level 2: a playful definition of the word. Two checks: it never contains the answer,
+    and a separate solver model can get the answer from it (so it isn't too vague)."""
+    tried = []
     for _ in range(3):
         response = client.chat.completions.create(
             model=CLUE_MODEL,
             messages=[{"role": "user", "content": (
-                f"A word puzzle's answer is {answer}; today's good news is about '{topic}'. The clue "
-                f"sentence is: \"{sentence}\". Write ONE playful hint, at most 14 words, that nudges "
-                "the player toward the meaning of the answer without saying it or any word containing "
-                "it. Warm and fun; you may start with one emoji."
+                f"Write a hint for the word {answer} ({len(answer)} letters). Describe what the WORD "
+                "itself means, clearly, like a friendly crossword definition, with a playful touch "
+                f"(e.g. for HEALTH: 'What doctors check on, and what you raise a glass to.'). At most "
+                "14 words; you may start with one emoji. Never say the word or any word containing it. "
+                "Describe the word, not today's news story."
+                + (f" These were too vague, do better: {tried}" if tried else "")
             )}],
         )
         text = response.choices[0].message.content.strip().strip('"')
-        if letters(answer) not in letters(text) and len(text.split()) <= 16:
+        if letters(answer) in letters(text) or len(text.split()) > 16:
+            continue
+        if answer in solver_guesses(text, len(answer)):
             return text
-    return "\U0001F305 Think about the happiest part of today's news."
+        tried.append(text)
+    return f"\U0001F305 Think about what today's good news is about: {html.escape(topic.lower())}." \
+        if letters(answer) not in letters(topic) else "\U0001F305 Think about the happiest part of today's news."
 
 
 CLUE_PROMPT = (
