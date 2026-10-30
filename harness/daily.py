@@ -191,6 +191,32 @@ def group_problems(group, keep, blocked):
     return problems
 
 
+FIT_MIN = 7      # how clearly a story must belong to its topic (0-10)
+
+
+def fit_scores(topic, stories):
+    """A separate check: how clearly each story belongs to the topic. The grouping step
+    once padded HEALTH with a Roman glass story to reach 3 stories."""
+    listing = "\n".join(f"{i}. {s['title']} | {s['snippet']}" for i, s in enumerate(stories))
+    response = client.chat.completions.create(
+        model=JUDGE_MODEL,
+        messages=[{"role": "user", "content": (
+            f"Today's puzzle topic is '{topic['topic']}' (answer: {topic['answer']}). For each story, "
+            "score 0-10 how clearly it is about this topic. A story that is only loosely or "
+            "creatively connected scores low.\n\n" + listing
+        )}],
+        response_format={"type": "json_schema", "json_schema": {"name": "fit", "strict": True, "schema": {
+            "type": "object",
+            "properties": {"scores": {"type": "array", "items": {
+                "type": "object",
+                "properties": {"id": {"type": "integer"}, "fit": {"type": "integer"}},
+                "required": ["id", "fit"], "additionalProperties": False}}},
+            "required": ["scores"], "additionalProperties": False}}},
+    )
+    scores = {s["id"]: s["fit"] for s in json.loads(response.choices[0].message.content)["scores"]}
+    return [scores.get(i, 0) for i in range(len(stories))]    # unscored counts as not fitting
+
+
 def pick_topics(keep, blocked):
     """Step 3-4: group the strong stories into topics; return the valid ones, best first."""
     listing = "\n".join(f"{i}. [{s['section']}] {s['title']} | {s['snippet']}" for i, s in enumerate(keep))
@@ -229,6 +255,20 @@ def pick_topics(keep, blocked):
                 ids = list(dict.fromkeys(group["story_ids"]))           # drop repeats, keep order
                 valid.append({**group, "answer": group["answer"].strip().upper(),
                               "stories": [keep[i] for i in ids]})
+        # Drop stories that don't clearly belong; a topic left with under 3 is not a day.
+        coherent = []
+        for t in valid:
+            fits = fit_scores(t, t["stories"])
+            kept = [s for s, f in zip(t["stories"], fits) if f >= FIT_MIN]
+            dropped = [s["title"][:50] for s, f in zip(t["stories"], fits) if f < FIT_MIN]
+            if dropped:
+                rejected.append(f"{t['topic']}: dropped off-topic {dropped}")
+            if len(kept) >= 3:
+                coherent.append({**t, "stories": kept})
+            else:
+                rejected.append(f"{t['topic']}: only {len(kept)} stories really fit")
+        valid = coherent
+
         if valid:
             # Rank in code, not by the model's order: the happiest set of stories wins.
             mean = lambda t, k: sum(s[k] for s in t["stories"]) / len(t["stories"])
