@@ -18,7 +18,12 @@ PREVIEW_TITLE = "Hope Today: a daily good-news puzzle"
 PREVIEW_TEXT = "One word puzzle a day. Solve it to unlock today's good news."
 
 
-def render_day(day_dir, out_dir):
+def puzzle_id(p):
+    """Same id the puzzle page uses to save progress (so the archive can show it)."""
+    return hashlib.sha1((p["sentence"] or p.get("image", "")).encode()).hexdigest()[:8]
+
+
+def render_day(day_dir, out_dir, is_latest=True):
     """Write index.html (the puzzle) and deck.html (the reward) for one day."""
     d = json.loads((day_dir / "day.json").read_text(encoding="utf-8"))
     p = d["puzzle"]
@@ -27,7 +32,7 @@ def render_day(day_dir, out_dir):
     (out_dir / "index.html").write_text(env.get_template("puzzle.html").render(
         **previews, page_url=f"{SITE_URL}{day_dir.name}/",
         today=d["date"], puzzle=p, branch=None, branch_b64="",     # Branch out is switched off
-        puzzle_id=hashlib.sha1((p["sentence"] or p.get("image", "")).encode()).hexdigest()[:8],
+        puzzle_id=puzzle_id(p), is_latest=is_latest,
         answer_b64=base64.b64encode(d["answer"].encode()).decode(),
     ), encoding="utf-8")
     (out_dir / "deck.html").write_text(env.get_template("deck.html").render(
@@ -43,7 +48,17 @@ def build():
     SITE.mkdir()
     days = sorted(d for d in DAILY.glob("20??-??-??") if (d / "day.json").exists())
     for day in days:
-        render_day(day, SITE / day.name)
+        render_day(day, SITE / day.name, is_latest=(day == days[-1]))
+
+    # Past puzzles: newest first, no topics or answers, each player's status from their browser.
+    listing = []
+    for day in reversed(days):
+        p = json.loads((day / "day.json").read_text(encoding="utf-8"))["puzzle"]
+        listing.append({"date": day.name, "length": p["length"], "puzzle_id": puzzle_id(p)})
+    (SITE / "archive").mkdir()
+    (SITE / "archive" / "index.html").write_text(env.get_template("archive.html").render(
+        days=listing, today=days[-1].name if days else "",
+        site_url=SITE_URL, preview_text=PREVIEW_TEXT), encoding="utf-8")
     shutil.copy(ROOT / "assets" / "og.png", SITE / "og.png")          # the link-preview picture
 
     # Home page: send players to the newest puzzle.

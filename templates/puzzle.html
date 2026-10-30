@@ -153,7 +153,8 @@
     .button:active { transform: translateY(1px) scale(0.98); }
     .give-up { border: 0; background: none; padding: 8px 0; text-decoration: underline; margin-left: auto; }
     .feedback { min-height: 1.6em; font-weight: 600; }
-    .done .feedback, .done .hints { display: none; }   /* finished: the result explains it all */
+    .more { margin: 0; font-size: var(--step-small); }
+    .done .feedback, .done .hints, .done .more { display: none; }   /* finished: the result explains it all */
     /* Short screens (small laptops, phones): tighter type so the whole card fits. */
     @media (max-height: 920px) {
       .facts, .instruction { font-size: 1.05rem; }
@@ -278,6 +279,7 @@
       <button class="give-up" type="button" id="give-up">Give up</button>
     </div>
     <p class="feedback" id="feedback" aria-live="polite"></p>
+    <p class="more"><a href="../archive/">Past puzzles</a></p>
 
     <ul class="hints" id="hints">
       {% for hint in puzzle.hints %}
@@ -298,6 +300,7 @@
         {% if branch %}<button class="button" type="button" id="start-branch">Branch out</button>{% endif %}
         <a class="button {{ 'soft' if branch }}" href="deck.html">Open today's good news</a>
         <button class="button soft" type="button" id="share">Share</button>
+        <a class="button soft" href="../archive/">Past puzzles</a>
       </div>
     </section>
 
@@ -436,9 +439,11 @@
       const TODAY = "{{ today }}";
       const dayBefore = iso => new Date(Date.parse(iso + "T00:00:00Z") - 864e5).toISOString().slice(0, 10);
       const readStreak = () => { try { return JSON.parse(localStorage.getItem(STREAK_KEY)) || {}; } catch { return {}; } };
+      // Only the newest puzzle counts: playing old days from the archive mustn't fake a streak.
+      const IS_LATEST = {{ "true" if is_latest is not defined or is_latest else "false" }};
       const bumpStreak = () => {
         const s = readStreak();
-        if (s.last !== TODAY) {
+        if (IS_LATEST && s.last !== TODAY) {
           s.count = s.last === dayBefore(TODAY) ? (s.count || 0) + 1 : 1;
           s.best = Math.max(s.best || 0, s.count);
           s.last = TODAY;

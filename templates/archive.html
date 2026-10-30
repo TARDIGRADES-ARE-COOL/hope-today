@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hope Today · past puzzles</title>
+  {% if site_url %}
+  <meta name="description" content="{{ preview_text }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hope Today">
+  <meta property="og:title" content="Hope Today: past puzzles">
+  <meta property="og:description" content="{{ preview_text }}">
+  <meta property="og:url" content="{{ site_url }}archive/">
+  <meta property="og:image" content="{{ site_url }}og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  {% endif %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #e3e2da; --ink: #1c1c1c; --muted: #38424a; --accent: #2c3620; --accent-ink: #e3e2da;
+      --field-1: #b7c8be; --field-2: #d6c4b8; --field-3: #b2bdc5; --backdrop-dim: 1;
+    }
+    @media (prefers-color-scheme: dark) { :root { --paper: #d9d7cc; --backdrop-dim: 0.9; } }
+    [hidden] { display: none !important; }
+    * { box-sizing: border-box; }
+    html { background: #2c3620; font-size: clamp(100%, 0.4vw + 11px, 150%); }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      place-items: center;
+      padding: clamp(8px, 3svh, 64px) clamp(16px, 4vw, 56px);
+      color: var(--ink);
+      font-family: "Literata", Georgia, serif;
+      font-size: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
+      line-height: 1.5;
+    }
+    h1 { margin: 0; font-family: "Rokkitt", sans-serif; font-weight: 800; text-transform: uppercase;
+         line-height: 0.9; letter-spacing: -0.01em; font-size: min(11cqw, 8.5svh); }
+    p { margin: 0; }
+    a { color: inherit; }
+    .card {
+      width: min(42rem, 100%);
+      min-width: 0;
+      container-type: inline-size;
+      background: var(--paper);
+      padding: clamp(20px, min(4vw, 4svh), 44px);
+      display: grid;
+      gap: clamp(12px, 2.2svh, 24px);
+    }
+    .days { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .days a {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+      padding: 14px 18px; text-decoration: none; font-weight: 600; transition: transform 120ms ease;
+    }
+    .days li:nth-child(3n+1) a { background: var(--field-1); }
+    .days li:nth-child(3n+2) a { background: var(--field-2); }
+    .days li:nth-child(3n+3) a { background: var(--field-3); }
+    .days a:hover { transform: translateY(-2px); }
+    .days .status { font-weight: 400; font-size: 0.9em; white-space: nowrap; }
+    .days .solved .status { font-weight: 600; }
+    @media (prefers-reduced-motion: reduce) { .days a { transition: none; } }
+  </style>
+</head>
+<body>
+  {% include "_dawn.html" %}
+  <main class="card">
+    <h1>Past puzzles</h1>
+    <p>Missed a day? Every puzzle stays here, with its good news waiting at the end.</p>
+    <ul class="days">
+      {% for day in days %}
+      <li data-key="hope-puzzle-{{ day.date }}-{{ day.puzzle_id }}">
+        <a href="../{{ day.date }}/">
+          <span>{{ day.date|nice_date }}{{ " · today" if loop.first else "" }} <span class="status-letters">({{ day.length }})</span></span>
+          <span class="status">New</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    <p><a href="../">Back to today's puzzle</a></p>
+  </main>
+  <script>
+    // Each player's own progress, read from their browser: nothing is stored anywhere else.
+    for (const li of document.querySelectorAll(".days li")) {
+      let s = null;
+      try { s = JSON.parse(localStorage.getItem(li.dataset.key)); } catch {}
+      const status = !s ? "New"
+        : s.status === "solved" ? "Solved ✓"
+        : s.status === "gave-up" ? "Revealed"
+        : (s.guesses || s.hints) ? "In progress" : "New";
+      li.querySelector(".status").textContent = status;
+      if (s?.status === "solved") li.classList.add("solved");
+    }
+  </script>
+</body>
+</html>
