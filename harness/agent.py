@@ -1,5 +1,6 @@
 import json
 import sys
+from guards import SUPPORT_MESSAGE, is_in_distress
 from llm import chat
 from tools import TOOL_SCHEMAS, TOOLS
 
@@ -8,6 +9,12 @@ MAX_DECK_TRIES = 3                           # stop if render_deck keeps failing
 
 # python harness/agent.py "good news about science"
 question = sys.argv[1] if len(sys.argv) > 1 else "any good ocean news?"
+
+# Safety gate: runs before the loop. Someone in crisis gets care and real support, not slides.
+if is_in_distress(question):
+    print(SUPPORT_MESSAGE)
+    sys.exit()
+
 messages = [{"role": "user", "content": question}]
 nudged = False                               # only nudge once
 deck_tries = 0
