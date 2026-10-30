@@ -50,7 +50,10 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+    /* Scale with the screen: 16px on phones and laptops, growing on big monitors
+       (about 19px at 1920 wide, 21px at 2560). Widths below are in rem, so the whole
+       layout grows with the text and keeps its proportions. */
+    html { font-size: clamp(100%, 0.4vw + 11px, 150%); scroll-snap-type: y mandatory; scroll-behavior: smooth; }
     body {
       margin: 0;
       background: #2c3620;      /* shown only if the dawn scene can't be drawn */
@@ -105,7 +108,7 @@
     .cover { justify-items: center; }
     .cover-card {
       position: relative;
-      width: min(880px, 100%);
+      width: min(55rem, 100%);
       container-type: inline-size;
       background: var(--paper);
       padding: clamp(24px, 4vw, 48px);
@@ -148,7 +151,7 @@
     /* ---------- Contents: one giant word, one filled bar per story ---------- */
     .contents { justify-items: center; }
     .contents-inner {
-      width: min(720px, 100%);
+      width: min(45rem, 100%);
       container-type: inline-size;
       background: var(--paper);
       padding: clamp(24px, 4vw, 48px);
@@ -177,7 +180,7 @@
     .story { justify-items: center; }
     .clipping {
       position: relative;
-      width: min(1180px, 100%);
+      width: min(74rem, 100%);
       background: var(--paper);
       padding: clamp(32px, 4vw, 52px) clamp(24px, 3.5vw, 48px);
       clip-path: {{ torn_edge() }};
@@ -187,7 +190,7 @@
       align-items: center;
       transform: rotate(var(--tilt, 0deg));
     }
-    .clipping:not(:has(.photo)) { grid-template-columns: 1fr; width: min(780px, 100%); }
+    .clipping:not(:has(.photo)) { grid-template-columns: 1fr; width: min(49rem, 100%); }
     .clipping-text { display: grid; gap: 20px; }
     .clipping h2 { font-size: var(--step-head); }
     .clipping .summary { font-size: var(--step-lead); line-height: 1.45; }
@@ -219,7 +222,7 @@
 
     /* ---------- Closing: the back of a postcard on the olive table ---------- */
     .closing { justify-items: center; }
-    .postcard { position: relative; width: min(1000px, 100%); }
+    .postcard { position: relative; width: min(62.5rem, 100%); }
     .scallops { display: block; width: 100%; height: 28px; fill: var(--paper); }
     .postcard-body {
       background: var(--paper);
@@ -253,7 +256,7 @@
     }
 
     @media (max-width: 1000px) {
-      .clipping { grid-template-columns: 1fr; width: min(680px, 100%); }
+      .clipping { grid-template-columns: 1fr; width: min(42.5rem, 100%); }
       .clipping-text { display: contents; }     /* let the headline move above the photo */
       .clipping h2 { order: -1; }
     }

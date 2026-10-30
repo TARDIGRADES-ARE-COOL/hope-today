@@ -34,10 +34,15 @@
     /* [hidden] must always win: display: flex/grid rules kept overriding it and showing
        buttons that should be gone. One rule here instead of one fix per element. */
     [hidden] { display: none !important; }
+    /* Scale with the screen: 16px on phones and laptops, growing on big monitors
+       (about 19px at 1920 wide, 21px at 2560). Widths below are in rem, so the whole
+       layout grows with the text and keeps its proportions. */
+    html { font-size: clamp(100%, 0.4vw + 11px, 150%); }
     body {
       margin: 0;
       min-height: 100svh;
       display: grid;
+      grid-template-columns: minmax(0, 1fr);   /* the card may never be wider than the screen */
       place-items: center;
       padding: clamp(24px, 5vh, 64px) var(--margin);
       background: #2c3620;
@@ -60,7 +65,8 @@
 
     /* The puzzle is one paper card, like the deck's cover. */
     .card {
-      width: min(820px, 100%);
+      width: min(51rem, 100%);
+      min-width: 0;
       container-type: inline-size;
       background: var(--paper);
       padding: clamp(24px, 4vw, 48px);
@@ -85,9 +91,10 @@
     .picture { width: 100%; aspect-ratio: 5 / 4; display: block; background: var(--field-3); image-rendering: pixelated; }
 
     /* Letter boxes. A real input sits on top, so phones get their keyboard. */
-    .entry { position: relative; display: flex; gap: 6px; flex-wrap: wrap; }
+    /* One row of boxes, however long the answer: they shrink to share the width. */
+    .entry { position: relative; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 3.5rem)); gap: 6px; }
     .box {
-      width: clamp(36px, 8cqw, 56px);
+      width: 100%;
       aspect-ratio: 1;
       display: grid;
       place-items: center;
@@ -207,7 +214,7 @@
     </p>
     {% endif %}
 
-    <form class="entry" id="entry" autocomplete="off">
+    <form class="entry" id="entry" autocomplete="off" style="--n: {{ puzzle.length }}">
       {% for _ in range(puzzle.length) %}<span class="box" aria-hidden="true"></span>{% endfor %}
       <input id="guess" name="guess" maxlength="{{ puzzle.length }}" aria-label="Your guess, {{ puzzle.length }} letters"
              autocapitalize="characters" spellcheck="false" enterkeyhint="go">
