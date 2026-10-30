@@ -73,7 +73,7 @@
     <p>Missed a day? Every puzzle stays here, with its good news waiting at the end.</p>
     <ul class="days">
       {% for day in days %}
-      <li data-key="hope-puzzle-{{ day.date }}-{{ day.puzzle_id }}">
+      <li data-key="hope-puzzle-{{ day.date }}-{{ day.puzzle_id }}"{% if day.desk_key %} data-desk-key="{{ day.desk_key }}"{% endif %}>
         <a href="../{{ day.date }}/">
           <span>{{ day.date|nice_date }}{{ " · today" if loop.first else "" }} <span class="status-letters">({{ day.length }})</span></span>
           <span class="status">New</span>
@@ -92,7 +92,9 @@
         : s.status === "solved" ? "Solved ✓"
         : s.status === "gave-up" ? "Revealed"
         : (s.guesses || s.hints) ? "In progress" : "New";
-      li.querySelector(".status").textContent = status;
+      let desk = null;
+      if (li.dataset.deskKey) try { desk = JSON.parse(localStorage.getItem(li.dataset.deskKey)); } catch {}
+      li.querySelector(".status").textContent = status + (desk?.status === "done" ? " · Desk ✓" : "");
       if (s?.status === "solved") li.classList.add("solved");
     }
   </script>

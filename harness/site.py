@@ -9,6 +9,7 @@ import shutil
 from pathlib import Path
 
 from deck import env
+from desk import desk_id, render_page
 
 ROOT = Path(__file__).resolve().parent.parent
 DAILY = ROOT / "daily"
@@ -25,14 +26,30 @@ def puzzle_id(p):
     return hashlib.sha1((p["sentence"] or p.get("image", "")).encode()).hexdigest()[:8]
 
 
+def live_desk(d):
+    """The day's Copy Desk if it is live. Shadow desks ("live": false) are never published."""
+    desk = d.get("desk")
+    return desk if desk and desk.get("live") else None
+
+
 def render_day(day_dir, out_dir, is_latest=True):
-    """Write index.html (the puzzle) and deck.html (the reward) for one day."""
+    """Write index.html (the puzzle), desk.html (Copy Desk, on days that have a live one)
+    and deck.html (the reward) for one day."""
     d = json.loads((day_dir / "day.json").read_text(encoding="utf-8"))
     p = d["puzzle"]
     out_dir.mkdir(parents=True, exist_ok=True)
     previews = dict(site_url=SITE_URL, preview_title=PREVIEW_TITLE, preview_text=PREVIEW_TEXT, analytics=ANALYTICS)
+    desk = live_desk(d)
+    if desk:
+        try:
+            render_page(desk, out_dir / "desk.html", today=d["date"], theme=d["topic"], label="",
+                        word_key=f"hope-puzzle-{d['date']}-{puzzle_id(p)}", analytics=ANALYTICS,
+                        is_latest=is_latest)
+        except Exception as e:      # noqa: BLE001 (one bad desk must never break the archive)
+            print(f"{day_dir.name}: desk left out ({type(e).__name__}: {e})")
+            desk = None
     (out_dir / "index.html").write_text(env.get_template("puzzle.html").render(
-        **previews, page_url=f"{SITE_URL}{day_dir.name}/",
+        **previews, page_url=f"{SITE_URL}{day_dir.name}/", has_desk=bool(desk),
         today=d["date"], puzzle=p, branch=None, branch_b64="",     # Branch out is switched off
         puzzle_id=puzzle_id(p), is_latest=is_latest,
         answer_b64=base64.b64encode(d["answer"].encode()).decode(),
@@ -55,8 +72,11 @@ def build():
     # Past puzzles: newest first, no topics or answers, each player's status from their browser.
     listing = []
     for day in reversed(days):
-        p = json.loads((day / "day.json").read_text(encoding="utf-8"))["puzzle"]
-        listing.append({"date": day.name, "length": p["length"], "puzzle_id": puzzle_id(p)})
+        d = json.loads((day / "day.json").read_text(encoding="utf-8"))
+        p, desk = d["puzzle"], live_desk(d)
+        listing.append({"date": day.name, "length": p["length"], "puzzle_id": puzzle_id(p),
+                        "desk_key": f"hope-desk-{day.name}-{desk_id(desk)}"
+                        if desk and (SITE / day.name / "desk.html").exists() else ""})
     (SITE / "archive").mkdir()
     (SITE / "archive" / "index.html").write_text(env.get_template("archive.html").render(
         days=listing, today=days[-1].name if days else "",
