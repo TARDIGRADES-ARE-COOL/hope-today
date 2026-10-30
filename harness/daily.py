@@ -367,18 +367,30 @@ def blocked_answers(history, today=None):
 
 if __name__ == "__main__":
     # Dry run by default, so testing doesn't use up this week's stories.
-    # python harness/daily.py --save  records the day in history.json.
-    save = "--save" in sys.argv
+    #   --save   record the day in history.json (the real daily run)
+    #   --fresh  testing: treat today's existing puzzle as used, so a different topic is picked
+    #   --blind  testing: don't print the answer, clue or headlines, so you can play unspoiled
+    save, fresh, blind = ("--save" in sys.argv), ("--fresh" in sys.argv), ("--blind" in sys.argv)
+    say = (lambda *a: None) if blind else print     # spoiler lines go through say()
+
     history = load_history()
+    blocked = blocked_answers(history)
+    existing = DAILY / date.today().isoformat() / "day.json"
+    if fresh and existing.exists():
+        old = json.loads(existing.read_text(encoding="utf-8"))
+        blocked.add(old["answer"])
+        history = {**history, "urls": history["urls"] + [s["url"] for s in old["stories"]]}  # in memory only
+        print("Fresh: skipping today's existing topic and its stories")
+
     found = unseen(sweep(), history)
     print(f"{len(found)} new candidate articles from the last {WINDOW_DAYS} days")
 
     keep = strong(judge(found))
     print(f"{len(keep)} strong good-news stories")
 
-    topics, rejected = pick_topics(keep, blocked_answers(history))
+    topics, rejected = pick_topics(keep, blocked)
     for r in rejected:
-        print(f"  {r}")
+        say(f"  {r}")
     if not topics:
         raise SystemExit("No topic today: no group passed the checks.")
     # The best topic whose answer gets a clue that passes the checks.
@@ -388,21 +400,21 @@ if __name__ == "__main__":
         if puzzle:
             today = topic
             break
-        print(f"  no valid clue for {topic['answer']} ({len(clue_rejects)} rejected), trying the next topic")
+        say(f"  no valid clue for {topic['answer']} ({len(clue_rejects)} rejected), trying the next topic")
     if not today:
         raise SystemExit("No topic today: no answer got a valid clue.")
 
-    print(f"\nToday: {today['answer']} ({len(today['answer'])})  {today['topic']}")
-    print(f"  {puzzle['instruction']}")
-    print(f"  \"{puzzle['sentence']}\" ({puzzle['length']})")
+    say(f"\nToday: {today['answer']} ({len(today['answer'])})  {today['topic']}")
+    say(f"  {puzzle['instruction']}")
+    say(f"  \"{puzzle['sentence']}\" ({puzzle['length']})")
     for h in puzzle["hints"]:
-        print(f"  Level {h['level']}{' (free)' if h['free'] else ''}: {h['text']}")
-    print(f"  Give up: {' / '.join(puzzle['solution']['steps'])}")
+        say(f"  Level {h['level']}{' (free)' if h['free'] else ''}: {h['text']}")
+    say(f"  Give up: {' / '.join(puzzle['solution']['steps'])}")
 
     folder, stories = build_day(today, puzzle)
     for s in stories:
-        print(f"  - {s['headline']}")
-    print(f"Saved {folder}/index.html (puzzle), deck.html and day.json")
+        say(f"  - {s['headline']}")
+    print(f"Puzzle ready ({puzzle['length']} letters, {len(stories)} stories): {folder}/index.html")
 
     if save:
         save_day(history, today["topic"], today["answer"], [s["url"] for s in stories])
