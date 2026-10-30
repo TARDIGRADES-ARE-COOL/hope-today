@@ -8,7 +8,7 @@ from pathlib import Path
 
 from wordfreq import zipf_frequency
 
-from clues import make_puzzle, theme_hint
+from clues import fresh_free_hint, make_puzzle, theme_hint
 from deck import env, render_deck
 from llm import client
 from tools import IMAGES, fetch_article, search_news
@@ -312,6 +312,7 @@ def choose_puzzle(topic, day=None):
         return None, rejected
     wanted = "anagram" if day_number % 2 == 0 else "hidden"
     puzzle = ([p for p in puzzles if p["type"] == wanted] or puzzles)[0]
+    puzzle["hints"][0]["text"] = fresh_free_hint(puzzle["type"], topic["answer"]) or puzzle["hints"][0]["text"]
     puzzle["hints"][1]["text"] = theme_hint(topic["answer"], topic["topic"], puzzle["sentence"])
     return puzzle, rejected
 

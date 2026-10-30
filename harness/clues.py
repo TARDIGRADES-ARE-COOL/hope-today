@@ -1,4 +1,5 @@
 """Part 2: wordplay clues for the daily answer. The AI writes them; Python checks every one."""
+import html
 import json
 import re
 
@@ -23,6 +24,11 @@ def letters(text):
     return re.sub(r"[^a-z]", "", text.lower())
 
 
+def stray_letters(words):
+    """Single-letter 'words' other than a and I: a sign of cheating like 'S A N C T U A R Y'."""
+    return [w for w in words if len(w) == 1 and w not in ("a", "i")]
+
+
 def check_anagram(sentence, answer, fodder):
     """Problems with a mix-it-up clue, or [] if it works. fodder = the word(s) to mix up."""
     words = [letters(w) for w in words_of(sentence)]
@@ -38,6 +44,10 @@ def check_anagram(sentence, answer, fodder):
         problems.append("the word to mix up is the answer itself")
     if letters(answer) in words:
         problems.append("the answer appears in the sentence as a word")
+    if not 1 <= len(target) <= 2:
+        problems.append("the letters to mix up must be one or two words")
+    if stray_letters(words):
+        problems.append("the sentence has stray single letters")
     if len(words) > MAX_WORDS:
         problems.append(f"sentence is over {MAX_WORDS} words")
     return problems, ([spots[0] + k for k in range(len(target))] if spots else [])
@@ -55,9 +65,19 @@ def check_hidden(sentence, answer):
     if start == -1:
         problems.append(f"{answer} is not hidden in the sentence's letters")
     else:
-        span = sorted(set(owner[start:start + len(letters(answer))]))
+        end = start + len(letters(answer))
+        span = sorted(set(owner[start:end]))
         if len(span) < 2:
             problems.append(f"{answer} sits inside one word; it must cross a gap between words")
+        if len(span) > 3:
+            problems.append(f"{answer} is spread over {len(span)} words; at most 3")
+        # It must be tucked inside words, not whole words glued together.
+        whole = (start == 0 or owner[start - 1] != owner[start]) and \
+                (end == len(joined) or owner[end] != owner[end - 1])
+        if whole:
+            problems.append(f"{answer} is just whole words side by side; it must start or end inside a word")
+    if stray_letters(words):
+        problems.append("the sentence has stray single letters")
     if letters(answer) in words:
         problems.append("the answer appears in the sentence as a word")
     if len(words) > MAX_WORDS:
@@ -93,6 +113,67 @@ def free_hint(kind, day_number):
     return text
 
 
+def mark_hidden(phrase, word):
+    """The phrase as safe HTML with the hidden word's letters in bold, e.g. publi<b>c at</b>tention."""
+    target = letters(word)
+    spots = [i for i, ch in enumerate(phrase) if ch.isalpha()]      # char index of each letter
+    at = "".join(phrase[i] for i in spots).lower().find(target)
+    start, end = spots[at], spots[at + len(target) - 1] + 1
+    return (html.escape(phrase[:start]) + "<b>" + html.escape(phrase[start:end]) + "</b>"
+            + html.escape(phrase[end:]))
+
+
+FREE_HINT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "intro": {"type": "string"},
+        "example_word": {"type": "string"},
+        "example_from": {"type": "string"},
+    },
+    "required": ["intro", "example_word", "example_from"],
+    "additionalProperties": False,
+}
+FREE_HINT_ASK = {
+    "hidden": ("example_word: a short common word (3-5 letters). example_from: a short everyday "
+               "phrase where that word hides across two words, ignoring spaces "
+               "(like CAT in 'public attention')."),
+    "anagram": ("example_word: a common word (4-6 letters). example_from: a DIFFERENT real word "
+                "made of exactly the same letters (like SILENT for LISTEN)."),
+}
+
+
+def fresh_free_hint(kind, answer):
+    """Level 1, new for every puzzle: the AI writes a playful intro and a fresh example;
+    code checks the example really works and that nothing gives today's answer away."""
+    for _ in range(3):
+        response = client.chat.completions.create(
+            model=CLUE_MODEL,
+            messages=[{"role": "user", "content": (
+                "Write the free first hint for a friendly word puzzle. It teaches the trick in "
+                "general, with an example that is NOT today's answer.\n"
+                f"The trick: {INSTRUCTIONS[kind]}\n"
+                "intro: one playful sentence (max 16 words) explaining the trick, no example in it.\n"
+                + FREE_HINT_ASK[kind] + f"\nNever use the word {answer} or anything containing it. "
+                "Pick a fresh, surprising example; avoid the overused CAT, OWL, EAR, LISTEN, SILENT, "
+                "HEART, EARTH."
+            )}],
+            response_format={"type": "json_schema", "json_schema": {
+                "name": "free_hint", "strict": True, "schema": FREE_HINT_SCHEMA}},
+        )
+        h = json.loads(response.choices[0].message.content)
+        word, source, intro = h["example_word"].upper(), h["example_from"], h["intro"].strip()
+        if kind == "hidden":
+            works = not check_hidden(source, word)[0]
+        else:
+            works = sorted(letters(word)) == sorted(letters(source)) and letters(word) != letters(source)
+        leaks = letters(answer) in letters(intro + word + source)
+        if works and not leaks and len(intro.split()) <= 20:
+            if kind == "hidden":
+                return f"{html.escape(intro)} Like {word} hiding in \u201c{mark_hidden(source, word)}\u201d."
+            return f"{html.escape(intro)} {html.escape(source.upper())} is just {word}, mixed up."
+    return None                                   # caller falls back to the hand-written hints
+
+
 def build_hints(kind, sentence, answer, highlight, day_number=0):
     """Hint levels and a give-up walkthrough, worked out in code from the verified clue.
     Level 2 (the theme nudge) is filled in later by theme_hint()."""
@@ -116,7 +197,7 @@ def build_hints(kind, sentence, answer, highlight, day_number=0):
             f"How: {' '.join(spot).upper()} \u2192 rearranged \u2192 {answer}",
         ]
     hints = [
-        {"level": 1, "free": True, "text": free_hint(kind, day_number)},
+        {"level": 1, "free": True, "text": free_hint(kind, day_number)},   # replaced by fresh_free_hint()
         {"level": 2, "free": False, "text": ""},          # theme nudge, added by theme_hint()
         {"level": 3, "free": False, "text": where, "highlight": highlight},
     ]
@@ -226,6 +307,10 @@ if __name__ == "__main__":
         (check_hidden("The arctic oral histories were saved.", "CORAL")[0], []),
         (check_hidden("Divers found coral reefs.", "CORAL")[0] != [], True),                      # plain word
         (check_hidden("Nothing to see here.", "CORAL")[0] != [], True),                           # missing
+        (check_hidden("Volunteers raised S A N C T U A R Y flags.", "SANCTUARY")[0] != [], True), # spelled out
+        (check_hidden("Bright sun shines on farms.", "SUNSHINES")[0] != [], True),                # whole words
+        (check_hidden("Clean power, so large families save.", "SOLAR")[0], []),                   # fine: ends inside 'large'
+        (check_anagram("We saw S O L A R panels.", "SOLAR", "S O L A R")[0] != [], True),        # spelled out
     ]
     for got, expected in tests:
         print("  ok" if got == expected else f"  FAIL got {got}")
