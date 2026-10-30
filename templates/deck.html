@@ -231,19 +231,9 @@
       grid-template-columns: 1fr 1fr;
       gap: clamp(24px, 5vw, 72px);
     }
-    .postcard h2 { grid-column: 1 / -1; font-size: var(--step-head); padding-right: 110px; }
+    .postcard h2 { grid-column: 1 / -1; font-size: var(--step-head); }
     .postcard-message { font-size: var(--step-lead); line-height: 1.45; }
     .postcard-right { display: grid; gap: 16px; align-content: start; }
-    .stamp {
-      position: absolute;       /* top-right corner, where a stamp goes */
-      top: clamp(48px, 5vw, 72px);
-      right: clamp(24px, 4vw, 56px);
-      width: 88px;
-      aspect-ratio: 3 / 4;
-      object-fit: cover;
-      border: 6px solid var(--accent-ink);
-      outline: 2px dotted var(--muted);
-    }
     .postcard h3 { font-size: var(--step-lead); }
     .postcard ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
     .imprint {
@@ -280,8 +270,6 @@
       body .dots { display: none; }   /* they sat on top of the text; scrolling needs no dots (body: beats the later .dots rule) */
       .cover-card h1 { flex-direction: column; gap: 0; }
       .postcard-body { grid-template-columns: 1fr; }
-      .stamp { width: 52px; top: 52px; right: 20px; border-width: 4px; }
-      .postcard h2 { padding-right: 64px; min-height: 96px; }   /* at least as tall as the stamp */
     }
 
     /* ---------- Layer 11: feedback, entrances, slide dots, Keep this ---------- */
@@ -417,9 +405,6 @@
         <path d="M0 28 V14 {% for i in range(12) %}A50 14 0 0 1 {{ (i + 1) * 100 }} 14 {% endfor %}V28 Z"/>
       </svg>
       <div class="postcard-body">
-        {% if stories[-1].image %}
-        <img class="stamp" src="{{ stories[-1].image }}" alt="" width="88" height="117" loading="lazy">
-        {% endif %}
         <h2>There is hope today.</h2>
         <div>
           <p class="postcard-message">{{ stories|length }} real {{ "story" if stories|length == 1 else "stories" }} about {{ topic|lower if topic else "what you care about" }}, every one from the last week{{ "" if topic else " or so" }}. Come back tomorrow and there will be more.</p>
