@@ -14,7 +14,8 @@ MARGIN = 1.25               # comparable values differ by at least 25%, so "bigg
 KINDS = {"money", "size", "time", "count", "year"}
 # Comparable units go into one base unit per kind. Money stays per currency (never compared across).
 TO_BASE = {"ha": ("ha", 1), "hectares": ("ha", 1), "acres": ("ha", 0.4047), "km2": ("ha", 100),
-           "years": ("years", 1), "months": ("years", 1 / 12), "weeks": ("years", 1 / 52)}
+           "years": ("years", 1), "months": ("years", 1 / 12), "weeks": ("years", 1 / 52),
+           "days": ("years", 1 / 365)}
 NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
 WORDS = {w: str(i) for i, w in enumerate(
     "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen "
