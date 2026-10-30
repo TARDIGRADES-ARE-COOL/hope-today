@@ -5,6 +5,7 @@ from pathlib import Path
 
 import sys
 
+from clues import make_puzzle
 from deck import render_deck
 from llm import client
 from tools import IMAGES, fetch_article, search_news
@@ -295,7 +296,17 @@ def write_stories(topic):
             for i, s in enumerate(topic["stories"]) if i in written]
 
 
-def build_day(topic, day=None):
+def choose_puzzle(topic, day=None):
+    """A verified clue for the topic's answer. Clue type alternates by day for variety."""
+    puzzles, rejected = make_puzzle(topic["answer"], topic["topic"])
+    if not puzzles:
+        return None, rejected
+    wanted = "anagram" if (day or date.today()).toordinal() % 2 == 0 else "hidden"
+    same_type = [p for p in puzzles if p["type"] == wanted]
+    return (same_type or puzzles)[0], rejected
+
+
+def build_day(topic, puzzle, day=None):
     """Write the day's deck and its data file into daily/YYYY-MM-DD/."""
     day = (day or date.today()).isoformat()
     stories = write_stories(topic)
@@ -307,7 +318,7 @@ def build_day(topic, day=None):
     # The puzzle page will read this file. Keep the answer out of the deck itself.
     (folder / "day.json").write_text(json.dumps({
         "date": day, "topic": topic["topic"], "answer": topic["answer"],
-        "why": topic["why"], "stories": stories,
+        "why": topic["why"], "puzzle": puzzle, "stories": stories,
     }, indent=2), encoding="utf-8")
     return folder, stories
 
@@ -355,10 +366,25 @@ if __name__ == "__main__":
         print(f"  {r}")
     if not topics:
         raise SystemExit("No topic today: no group passed the checks.")
-    today = topics[0]
-    print(f"\nToday: {today['answer']} ({len(today['answer'])})  {today['topic']}")
+    # The best topic whose answer gets a clue that passes the checks.
+    today = puzzle = None
+    for topic in topics:
+        puzzle, clue_rejects = choose_puzzle(topic)
+        if puzzle:
+            today = topic
+            break
+        print(f"  no valid clue for {topic['answer']} ({len(clue_rejects)} rejected), trying the next topic")
+    if not today:
+        raise SystemExit("No topic today: no answer got a valid clue.")
 
-    folder, stories = build_day(today)
+    print(f"\nToday: {today['answer']} ({len(today['answer'])})  {today['topic']}")
+    print(f"  {puzzle['instruction']}")
+    print(f"  \"{puzzle['sentence']}\" ({puzzle['length']})")
+    for h in puzzle["hints"]:
+        print(f"  Level {h['level']}{' (free)' if h['free'] else ''}: {h['text']}")
+    print(f"  Give up: {' / '.join(puzzle['solution']['steps'])}")
+
+    folder, stories = build_day(today, puzzle)
     for s in stories:
         print(f"  - {s['headline']}")
     print(f"Saved {folder}/deck.html and day.json")
