@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hope Today · daily puzzle</title>
+  {% include "_analytics.html" %}
   {#- Link previews (WhatsApp, iMessage, Discord...). Never mentions the answer. -#}
   {% if site_url %}
   <meta name="description" content="{{ preview_text }}">
@@ -454,6 +455,10 @@
       const streakText = s => s.count ? `\u{1F525} ${s.count}-day streak \u00B7 best ${s.best}` : "";
 
       const finish = (status, celebrate) => {
+        if (celebrate) {                       // count each finish once (not when reopening a finished day)
+          track(status === "solved" ? `solved-in-${Math.min(state.guesses, 4)}${state.guesses >= 4 ? "+" : ""}` : "gave-up");
+          track(`extra-hints-${extraHints()}`);
+        }
         state.status = status;
         save();
         input.value = ANSWER;
@@ -490,6 +495,7 @@
           return;
         }
         state.guesses += 1;
+        if (state.guesses === 1) track("started");
         if (matches(guess)) return finish("solved", true);
         save();
         drawPicture();                         // pixel mode: a wrong guess sharpens the photo
@@ -502,12 +508,14 @@
       });
       $("more-hint").addEventListener("click", () => {
         state.hints = Math.min(hintItems.length, state.hints + 1);
+        track(`hint-${state.hints}`);
         save();
         showHints();
         input.focus();
       });
       $("give-up").addEventListener("click", () => finish("gave-up", true));
       $("share").addEventListener("click", async () => {
+        track("share");
         const g = state.guesses, h = extraHints();
         const streak = readStreak().count ? ` \u00B7 \u{1F525} ${readStreak().count}` : "";
         {% if branch %}const extra = bstate.done ? ` \u00B7 Branch out: ${branchScore()} pts${bstate.found.some(i => ANSWERS[i].n === GEM) ? " \u{1F48E}" : ""}` : "";{% else %}const extra = "";{% endif %}
@@ -608,7 +616,7 @@
         $("tutorial-next").textContent = n === steps.length - 1 ? "Let's play" : "Next";
         steps[n].querySelector("h2").focus();
       };
-      const openTutorial = () => { tutorial.showModal(); showStep(0); };
+      const openTutorial = () => { tutorial.showModal(); showStep(0); track("tutorial"); };
       $("how").addEventListener("click", openTutorial);
       $("tutorial-next").addEventListener("click", () => step < steps.length - 1 ? showStep(step + 1) : tutorial.close());
       $("tutorial-back").addEventListener("click", () => showStep(Math.max(0, step - 1)));

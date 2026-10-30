@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hope Today · {{ title }}</title>
+  {% include "_analytics.html" %}
   {#- Link previews (WhatsApp, iMessage, Discord...). Never mentions the answer. -#}
   {% if site_url %}
   <meta name="description" content="{{ preview_text }}">

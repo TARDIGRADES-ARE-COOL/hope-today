@@ -1,0 +1,8 @@
+{#- Privacy-friendly counting with GoatCounter: no cookies, no personal data, never the answer or topic.
+    Switched off unless harness/site.py sets ANALYTICS to the GoatCounter code. -#}
+<script>
+  window.track = name => { try { window.goatcounter?.count({ path: "event/" + name, title: name, event: true }); } catch {} };
+</script>
+{% if analytics %}
+<script data-goatcounter="https://{{ analytics }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+{% endif %}
