@@ -179,42 +179,37 @@
     .chips .t-Gem { background: var(--accent); color: var(--accent-ink); }
     .chips .missed { background: none; outline: 2px dotted var(--muted); font-weight: 400; }
     .branch-end { display: grid; gap: 12px; }
-    /* How to play */
-    .how {
-      border: 0;
-      background: none;
-      padding: 0;
-      font-weight: 600;
-      text-decoration: underline;
-    }
+    /* How to play: three short steps that each fit the screen, no scrolling. */
+    .how { border: 0; background: none; padding: 0; font-weight: 600; text-decoration: underline; }
     .tutorial {
-      width: min(40rem, calc(100% - 32px));
-      max-height: calc(100svh - 32px);
+      width: min(36rem, calc(100% - 24px));
+      max-height: calc(100svh - 24px);
       border: 0;
       padding: 0;
+      overflow: hidden;
       background: var(--paper);
       color: var(--ink);
+      /* Text follows the screen's height as well as its width, so every step fits. */
+      font-size: clamp(14px, min(2.1svh, 4.2vw), 18px);
+      line-height: 1.5;
     }
     .tutorial::backdrop { background: rgb(28 28 28 / 0.6); }
-    .tutorial-body { padding: clamp(20px, 4vw, 36px); display: grid; gap: 16px; }
-    .tutorial h2 { font-size: var(--step-head); }
-    .tutorial h3 {
-      font-family: "Rokkitt", sans-serif;
-      font-weight: 800;
-      font-size: var(--step-lead);
-      text-transform: uppercase;
-      margin: 8px 0 0;
-    }
-    .tricks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-    .tricks li { padding: 12px 16px; }
-    .tricks li:nth-child(5n+1) { background: var(--field-3); }
-    .tricks li:nth-child(5n+2) { background: var(--field-1); }
-    .tricks li:nth-child(5n+3) { background: var(--field-2); }
-    .tricks li:nth-child(5n+4) { background: var(--field-3); }
-    .tricks li:nth-child(5n+5) { background: var(--field-1); }
+    .tutorial-body { padding: clamp(16px, 3svh, 32px) clamp(16px, 4vw, 32px); display: grid; gap: clamp(10px, 1.8svh, 16px); }
+    .tutorial h2 { font-size: clamp(1.6rem, 4.5svh, 2.6rem); }
+    .tutorial h2:focus { outline: none; }        /* focused only so the step starts at the top */
+    .step { display: grid; gap: clamp(8px, 1.5svh, 14px); }
+    .tricks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .tricks li { padding: clamp(6px, 1.1svh, 10px) 12px; }
+    .tricks li:nth-child(odd) { background: var(--field-3); }
+    .tricks li:nth-child(even) { background: var(--field-1); }
     .tricks strong { font-weight: 600; }
     .tricks b { background: var(--paper); }     /* no padding: it split words like "th e vil lage" */
-    .tutorial .button { justify-self: start; }
+    .tutorial-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .tutorial-nav .button { font-size: 1.1em; padding: 10px 20px; }
+    .tutorial-dots { display: flex; gap: 6px; }
+    .tutorial-dots span { width: 10px; height: 10px; background: var(--field-3); }
+    .tutorial-dots span.on { background: var(--accent); }
+    .back { border: 0; background: none; padding: 8px 0; text-decoration: underline; }
     .streak { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: var(--step-lead); text-transform: uppercase; }
     .result .actions .button { flex: 0 0 auto; }
 
@@ -310,26 +305,34 @@
 
   <dialog class="tutorial" id="tutorial" aria-labelledby="tutorial-title">
     <div class="tutorial-body">
-      <h2 id="tutorial-title" tabindex="-1" autofocus>How to play</h2>
-      <p>Every day there's one puzzle. Its answer is the topic of today's good news. Solve it (or give up) and the good news is yours to read.</p>
-
-      <h3>Find the answer</h3>
-      <p>The clue is a sentence with the answer tucked inside it. Each day uses one of five tricks, and working out which one is half the fun. The number in brackets is how many letters the answer has.</p>
-      <ul class="tricks">
-        <li><strong>Hidden:</strong> the answer runs across words, ignoring the spaces. CAT hides in “publi<b>c at</b>tention”.</li>
-        <li><strong>Mix it up:</strong> a word in the sentence has the answer's letters, shuffled. HEART rearranged is EARTH.</li>
-        <li><strong>First letters:</strong> the first letters of a run of words spell it. <b>H</b>appy <b>O</b>tters <b>P</b>lay <b>E</b>verywhere spells HOPE.</li>
-        <li><strong>Backwards:</strong> hidden across words, but right to left. “th<b>e vil</b>lage” read backwards gives LIVE.</li>
-        <li><strong>Two halves:</strong> two little clues, one for each half; join the answers. SUN + FLOWER = SUNFLOWER.</li>
-      </ul>
-
-      <h3>Stuck? Use a hint</h3>
-      <p>The first hint is free: it tells you which trick today's clue uses. Hint 2 describes what the word means. Hint 3 shows where to look. Still stuck? Give up and we'll walk you through how the clue worked.</p>
-
-      <h3>Come back tomorrow</h3>
-      <p>Type your guess and press Check. Wrong guesses cost nothing. Finish a puzzle every day to grow your 🔥 streak, and share how you did without spoiling the answer.</p>
-
-      <button class="button" type="button" id="tutorial-close">Let's play</button>
+      <section class="step">
+        <h2 id="tutorial-title" tabindex="-1">How to play</h2>
+        <p>One puzzle a day. The answer is the topic of today's good news.</p>
+        <p>The clue is a sentence with the answer tucked inside it. Type your guess and press Check; wrong guesses are free.</p>
+        <p>Solve it, or give up, and today's good news is yours to read.</p>
+      </section>
+      <section class="step" hidden>
+        <h2 tabindex="-1">Five tricks</h2>
+        <p>Each day uses one. Spotting which is half the fun. The number in brackets is the answer's length.</p>
+        <ul class="tricks">
+          <li><strong>Hidden:</strong> across words. CAT is in “publi<b>c at</b>tention”.</li>
+          <li><strong>Mix it up:</strong> a word, shuffled. HEART becomes EARTH.</li>
+          <li><strong>First letters:</strong> <b>H</b>appy <b>O</b>tters <b>P</b>lay <b>E</b>verywhere: HOPE.</li>
+          <li><strong>Backwards:</strong> “th<b>e vil</b>lage” read right to left: LIVE.</li>
+          <li><strong>Two halves:</strong> a clue for each half. SUN + FLOWER.</li>
+        </ul>
+      </section>
+      <section class="step" hidden>
+        <h2 tabindex="-1">Hints and streaks</h2>
+        <p><strong>Hint 1</strong> is free: it names today's trick. <strong>Hint 2</strong> describes the word. <strong>Hint 3</strong> shows where to look.</p>
+        <p>Give up any time and we'll show you how the clue worked.</p>
+        <p>Play every day to grow your 🔥 streak, and share your result without spoiling it.</p>
+      </section>
+      <div class="tutorial-nav">
+        <button class="back" type="button" id="tutorial-back">Back</button>
+        <div class="tutorial-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        <button class="button" type="button" id="tutorial-next">Next</button>
+      </div>
     </div>
   </dialog>
 
@@ -565,11 +568,23 @@
       paintBranch();
       {% endif %}
 
-      // How to play: opens by itself on a player's first visit, then whenever they tap it.
+      // How to play: three steps with Next/Back. Opens by itself on a first visit, then on tap.
       const tutorial = $("tutorial");
-      const openTutorial = () => { tutorial.showModal(); tutorial.scrollTop = 0; };   // start at the top
+      const steps = [...tutorial.querySelectorAll(".step")];
+      const dots = [...tutorial.querySelectorAll(".tutorial-dots span")];
+      let step = 0;
+      const showStep = n => {
+        step = n;
+        steps.forEach((s, i) => { s.hidden = i !== n; });
+        dots.forEach((d, i) => d.classList.toggle("on", i === n));
+        $("tutorial-back").style.visibility = n === 0 ? "hidden" : "visible";
+        $("tutorial-next").textContent = n === steps.length - 1 ? "Let's play" : "Next";
+        steps[n].querySelector("h2").focus();
+      };
+      const openTutorial = () => { tutorial.showModal(); showStep(0); };
       $("how").addEventListener("click", openTutorial);
-      $("tutorial-close").addEventListener("click", () => tutorial.close());
+      $("tutorial-next").addEventListener("click", () => step < steps.length - 1 ? showStep(step + 1) : tutorial.close());
+      $("tutorial-back").addEventListener("click", () => showStep(Math.max(0, step - 1)));
       tutorial.addEventListener("close", () => { if (state.status === "playing") input.focus(); });
       let seenTutorial = false;
       try { seenTutorial = localStorage.getItem("hope-tutorial-seen") === "1"; localStorage.setItem("hope-tutorial-seen", "1"); } catch {}
