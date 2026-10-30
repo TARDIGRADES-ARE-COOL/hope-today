@@ -61,8 +61,9 @@ def count_recent_news(tag):
     return response.json()["response"]["total"]
 
 
-def search_news(tag, since=None):
-    """Recent Guardian articles for a tag id from find_topics."""
+def search_news(tag, since=None, page_size=20):
+    """Recent Guardian articles for a tag id from find_topics. page_size is for the daily
+    sweep only; the model's schema doesn't offer it."""
     if since is None:
         since = (date.today() - timedelta(days=30)).isoformat()  # default: whole window, newest first
 
@@ -78,7 +79,7 @@ def search_news(tag, since=None):
         "from-date": since,
         "show-fields": "trailText,thumbnail",
         "show-elements": "image",
-        "page-size": 20,                                          # default is 10
+        "page-size": page_size,                                   # Guardian default is 10
         "api-key": GUARDIAN_KEY,
     }
 
