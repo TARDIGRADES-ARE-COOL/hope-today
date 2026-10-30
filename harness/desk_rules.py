@@ -4,14 +4,17 @@ C3.5a: list every TRUE small rule over the cards, plus the names code can resolv
 card ("the only acres", "the biggest size on the desk"). The structure search (C3.5b) picks
 clues from these; the LLM (C3.5c) only phrases them.
 
-    python harness/desk_rules.py prototypes/copy-desk/samples.json
+    python harness/desk_rules.py prototypes/copy-desk/samples.json            # C3.5a test
+    python harness/desk_rules.py --search prototypes/copy-desk/samples.json   # C3.5b test
 """
 import json
+import random
 import re
 import sys
+import time
 from itertools import combinations
 
-from desk import Desk, rule_holds
+from desk import Desk, check, rule_holds
 from desk_facts import MARGIN, NUMBER, normalise
 
 CURRENCY = "$£€¥"
@@ -92,10 +95,72 @@ def true_rules(desk_data):
                 rules.append({"op": "same_as_any", "card": c["id"], "others": others, "group": list(key)})
 
     # Masks from the real engine, so a rule that every filing meets (it says nothing) is dropped.
-    probe = Desk({**desk_data, "cards": [{k: v for k, v in c.items() if k != "clue"} for c in cards],
-                  "clues": [{"id": f"r{i}", "start": True, "rule": r} for i, r in enumerate(rules)]})
-    useful = [r for i, r in enumerate(rules) if probe.clue_mask[f"r{i}"] != probe.all]
+    probe, masks = rule_masks(desk_data, rules)
+    useful = [r for r, m in zip(rules, masks) if m != probe.all]
     return useful, card_names(cards)
+
+
+def rule_masks(desk_data, rules):
+    """(probe Desk, bitmask of filings each rule allows), using the real engine."""
+    probe = Desk({**desk_data, "cards": [{k: v for k, v in c.items() if k != "clue"} for c in desk_data["cards"]],
+                  "clues": [{"id": f"r{i}", "start": True, "rule": r} for i, r in enumerate(rules)]})
+    return probe, [probe.clue_mask[f"r{i}"] for i in range(len(rules))]
+
+
+# ---------- C3.5b: structure search ----------
+
+ATTEMPTS = 20000            # hard cap on tries per desk; most are rejected by bitmasks alone
+START = (2, 3)              # how many start clues
+HIDDEN = (2, 3, 4)          # how many clues hidden on facts
+
+
+def search(desk_data, seed=0, attempts=ATTEMPTS):
+    """Pick start clues and hidden clues from the true rules until all quality rules pass.
+    Returns (desk data with clues, stats) or (None, stats). Clue texts come later (C3.5c)."""
+    rules, _ = true_rules(desk_data)
+    probe, masks = rule_masks(desk_data, rules)
+    pool, seen = [], set()
+    for r, m in zip(rules, masks):        # one rule per mask: same effect means same clue
+        if m not in seen:
+            seen.add(m)
+            pool.append((r, m))
+    places = list(probe.place.values())
+
+    def proves(m):                        # does a set of filings fix at least one card?
+        return any(m & p == m for p in places)
+
+    rng = random.Random(seed)
+    cards = [c["id"] for c in desk_data["cards"]]
+    stats = {"rules": len(pool), "attempts": 0, "full_checks": 0}
+    for attempt in range(1, attempts + 1):
+        stats["attempts"] = attempt
+        n_start, n_hidden = rng.choice(START), rng.choice(HIDDEN)
+        chosen = rng.sample(pool, n_start + n_hidden)
+        both = probe.all
+        for _, m in chosen:
+            both &= m
+        if bin(both).count("1") != 1:                                  # rule 2: one answer
+            continue
+        if sum(proves(m) for _, m in chosen) > 2:                      # rule 5: openers
+            continue
+        start = probe.all
+        for _, m in chosen[:n_start]:
+            start &= m
+        if not proves(start):                                          # rule 3 at the start
+            continue
+        hide_on = rng.sample(cards, n_hidden)
+        clues = [{"id": f"c{i + 1}", "rule": r, **({"start": True} if i < n_start else {})}
+                 for i, (r, _) in enumerate(chosen)]
+        hidden = dict(zip(hide_on, [c["id"] for c in clues[n_start:]]))
+        data = {**desk_data, "clues": clues,
+                "cards": [{**{k: v for k, v in c.items() if k != "clue"},
+                           **({"clue": hidden[c["id"]]} if c["id"] in hidden else {})}
+                          for c in desk_data["cards"]]}
+        stats["full_checks"] += 1
+        passed, _, checks = check(Desk(data))
+        if passed:
+            return data, {**stats, **checks}
+    return None, stats
 
 
 def rule_key(rule):
@@ -108,7 +173,38 @@ def rule_key(rule):
     return json.dumps(r, sort_keys=True)
 
 
+def search_test(path, seeds=10):
+    """C3.5b test: search each sample's cards (its hand-made clues removed) with several seeds."""
+    found = tries = 0
+    for sample in json.load(open(path, encoding="utf-8")):
+        d = {k: v for k, v in sample["desk"].items() if k != "clues"}
+        wins, t0, example = [], time.time(), None
+        for seed in range(seeds):
+            data, stats = search(d, seed=seed)
+            tries += 1
+            if data:
+                wins.append(stats["attempts"])
+                example = example or (data, stats)
+        found += len(wins)
+        print(f"{sample['label']} · {sample['size']}: {len(wins)}/{seeds} seeds pass"
+              + (f", attempts median {sorted(wins)[len(wins) // 2]} max {max(wins)}" if wins else "")
+              + f", {(time.time() - t0) / seeds:.1f}s per search")
+        if example:
+            data, stats = example
+            gate = {c["clue"]: c["t"] for c in data["cards"] if c.get("clue")}
+            for c in data["clues"]:
+                where = "start" if c.get("start") else f"on {gate[c['id']]}"
+                print(f"    {c['id']} ({where}): {json.dumps(c['rule'])}")
+            print(f"    states={stats['states']} avg-provable={stats['avg_provable']} "
+                  f"chain={stats['chain']} longest-proof={stats['longest_proof']} openers={stats['openers']}")
+    print(f"pass rate: {found}/{tries}")
+    return found
+
+
 if __name__ == "__main__":
+    if "--search" in sys.argv:
+        sys.argv.remove("--search")
+        sys.exit(0 if search_test(sys.argv[1]) else 1)
     # Test (C3.5a): every listed rule is true for the real filing. Also shows which of the
     # hand-made clues the lister would have found.
     failed = False
