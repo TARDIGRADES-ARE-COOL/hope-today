@@ -108,9 +108,13 @@ FACT_SCHEMA = {
 }
 
 
-def pick_facts(stories, texts, per=2):
-    """LLM picks the facts, code checks them. Returns ({stories, cards, warnings} or None, problems)."""
+def pick_facts(stories, texts, per=2, avoid=()):
+    """LLM picks the facts, code checks them. Returns ({stories, cards, warnings} or None, problems).
+    `avoid`: card texts a blind reader placed too easily last time."""
     listing = "\n\n".join(f"ARTICLE {i}: {s['headline']}\n{t}" for i, (s, t) in enumerate(zip(stories, texts)))
+    if avoid:
+        listing += ("\n\nA reader placed these facts without any clues, so pick others where you can: "
+                    + ", ".join(avoid))
     messages = [{"role": "system", "content": FACT_PROMPT}, {"role": "user", "content": listing}]
     for attempt in range(2):                      # one retry with the problem list
         response = client.chat.completions.create(
