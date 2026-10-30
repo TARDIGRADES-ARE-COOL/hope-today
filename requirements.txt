@@ -1,0 +1,6 @@
+# Install with:  pip install -r requirements.txt
+openai==3.41.0          # model calls (agent, judge, clues)
+requests==2.34.2        # Guardian API
+python-dotenv==1.2.4    # loads keys from .env
+Jinja2==3.1.6           # deck and puzzle templates
+wordfreq==3.1.1         # blocks puzzle answers too rare to guess
