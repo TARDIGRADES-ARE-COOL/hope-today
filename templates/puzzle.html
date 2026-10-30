@@ -140,6 +140,7 @@
     .result h2 { font-size: var(--step-head); }
     .steps { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
     .steps[hidden] { display: none; }
+    .streak { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: var(--step-lead); text-transform: uppercase; }
     .result .actions .button { flex: 0 0 auto; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -193,6 +194,7 @@
     <section class="result" id="result" hidden aria-live="polite">
       <h2 id="result-title"></h2>
       <p id="result-line"></p>
+      <p class="streak" id="streak"></p>
       <ol class="steps" id="steps" hidden>
         {% for step in puzzle.solution.steps %}<li>{{ step }}</li>{% endfor %}
       </ol>
@@ -240,6 +242,23 @@
       // Accept the answer, or a simple plural either way.
       const matches = g => g === ANSWER || g === ANSWER + "S" || g + "S" === ANSWER;
 
+      // Streak: days in a row the player finished the puzzle (solving or giving up both count).
+      const STREAK_KEY = "hope-streak";
+      const TODAY = "{{ today }}";
+      const dayBefore = iso => new Date(Date.parse(iso + "T00:00:00Z") - 864e5).toISOString().slice(0, 10);
+      const readStreak = () => { try { return JSON.parse(localStorage.getItem(STREAK_KEY)) || {}; } catch { return {}; } };
+      const bumpStreak = () => {
+        const s = readStreak();
+        if (s.last !== TODAY) {
+          s.count = s.last === dayBefore(TODAY) ? (s.count || 0) + 1 : 1;
+          s.best = Math.max(s.best || 0, s.count);
+          s.last = TODAY;
+          try { localStorage.setItem(STREAK_KEY, JSON.stringify(s)); } catch {}
+        }
+        return s;
+      };
+      const streakText = s => s.count ? `\u{1F525} ${s.count}-day streak \u00B7 best ${s.best}` : "";
+
       const finish = (status, celebrate) => {
         state.status = status;
         save();
@@ -256,6 +275,8 @@
           ? `${ANSWER} in ${g} ${g === 1 ? "guess" : "guesses"}, with ${h} extra ${h === 1 ? "hint" : "hints"}. Your good news is ready.`
           : "Here's how the clue worked. Your good news is ready anyway.";
         $("steps").hidden = solved;
+        const streak = celebrate ? bumpStreak() : readStreak();   // only count a finish once
+        $("streak").textContent = streakText(streak);
         $("result").hidden = false;
         showHints();
         if (celebrate) {
@@ -292,9 +313,10 @@
       $("give-up").addEventListener("click", () => finish("gave-up", true));
       $("share").addEventListener("click", async () => {
         const g = state.guesses, h = state.hints - 1;
+        const streak = readStreak().count ? ` \u00B7 \u{1F525} ${readStreak().count}` : "";
         const text = state.status === "solved"
-          ? `Hope Today {{ today|nice_date }}: solved in ${g} ${g === 1 ? "guess" : "guesses"}, ${h} extra ${h === 1 ? "hint" : "hints"} \u{1F305}`
-          : `Hope Today {{ today|nice_date }}: this one beat me \u{1F305}`;
+          ? `Hope Today {{ today|nice_date }}: solved in ${g} ${g === 1 ? "guess" : "guesses"}, ${h} extra ${h === 1 ? "hint" : "hints"}${streak} \u{1F305}`
+          : `Hope Today {{ today|nice_date }}: this one beat me${streak} \u{1F305}`;
         try { await navigator.clipboard.writeText(text); $("share").textContent = "Copied!"; }
         catch { prompt("Copy this:", text); }
       });
