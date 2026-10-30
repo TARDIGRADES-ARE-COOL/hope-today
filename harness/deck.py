@@ -46,8 +46,9 @@ def check_stories(stories):
     return " ".join(problems) or None
 
 
-def render_deck(title, user_answer, stories):
-    """Fill the deck template with stories, save it as HTML and open it."""
+def render_deck(title, user_answer, stories, topic=None, path=None):
+    """Fill the deck template with stories, save it as HTML and open it.
+    The daily puzzle passes topic (no single user to quote) and its own path."""
     # Errors go back to the model as text (not raised) so it can fix and retry.
     problem = check_stories(stories)
     if problem:
@@ -57,12 +58,13 @@ def render_deck(title, user_answer, stories):
     html = template.render(
         title=title,
         user_answer=user_answer,
+        topic=topic,
         stories=stories,
         today=date.today().isoformat(),
     )
 
-    OUTPUT.mkdir(exist_ok=True)
-    path = OUTPUT / f"deck-{date.today().isoformat()}.html"
+    path = Path(path) if path else OUTPUT / f"deck-{date.today().isoformat()}.html"
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(html, encoding="utf-8")
 
     webbrowser.open(path.as_uri())

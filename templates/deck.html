@@ -347,7 +347,11 @@
         <span>{{ stories|length }} good {{ "story" if stories|length == 1 else "stories" }}</span>
         <span>{{ title }}</span>
       </div>
+      {% if topic %}
+      <p class="cover-said">Today's good news: <q>{{ topic }}</q>. Here is what is going right.</p>
+      {% else %}
       <p class="cover-said">You said <q>{{ user_answer }}</q>. Here is what is going right.</p>
+      {% endif %}
       {%- set thumbs = (stories | selectattr("image") | list)[:4] %}
       {% if thumbs %}
       <div class="cover-photos" style="grid-template-columns: repeat({{ thumbs|length }}, 1fr)">
@@ -388,7 +392,7 @@
         <li>{{ point }}</li>
         {% endfor %}
       </ul>
-      <p class="why"><strong>Why it matters to you:</strong> {{ story.why_it_matters }}</p>
+      <p class="why"><strong>Why it matters{{ "" if topic else " to you" }}:</strong> {{ story.why_it_matters }}</p>
       <p class="source">
         <span>The Guardian · {{ story.date|nice_date }}</span>
         <button class="keep" type="button" aria-pressed="false"
@@ -412,7 +416,7 @@
         {% endif %}
         <h2>There is hope today.</h2>
         <div>
-          <p class="postcard-message">{{ stories|length }} real {{ "story" if stories|length == 1 else "stories" }} about what you care about, every one from the last month. Come back tomorrow and there will be more.</p>
+          <p class="postcard-message">{{ stories|length }} real {{ "story" if stories|length == 1 else "stories" }} about {{ topic|lower if topic else "what you care about" }}, every one from the last week{{ "" if topic else " or so" }}. Come back tomorrow and there will be more.</p>
         </div>
         <div class="postcard-right">
           <div class="kept" id="kept" hidden>
