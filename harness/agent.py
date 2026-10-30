@@ -1,6 +1,6 @@
 import json
 import sys
-from guards import SUPPORT_MESSAGE, is_in_distress
+from guards import OFF_TOPIC_MESSAGE, SUPPORT_MESSAGE, screen
 from llm import chat
 from tools import TOOL_SCHEMAS, TOOLS
 
@@ -10,9 +10,14 @@ MAX_DECK_TRIES = 3                           # stop if render_deck keeps failing
 # python harness/agent.py "good news about science"
 question = sys.argv[1] if len(sys.argv) > 1 else "any good ocean news?"
 
-# Safety gate: runs before the loop. Someone in crisis gets care and real support, not slides.
-if is_in_distress(question):
+# Safety gate: runs before the loop. Someone in crisis gets care and real support, not slides;
+# a message good news can't answer gets a short pointer instead of a wasted search.
+label = screen(question)
+if label == "CRISIS":
     print(SUPPORT_MESSAGE)
+    sys.exit()
+if label == "OFF_TOPIC":
+    print(OFF_TOPIC_MESSAGE)
     sys.exit()
 
 messages = [{"role": "user", "content": question}]
