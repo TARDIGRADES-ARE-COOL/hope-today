@@ -1,0 +1,131 @@
+[
+ {
+  "label": "FIXTURE old chain-only",
+  "size": "6 facts",
+  "date": "2026-10-31",
+  "theme": "Big finds, safe crossings",
+  "desk": {
+   "per": 2,
+   "rule": "Each story gets two facts.",
+   "kinds": {},
+   "stories": [
+    {
+     "head": "Japan Heads for Phobos",
+     "dl": "Space · launched by Japan",
+     "blurb": "Japan's MMX probe is on its way to Phobos, a moon of Mars. It will drop a rover with a drill, scoop up some of the surface and bring it home, landing in the South Australian outback."
+    },
+    {
+     "head": "Waterlily Found on Instagram",
+     "dl": "Inírida, Colombia",
+     "blurb": "A giant waterlily first noticed in someone's Instagram photos is a new species, Victoria colombiana. A short expedition finally found it in two jungle lakes. It is already at risk."
+    },
+    {
+     "head": "Elk Get a Bridge",
+     "dl": "Colorado, USA",
+     "blurb": "A grass-covered bridge over Interstate 25 opened last December so elk, bears and pronghorns can cross safely. Crashes with wildlife have plunged since."
+    }
+   ],
+   "cards": [
+    {
+     "id": "y31",
+     "t": "2031",
+     "home": 0,
+     "means": "when MMX's capsule lands back on Earth",
+     "kind": "year",
+     "value": 2031,
+     "unit": "year",
+     "clue": "c3"
+    },
+    {
+     "id": "n4",
+     "t": "4",
+     "home": 0,
+     "means": "legs on MMX's rover",
+     "kind": "count",
+     "value": 4,
+     "unit": "legs"
+    },
+    {
+     "id": "d5",
+     "t": "5 days",
+     "home": 1,
+     "means": "how long the expedition lasted",
+     "kind": "time",
+     "value": 5,
+     "unit": "days"
+    },
+    {
+     "id": "n7",
+     "t": "7",
+     "home": 1,
+     "means": "plants the team found across two lakes",
+     "kind": "count",
+     "value": 7,
+     "unit": "plants"
+    },
+    {
+     "id": "p91",
+     "t": "91%",
+     "home": 2,
+     "means": "the drop in crashes with wildlife",
+     "kind": "percent",
+     "value": 91,
+     "unit": "%",
+     "clue": "c4"
+    },
+    {
+     "id": "n6",
+     "t": "6",
+     "home": 2,
+     "means": "lanes of I-25 under the bridge",
+     "kind": "count",
+     "value": 6,
+     "unit": "lanes"
+    }
+   ],
+   "clues": [
+    {
+     "id": "c1",
+     "start": true,
+     "t": "The only year on the desk is when something comes home.",
+     "rule": {
+      "op": "in",
+      "card": "y31",
+      "story": 0
+     }
+    },
+    {
+     "id": "c2",
+     "start": true,
+     "t": "The percentage measures how far something fell.",
+     "rule": {
+      "op": "in",
+      "card": "p91",
+      "story": 2
+     }
+    },
+    {
+     "id": "c3",
+     "t": "The year's story has the smallest bare number on the desk.",
+     "rule": {
+      "op": "same",
+      "a": "n4",
+      "b": "y31"
+     }
+    },
+    {
+     "id": "c4",
+     "t": "The percentage shares a story with an even bare number.",
+     "rule": {
+      "op": "same_as_any",
+      "card": "p91",
+      "others": [
+       "n4",
+       "n6"
+      ]
+     }
+    }
+   ]
+  }
+ }
+]

@@ -1,0 +1,679 @@
+[
+ {
+  "label": "Fri 30 Oct",
+  "size": "6 facts",
+  "date": "2026-10-30",
+  "theme": "Saving wild places",
+  "desk": {
+   "per": 2,
+   "rule": "Each story gets two facts.",
+   "kinds": {},
+   "stories": [
+    {
+     "head": "Big Save for Wooroora",
+     "dl": "Far north Queensland, Australia",
+     "blurb": "A conservation group has bought Wooroora, a cattle station south-west of Cairns, to protect the rare wildlife that lives there."
+    },
+    {
+     "head": "Rothbury Fund Hits Goal",
+     "dl": "Northumberland, England",
+     "blurb": "A public appeal backed by David Attenborough has raised enough to buy the Rothbury estate, which had been sitting on the market, and rewild it."
+    },
+    {
+     "head": "Fen Fight Wins Again",
+     "dl": "Norfolk, England",
+     "blurb": "A Norfolk couple who farm next to Catfield Fen have won another court case to protect it from pollution, after a long and costly fight."
+    }
+   ],
+   "cards": [
+    {
+     "id": "d19",
+     "t": "$19m+",
+     "home": 0,
+     "means": "raised by private donors to buy Wooroora",
+     "kind": "money",
+     "value": 19000000,
+     "unit": "AUD"
+    },
+    {
+     "id": "h20",
+     "t": "20,000+ ha",
+     "home": 0,
+     "means": "the size of Wooroora",
+     "kind": "size",
+     "value": 20000,
+     "unit": "ha"
+    },
+    {
+     "id": "p30",
+     "t": "£30m",
+     "home": 1,
+     "means": "raised by the Rothbury appeal",
+     "kind": "money",
+     "value": 30000000,
+     "unit": "GBP"
+    },
+    {
+     "id": "y2",
+     "t": "2 years",
+     "home": 1,
+     "means": "how long Rothbury was up for sale",
+     "kind": "time",
+     "value": 2,
+     "unit": "years"
+    },
+    {
+     "id": "a460",
+     "t": "460 acres",
+     "home": 2,
+     "means": "the couple's farm",
+     "kind": "size",
+     "value": 186.2,
+     "unit": "ha",
+     "clue": "c4"
+    },
+    {
+     "id": "y15",
+     "t": "15 years",
+     "home": 2,
+     "means": "how long the couple have been fighting",
+     "kind": "time",
+     "value": 15,
+     "unit": "years",
+     "clue": "c5"
+    }
+   ],
+   "clues": [
+    {
+     "id": "c1",
+     "t": "Only the Australian story counts its money in dollars.",
+     "rule": {
+      "op": "in",
+      "card": "d19",
+      "story": 0
+     },
+     "start": true
+    },
+    {
+     "id": "c2",
+     "t": "The acres aren't in the Australian story.",
+     "rule": {
+      "op": "not_in",
+      "card": "a460",
+      "story": 0
+     },
+     "start": true
+    },
+    {
+     "id": "c3",
+     "t": "The public appeal didn't buy anything measured in acres.",
+     "rule": {
+      "op": "not_in",
+      "card": "a460",
+      "story": 1
+     },
+     "start": true
+    },
+    {
+     "id": "c4",
+     "t": "The only size in acres sits with the longest stretch of time on the desk.",
+     "rule": {
+      "op": "same",
+      "a": "a460",
+      "b": "y15"
+     }
+    },
+    {
+     "id": "c5",
+     "t": "The story with dollars is also the biggest place on the desk.",
+     "rule": {
+      "op": "same",
+      "a": "h20",
+      "b": "d19"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "label": "Fri 30 Oct",
+  "size": "9 facts",
+  "date": "2026-10-30",
+  "theme": "Saving wild places",
+  "desk": {
+   "per": 3,
+   "rule": "Each story gets three facts: one sum of money, one size, and one other.",
+   "kinds": {
+    "money": 1,
+    "size": 1
+   },
+   "stories": [
+    {
+     "head": "Big Save for Wooroora",
+     "dl": "Far north Queensland, Australia",
+     "blurb": "A conservation group has bought Wooroora, a cattle station south-west of Cairns, to protect the rare wildlife that lives there."
+    },
+    {
+     "head": "Rothbury Fund Hits Goal",
+     "dl": "Northumberland, England",
+     "blurb": "A public appeal backed by David Attenborough has raised enough to buy the Rothbury estate, which had been sitting on the market, and rewild it."
+    },
+    {
+     "head": "Fen Fight Wins Again",
+     "dl": "Norfolk, England",
+     "blurb": "A Norfolk couple who farm next to Catfield Fen have won another court case to protect it from pollution, after a long and costly fight."
+    }
+   ],
+   "cards": [
+    {
+     "id": "d19",
+     "t": "$19m+",
+     "home": 0,
+     "means": "raised by private donors to buy Wooroora",
+     "kind": "money",
+     "value": 19000000,
+     "unit": "AUD",
+     "clue": "c5"
+    },
+    {
+     "id": "p30",
+     "t": "£30m",
+     "home": 1,
+     "means": "raised by the Rothbury appeal",
+     "kind": "money",
+     "value": 30000000,
+     "unit": "GBP"
+    },
+    {
+     "id": "p15",
+     "t": "£1.5m",
+     "home": 2,
+     "means": "what the couple's fight has cost them",
+     "kind": "money",
+     "value": 1500000,
+     "unit": "GBP",
+     "clue": "c7"
+    },
+    {
+     "id": "h20",
+     "t": "20,000+ ha",
+     "home": 0,
+     "means": "the size of Wooroora",
+     "kind": "size",
+     "value": 20000,
+     "unit": "ha",
+     "clue": "c6"
+    },
+    {
+     "id": "h38",
+     "t": "3,800+ ha",
+     "home": 1,
+     "means": "the size of the Rothbury estate",
+     "kind": "size",
+     "value": 3800,
+     "unit": "ha",
+     "clue": "c8"
+    },
+    {
+     "id": "a460",
+     "t": "460 acres",
+     "home": 2,
+     "means": "the couple's farm",
+     "kind": "size",
+     "value": 186.2,
+     "unit": "ha",
+     "clue": "c4"
+    },
+    {
+     "id": "s12",
+     "t": "12+ species",
+     "home": 0,
+     "means": "threatened species recorded at Wooroora",
+     "kind": "count",
+     "value": 12,
+     "unit": "species"
+    },
+    {
+     "id": "y2",
+     "t": "2 years",
+     "home": 1,
+     "means": "how long Rothbury was up for sale",
+     "kind": "time",
+     "value": 2,
+     "unit": "years"
+    },
+    {
+     "id": "y15",
+     "t": "15 years",
+     "home": 2,
+     "means": "how long the couple have been fighting",
+     "kind": "time",
+     "value": 15,
+     "unit": "years"
+    }
+   ],
+   "clues": [
+    {
+     "id": "c1",
+     "t": "Only the Australian story counts its money in dollars.",
+     "rule": {
+      "op": "in",
+      "card": "d19",
+      "story": 0
+     },
+     "start": true
+    },
+    {
+     "id": "c2",
+     "t": "The acres aren't in the Australian story.",
+     "rule": {
+      "op": "not_in",
+      "card": "a460",
+      "story": 0
+     },
+     "start": true
+    },
+    {
+     "id": "c3",
+     "t": "The public appeal didn't buy anything measured in acres.",
+     "rule": {
+      "op": "not_in",
+      "card": "a460",
+      "story": 1
+     },
+     "start": true
+    },
+    {
+     "id": "c4",
+     "t": "The story with dollars is also the biggest place on the desk.",
+     "rule": {
+      "op": "same",
+      "a": "h20",
+      "b": "d19"
+     }
+    },
+    {
+     "id": "c5",
+     "t": "The count of threatened species belongs to the biggest place on the desk.",
+     "rule": {
+      "op": "same",
+      "a": "s12",
+      "b": "h20"
+     }
+    },
+    {
+     "id": "c6",
+     "t": "The story with acres has the smaller sum in pounds.",
+     "rule": {
+      "op": "same",
+      "a": "p15",
+      "b": "a460"
+     }
+    },
+    {
+     "id": "c7",
+     "t": "The smaller sum in pounds sits with the longer stretch of time.",
+     "rule": {
+      "op": "same",
+      "a": "y15",
+      "b": "p15"
+     }
+    },
+    {
+     "id": "c8",
+     "t": "The second-biggest place sits with the shorter stretch of time.",
+     "rule": {
+      "op": "same",
+      "a": "y2",
+      "b": "h38"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "label": "Sample day",
+  "size": "6 facts",
+  "date": "2026-10-31",
+  "theme": "Big finds, safe crossings",
+  "desk": {
+   "per": 2,
+   "rule": "Each story gets two facts.",
+   "kinds": {},
+   "stories": [
+    {
+     "head": "Japan Heads for Phobos",
+     "dl": "Space · launched by Japan",
+     "blurb": "Japan's MMX probe is on its way to Phobos, a moon of Mars. It will drop a rover with a drill, scoop up some of the surface and bring it home, landing in the South Australian outback."
+    },
+    {
+     "head": "Waterlily Found on Instagram",
+     "dl": "Inírida, Colombia",
+     "blurb": "A giant waterlily first noticed in someone's Instagram photos is a new species, Victoria colombiana. A short expedition finally found it in two jungle lakes. It is already at risk."
+    },
+    {
+     "head": "Elk Get a Bridge",
+     "dl": "Colorado, USA",
+     "blurb": "A grass-covered bridge over Interstate 25 opened last December so elk, bears and pronghorns can cross safely. Crashes with wildlife have plunged since."
+    }
+   ],
+   "cards": [
+    {
+     "id": "y31",
+     "t": "2031",
+     "home": 0,
+     "means": "when MMX's capsule lands back on Earth",
+     "kind": "year",
+     "value": 2031,
+     "unit": "year"
+    },
+    {
+     "id": "n4",
+     "t": "4",
+     "home": 0,
+     "means": "legs on MMX's rover",
+     "kind": "count",
+     "value": 4,
+     "unit": "legs",
+     "clue": "c5"
+    },
+    {
+     "id": "d5",
+     "t": "5 days",
+     "home": 1,
+     "means": "how long the expedition lasted",
+     "kind": "time",
+     "value": 5,
+     "unit": "days"
+    },
+    {
+     "id": "n7",
+     "t": "7",
+     "home": 1,
+     "means": "plants the team found across two lakes",
+     "kind": "count",
+     "value": 7,
+     "unit": "plants"
+    },
+    {
+     "id": "p91",
+     "t": "91%",
+     "home": 2,
+     "means": "the drop in crashes with wildlife",
+     "kind": "percent",
+     "value": 91,
+     "unit": "%",
+     "clue": "c4"
+    },
+    {
+     "id": "n6",
+     "t": "6",
+     "home": 2,
+     "means": "lanes of I-25 under the bridge",
+     "kind": "count",
+     "value": 6,
+     "unit": "lanes"
+    }
+   ],
+   "clues": [
+    {
+     "id": "c1",
+     "t": "The only year on the desk is when something comes home.",
+     "rule": {
+      "op": "in",
+      "card": "y31",
+      "story": 0
+     },
+     "start": true
+    },
+    {
+     "id": "c2",
+     "t": "The percentage has nothing to do with space.",
+     "rule": {
+      "op": "not_in",
+      "card": "p91",
+      "story": 0
+     },
+     "start": true
+    },
+    {
+     "id": "c3",
+     "t": "The percentage isn't counting plants.",
+     "rule": {
+      "op": "not_in",
+      "card": "p91",
+      "story": 1
+     },
+     "start": true
+    },
+    {
+     "id": "c4",
+     "t": "The year's story has the smallest bare number on the desk.",
+     "rule": {
+      "op": "same",
+      "a": "n4",
+      "b": "y31"
+     }
+    },
+    {
+     "id": "c5",
+     "t": "The percentage shares a story with an even bare number.",
+     "rule": {
+      "op": "same_as_any",
+      "card": "p91",
+      "others": [
+       "n4",
+       "n6"
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "label": "Sample day",
+  "size": "9 facts",
+  "date": "2026-10-31",
+  "theme": "Big finds, safe crossings",
+  "desk": {
+   "per": 3,
+   "rule": "Each story gets three facts.",
+   "kinds": {},
+   "stories": [
+    {
+     "head": "Japan Heads for Phobos",
+     "dl": "Space · launched by Japan",
+     "blurb": "Japan's MMX probe is on its way to Phobos, a moon of Mars. It will drop a rover with a drill, scoop up some of the surface and bring it home, landing in the South Australian outback."
+    },
+    {
+     "head": "Waterlily Found on Instagram",
+     "dl": "Inírida, Colombia",
+     "blurb": "A giant waterlily first noticed in someone's Instagram photos is a new species, Victoria colombiana. A short expedition finally found it in two jungle lakes. It is already at risk."
+    },
+    {
+     "head": "Elk Get a Bridge",
+     "dl": "Colorado, USA",
+     "blurb": "A grass-covered bridge over Interstate 25 opened last December so elk, bears and pronghorns can cross safely. Crashes with wildlife have plunged since."
+    }
+   ],
+   "cards": [
+    {
+     "id": "y31",
+     "t": "2031",
+     "home": 0,
+     "means": "when MMX's capsule lands back on Earth",
+     "kind": "year",
+     "value": 2031,
+     "unit": "year",
+     "clue": "c5"
+    },
+    {
+     "id": "g10",
+     "t": "10g",
+     "home": 0,
+     "means": "at least this much of Phobos comes home",
+     "kind": "mass",
+     "value": 10,
+     "unit": "g",
+     "clue": "c6"
+    },
+    {
+     "id": "n4",
+     "t": "4",
+     "home": 0,
+     "means": "legs on MMX's rover",
+     "kind": "count",
+     "value": 4,
+     "unit": "legs",
+     "clue": "c9"
+    },
+    {
+     "id": "d5",
+     "t": "5 days",
+     "home": 1,
+     "means": "how long the expedition lasted",
+     "kind": "time",
+     "value": 5,
+     "unit": "days",
+     "clue": "c8"
+    },
+    {
+     "id": "r30",
+     "t": "30 to 50",
+     "home": 1,
+     "means": "plants thought to be left in the wild",
+     "kind": "count",
+     "value": 40,
+     "unit": "plants"
+    },
+    {
+     "id": "n7",
+     "t": "7",
+     "home": 1,
+     "means": "plants the team found across two lakes",
+     "kind": "count",
+     "value": 7,
+     "unit": "plants"
+    },
+    {
+     "id": "m9",
+     "t": "9 months",
+     "home": 2,
+     "means": "how long the bridge has been open in the data",
+     "kind": "time",
+     "value": 270,
+     "unit": "days",
+     "clue": "c7"
+    },
+    {
+     "id": "p91",
+     "t": "91%",
+     "home": 2,
+     "means": "the drop in crashes with wildlife",
+     "kind": "percent",
+     "value": 91,
+     "unit": "%",
+     "clue": "c4"
+    },
+    {
+     "id": "n6",
+     "t": "6",
+     "home": 2,
+     "means": "lanes of I-25 under the bridge",
+     "kind": "count",
+     "value": 6,
+     "unit": "lanes"
+    }
+   ],
+   "clues": [
+    {
+     "id": "c1",
+     "t": "The only year on the desk is when something comes home.",
+     "rule": {
+      "op": "in",
+      "card": "y31",
+      "story": 0
+     },
+     "start": true
+    },
+    {
+     "id": "c2",
+     "t": "The percentage has nothing to do with space.",
+     "rule": {
+      "op": "not_in",
+      "card": "p91",
+      "story": 0
+     },
+     "start": true
+    },
+    {
+     "id": "c3",
+     "t": "The percentage isn't counting plants.",
+     "rule": {
+      "op": "not_in",
+      "card": "p91",
+      "story": 1
+     },
+     "start": true
+    },
+    {
+     "id": "c4",
+     "t": "The grams sit in the same story as the year.",
+     "rule": {
+      "op": "same",
+      "a": "g10",
+      "b": "y31"
+     }
+    },
+    {
+     "id": "c5",
+     "t": "The longer of the two time spans sits with the percentage.",
+     "rule": {
+      "op": "same",
+      "a": "m9",
+      "b": "p91"
+     }
+    },
+    {
+     "id": "c6",
+     "t": "The year's story has the smallest bare number on the desk.",
+     "rule": {
+      "op": "same",
+      "a": "n4",
+      "b": "y31"
+     }
+    },
+    {
+     "id": "c7",
+     "t": "The shorter time span is not with the percentage.",
+     "rule": {
+      "op": "differ",
+      "a": "d5",
+      "b": "p91"
+     }
+    },
+    {
+     "id": "c8",
+     "t": "The range “30 to 50” sits with the shorter time span.",
+     "rule": {
+      "op": "same",
+      "a": "r30",
+      "b": "d5"
+     }
+    },
+    {
+     "id": "c9",
+     "t": "The percentage shares a story with an even bare number.",
+     "rule": {
+      "op": "same_as_any",
+      "card": "p91",
+      "others": [
+       "n4",
+       "n6"
+      ]
+     }
+    }
+   ]
+  }
+ }
+]

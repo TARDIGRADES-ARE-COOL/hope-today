@@ -1,0 +1,448 @@
+<title>Copy Desk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Rokkitt:wght@600;800&display=swap">
+<style>
+/* Layout: a night news desk. Sky band on top brightens as facts are filed; clue board, then the tray of loose facts, then three clippings to file them into. Single look by choice (Hope Today's night palette). */
+:root{
+  --night:#18203a; --night-2:#222c4b; --night-3:#34416b;
+  --paper:#e3dfd2; --paper-2:#f2eee2; --ink:#1d1c19; --ink-2:#56534b;
+  --olive:#2f3b25; --olive-2:#46593a;
+  --dawn:#f1c983; --sun:#f7e0a6; --rose:#cf8f7c;
+  --wire:#2a5ea8; --wire-bg:#dbe5f3;
+  --bad:#a4412f; --good:#2f6b3a;
+  --display:"Rokkitt","Rockwell","Roboto Slab",Georgia,serif;
+  --body:"Literata","Iowan Old Style",Georgia,serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--night);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 56px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:18px}
+h1,h2,h3{font-family:var(--display);line-height:1.05;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.kicker{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--dawn)}
+
+.sky{--p:0;height:110px;position:relative;overflow:hidden;margin-inline:calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  background:linear-gradient(180deg,#141b33 0 20%,#1b2443 20% 40%,#27325a 40% 58%,#4a4870 58% 72%,#7b5f78 72% 84%,#a8756f 84% 92%,#c98f6f 92% 100%);
+  filter:brightness(calc(.5 + var(--p) * .62)) saturate(calc(.7 + var(--p) * .4));transition:filter .8s}
+.sky .stars{position:absolute;inset:0;background-image:radial-gradient(#e3dfd2 1px,transparent 1.5px);background-size:46px 34px;opacity:calc(.6 - var(--p) * .5);mask-image:linear-gradient(#000 0,#000 40%,transparent 60%)}
+.sky .sun{position:absolute;width:52px;height:52px;left:70%;bottom:calc(-34px + var(--p) * 44px);background:var(--sun);transition:bottom 1s ease;
+  clip-path:polygon(30% 0,70% 0,70% 10%,85% 10%,85% 20%,92% 20%,92% 32%,100% 32%,100% 68%,92% 68%,92% 80%,85% 80%,85% 90%,70% 90%,70% 100%,30% 100%,30% 90%,15% 90%,15% 80%,8% 80%,8% 68%,0 68%,0 32%,8% 32%,8% 20%,15% 20%,15% 10%,30% 10%)}
+.sky .hills{position:absolute;inset:auto 0 0 0;height:28px;background:#2a3326;clip-path:polygon(0 60%,6% 40%,12% 55%,20% 30%,28% 50%,36% 35%,44% 55%,52% 25%,60% 45%,68% 30%,76% 50%,84% 35%,92% 55%,100% 40%,100% 100%,0 100%)}
+
+header{display:grid;gap:8px}
+header h1{font-size:clamp(38px,7.5vw,60px);font-weight:800}
+.mast{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:clamp(22px,4vw,28px);color:var(--paper);border-bottom:2px solid var(--paper);padding-bottom:6px;margin-bottom:4px}
+.heads{list-style:none;margin:4px 0 2px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.heads li{background:var(--paper);color:var(--ink);font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:14px;padding:6px 10px;transform:rotate(-.5deg)}
+.heads li:nth-child(2){transform:rotate(.6deg)}
+.heads li span{display:block;font-family:var(--body);font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;color:var(--ink-2)}
+header .sub b{color:var(--paper)}
+header p.sub{max-width:62ch;color:#d5d2c8}
+
+.days{display:flex;gap:0;border:1px solid var(--night-3)}
+.day{flex:1 1 0;min-width:0;background:var(--night-2);border:0;border-right:1px solid var(--night-3);padding:10px 12px;cursor:pointer;text-align:left;display:grid;gap:2px}
+.day:last-child{border-right:0}
+.day b{font-family:var(--display);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:15px}
+.day span{font-size:13px;color:#a9a79e}
+.day[aria-pressed="true"]{background:var(--paper);color:var(--ink)}
+.day[aria-pressed="true"] span{color:var(--ink-2)}
+
+.status{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;justify-content:space-between;background:var(--olive);padding:10px 14px}
+.status .t{font-family:var(--mono);font-size:22px;font-variant-numeric:tabular-nums;color:var(--sun)}
+.status .m{font-family:var(--mono);font-size:13px;color:#dde2cf;display:flex;gap:14px;flex-wrap:wrap}
+.howto{font-size:15px;color:#cfccc2;max-width:72ch}
+.howto b{color:var(--paper)}
+
+.board{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+@media (min-width:860px){.board{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}}
+.panel{background:var(--night-2);border:1px solid var(--night-3);padding:14px 16px;display:grid;gap:10px;align-content:start;min-width:0}
+.panel h2{font-size:20px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--dawn)}
+.clues{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:c}
+.clue{background:var(--paper-2);color:var(--ink);padding:9px 12px 9px 40px;position:relative;font-size:15px;line-height:1.45;transition:background .4s}
+.clue::before{counter-increment:c;content:counter(c);position:absolute;left:10px;top:8px;font-family:var(--display);font-weight:800;font-size:18px;color:var(--rose)}
+.clue.locked{background:transparent;color:#8f8d86;border:1px dashed var(--night-3);font-style:italic}
+.clue.locked::before{color:#6b6a72}
+.clue.new{animation:arrive .7s ease}
+.clue.hl{background:#f6dc8f}
+@keyframes arrive{from{transform:translateY(-6px);background:#f6dc8f}to{transform:none}}
+.rule{font-size:14px;color:#cfccc2;border-left:3px solid var(--dawn);padding-left:10px}
+
+.tray{display:flex;flex-wrap:wrap;gap:8px;min-height:44px}
+.card{background:var(--wire-bg);color:var(--wire);border:1.5px dashed var(--wire);padding:8px 12px;font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:.01em;cursor:pointer;min-width:64px;text-align:center;transition:transform .15s,background .2s}
+.card:hover{transform:translateY(-1px)}
+.card[aria-pressed="true"]{background:var(--wire);color:#fff;border-style:solid;transform:translateY(-2px)}
+.card.hl{outline:3px solid var(--sun);outline-offset:2px}
+.card.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+.tray .empty{color:#a9a79e;font-size:14px;font-style:italic;align-self:center}
+
+.clips{display:grid;gap:14px}
+.clip{position:relative;background:var(--paper);color:var(--ink);padding:16px 16px 14px;display:grid;gap:8px;text-align:left;border:0;width:100%;cursor:default;
+  clip-path:polygon(0 3px,4% 0,9% 3px,15% 1px,22% 4px,30% 0,38% 3px,46% 1px,55% 4px,63% 0,71% 3px,80% 1px,88% 4px,95% 0,100% 3px,100% 100%,0 100%)}
+.clip.target{cursor:pointer;box-shadow:inset 0 0 0 3px var(--dawn)}
+.clip.target:hover{background:#ebe6d6}
+.clip .dl{font-family:var(--display);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:12px;color:var(--ink-2)}
+.clip h3{font-size:23px;font-weight:800;text-transform:uppercase}
+.clip .txt{font-size:15px;line-height:1.6}
+.filed{display:grid;gap:6px;border-top:1px solid #bdb6a3;padding-top:8px}
+.filed .slot{font-size:14px;color:var(--ink-2);font-style:italic}
+.fact{display:flex;gap:10px;align-items:baseline;animation:arrive .6s ease}
+.fact b{font-family:var(--display);font-weight:800;font-size:18px;min-width:76px;color:var(--ink)}
+.fact span{font-size:14px;color:var(--ink-2)}
+.fact.hinted b{color:#8a6a1c}
+.fileBtn{justify-self:start;font-family:var(--display);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:13px;background:var(--olive);color:var(--paper);border:0;padding:7px 12px;cursor:pointer}
+.fileBtn[hidden]{display:none}
+
+.msg{min-height:24px;font-size:15px;color:var(--sun)}
+.msg.bad{color:#f0a492}
+.controls{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font-family:var(--display);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:15px;padding:11px 16px;border:0;cursor:pointer;background:var(--olive-2);color:var(--paper)}
+.btn.primary{background:var(--dawn);color:var(--ink)}
+.btn.ghost{background:transparent;color:#cfccc2;border:1px solid var(--night-3)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.done{background:var(--paper);color:var(--ink);padding:18px 20px;display:grid;gap:12px}
+.done[hidden]{display:none}
+.done h2{font-size:30px;font-weight:800}
+.share{font-family:var(--mono);font-size:14px;white-space:pre;background:var(--paper-2);border:1px solid #c9c2ae;padding:12px 14px;overflow-x:auto}
+.note{font-size:14px;color:#a9a79e;max-width:70ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="sky" id="sky" aria-hidden="true"><div class="stars"></div><div class="sun"></div><div class="hills"></div></div>
+  <header>
+    <p class="mast">Hope Today</p>
+    <p class="kicker" id="dateLine">Fri 30 Oct · today's good news</p>
+    <h1 id="theme">Saving wild places</h1>
+    <ul class="heads" id="heads"></ul>
+    <p class="sub"><b>Today's puzzle: Copy Desk.</b> The night desk dropped a handful of facts from these stories. File each one in the story it came from. The catch: you can only file a fact once the clues <em>prove</em> where it goes.</p>
+  </header>
+
+  <div class="days" id="days" role="group" aria-label="Choose a day"></div>
+
+  <div class="status">
+    <span class="t" id="timer" aria-label="Time">0:00</span>
+    <span class="m"><span id="filedCount">0 filed</span><span id="mistakes">0 mistakes</span><span id="hintsUsed">0 hints</span></span>
+  </div>
+  <p class="howto"><b>How to play:</b> tap a fact, then tap the story it belongs to. If the clues don't prove it yet, the desk won't take it (no penalty). Filing a fact where the clues already rule it out is a mistake. Every fact you file correctly can reveal a new clue. The timer starts on your first tap.</p>
+
+  <div class="board">
+    <div class="panel">
+      <h2>Clues</h2>
+      <p class="rule" id="rule"></p>
+      <ol class="clues" id="clues"></ol>
+    </div>
+    <div class="panel">
+      <h2>Loose facts</h2>
+      <div class="tray" id="tray"></div>
+      <div class="msg" id="msg" role="status" aria-live="polite"></div>
+      <div class="clips" id="clips"></div>
+      <div class="controls">
+        <button class="btn" id="hint">Hint</button>
+        <button class="btn ghost" id="reset">Start again</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="done" id="done" hidden>
+    <h2 id="doneTitle">First light</h2>
+    <p id="doneLine"></p>
+    <div class="share" id="share"></div>
+    <div class="controls">
+      <button class="btn primary" id="next">Next day</button>
+      <button class="btn" id="copy">Copy result</button>
+    </div>
+    <p style="font-size:14px;color:var(--ink-2)">In the real game, the good-news slide deck opens here.</p>
+  </div>
+  <p class="note">Prototype only: nothing here touches the hope-today code. Both days were checked by a solver, so each can be finished from the clues alone without a single guess.</p>
+</div>
+
+<script id="engine">
+(function(root){
+  const S1=[
+    {k:"W",dl:"Far north Queensland, Australia",head:"Big Save for Wooroora",txt:"A conservation group has bought Wooroora, a cattle station south-west of Cairns, to protect the rare wildlife that lives there."},
+    {k:"R",dl:"Northumberland, England",head:"Rothbury Fund Hits Goal",txt:"A public appeal backed by David Attenborough has raised enough to buy the Rothbury estate, which had been sitting on the market, and rewild it."},
+    {k:"F",dl:"Norfolk, England",head:"Fen Fight Wins Again",txt:"A Norfolk couple who farm next to Catfield Fen have won another court case to protect it from pollution, after a long and costly fight."}];
+  const S2=[
+    {k:"M",dl:"Space · launched by Japan",head:"Japan Heads for Phobos",txt:"Japan's MMX probe is on its way to Phobos, a moon of Mars. It will drop a rover with a drill, scoop up some of the surface and bring it home, landing in the South Australian outback."},
+    {k:"V",dl:"Inírida, Colombia",head:"Waterlily Found on Instagram",txt:"A giant waterlily first noticed in someone's Instagram photos is a new species, Victoria colombiana. A short expedition finally found it in two jungle lakes. It is already at risk."},
+    {k:"O",dl:"Colorado, USA",head:"Elk Get a Bridge",txt:"A grass-covered bridge over Interstate 25 opened last December so elk, bears and pronghorns can cross safely. Crashes with wildlife have plunged since."}];
+  // Every puzzle is gated: one early fact needs two clues together on every solve path (check.js rule 6).
+  const DAYS=[
+  {id:"d1s",label:"Fri 30 Oct",size:"6 facts",per:2,theme:"Saving wild places",
+   rule:"Each story gets two facts.",kinds:{},stories:S1,
+   cards:[
+    {id:"d19",t:"$19m+",home:"W",means:"raised by private donors to buy Wooroora"},
+    {id:"h20",t:"20,000+ ha",home:"W",means:"the size of Wooroora"},
+    {id:"p30",t:"£30m",home:"R",means:"raised by the Rothbury appeal"},
+    {id:"y2",t:"2 years",home:"R",means:"how long Rothbury was up for sale"},
+    {id:"a460",t:"460 acres",home:"F",means:"the couple's farm",clue:"c4"},
+    {id:"y15",t:"15 years",home:"F",means:"how long the couple have been fighting",clue:"c5"}],
+   clues:[
+    {id:"c1",start:true,t:"Only the Australian story counts its money in dollars.",f:a=>a.d19==="W"},
+    {id:"c2",start:true,t:"The acres aren't in the Australian story.",f:a=>a.a460!=="W"},
+    {id:"c3",start:true,t:"The public appeal didn't buy anything measured in acres.",f:a=>a.a460!=="R"},
+    {id:"c4",t:"The only size in acres sits with the longest stretch of time on the desk.",f:a=>a.a460===a.y15},
+    {id:"c5",t:"The story with dollars is also the biggest place on the desk.",f:a=>a.h20===a.d19}]},
+  {id:"d1",label:"Fri 30 Oct",size:"9 facts",per:3,theme:"Saving wild places",
+   rule:"Each story gets three facts: one sum of money, one size, and one other.",kinds:{money:1,size:1},stories:S1,
+   cards:[
+    {id:"d19",t:"$19m+",kind:"money",home:"W",means:"raised by private donors to buy Wooroora",clue:"c5"},
+    {id:"p30",t:"£30m",kind:"money",home:"R",means:"raised by the Rothbury appeal"},
+    {id:"p15",t:"£1.5m",kind:"money",home:"F",means:"what the couple's fight has cost them",clue:"c7"},
+    {id:"h20",t:"20,000+ ha",kind:"size",home:"W",means:"the size of Wooroora",clue:"c6"},
+    {id:"h38",t:"3,800+ ha",kind:"size",home:"R",means:"the size of the Rothbury estate",clue:"c8"},
+    {id:"a460",t:"460 acres",kind:"size",home:"F",means:"the couple's farm",clue:"c4"},
+    {id:"s12",t:"12+ species",kind:"other",home:"W",means:"threatened species recorded at Wooroora"},
+    {id:"y2",t:"2 years",kind:"other",home:"R",means:"how long Rothbury was up for sale"},
+    {id:"y15",t:"15 years",kind:"other",home:"F",means:"how long the couple have been fighting"}],
+   clues:[
+    {id:"c1",start:true,t:"Only the Australian story counts its money in dollars.",f:a=>a.d19==="W"},
+    {id:"c2",start:true,t:"The acres aren't in the Australian story.",f:a=>a.a460!=="W"},
+    {id:"c3",start:true,t:"The public appeal didn't buy anything measured in acres.",f:a=>a.a460!=="R"},
+    {id:"c4",t:"The story with dollars is also the biggest place on the desk.",f:a=>a.h20===a.d19},
+    {id:"c5",t:"The count of threatened species belongs to the biggest place on the desk.",f:a=>a.s12===a.h20},
+    {id:"c6",t:"The story with acres has the smaller sum in pounds.",f:a=>a.p15===a.a460},
+    {id:"c7",t:"The smaller sum in pounds sits with the longer stretch of time.",f:a=>a.y15===a.p15},
+    {id:"c8",t:"The second-biggest place sits with the shorter stretch of time.",f:a=>a.y2===a.h38}]},
+  {id:"d2s",label:"Sample day",size:"6 facts",per:2,theme:"Big finds, safe crossings",
+   rule:"Each story gets two facts.",kinds:{},stories:S2,
+   cards:[
+    {id:"y31",t:"2031",home:"M",means:"when MMX's capsule lands back on Earth"},
+    {id:"n4",t:"4",home:"M",means:"legs on MMX's rover",clue:"c5"},
+    {id:"d5",t:"5 days",home:"V",means:"how long the expedition lasted"},
+    {id:"n7",t:"7",home:"V",means:"plants the team found across two lakes"},
+    {id:"p91",t:"91%",home:"O",means:"the drop in crashes with wildlife",clue:"c4"},
+    {id:"n6",t:"6",home:"O",means:"lanes of I-25 under the bridge"}],
+   clues:[
+    {id:"c1",start:true,t:"The only year on the desk is when something comes home.",f:a=>a.y31==="M"},
+    {id:"c2",start:true,t:"The percentage has nothing to do with space.",f:a=>a.p91!=="M"},
+    {id:"c3",start:true,t:"The percentage isn't counting plants.",f:a=>a.p91!=="V"},
+    {id:"c4",t:"The year's story has the smallest bare number on the desk.",f:a=>a.n4===a.y31},
+    {id:"c5",t:"The percentage shares a story with an even bare number.",f:a=>a.p91===a.n4||a.p91===a.n6}]},
+  {id:"d2",label:"Sample day",size:"9 facts",per:3,theme:"Big finds, safe crossings",
+   rule:"Each story gets three facts.",kinds:{},stories:S2,
+   cards:[
+    {id:"y31",t:"2031",home:"M",means:"when MMX's capsule lands back on Earth",clue:"c5"},
+    {id:"g10",t:"10g",home:"M",means:"at least this much of Phobos comes home",clue:"c6"},
+    {id:"n4",t:"4",home:"M",means:"legs on MMX's rover",clue:"c9"},
+    {id:"d5",t:"5 days",home:"V",means:"how long the expedition lasted",clue:"c8"},
+    {id:"r30",t:"30 to 50",home:"V",means:"plants thought to be left in the wild"},
+    {id:"n7",t:"7",home:"V",means:"plants the team found across two lakes"},
+    {id:"m9",t:"9 months",home:"O",means:"how long the bridge has been open in the data",clue:"c7"},
+    {id:"p91",t:"91%",home:"O",means:"the drop in crashes with wildlife",clue:"c4"},
+    {id:"n6",t:"6",home:"O",means:"lanes of I-25 under the bridge"}],
+   clues:[
+    {id:"c1",start:true,t:"The only year on the desk is when something comes home.",f:a=>a.y31==="M"},
+    {id:"c2",start:true,t:"The percentage has nothing to do with space.",f:a=>a.p91!=="M"},
+    {id:"c3",start:true,t:"The percentage isn't counting plants.",f:a=>a.p91!=="V"},
+    {id:"c4",t:"The grams sit in the same story as the year.",f:a=>a.g10===a.y31},
+    {id:"c5",t:"The longer of the two time spans sits with the percentage.",f:a=>a.m9===a.p91},
+    {id:"c6",t:"The year's story has the smallest bare number on the desk.",f:a=>a.n4===a.y31},
+    {id:"c7",t:"The shorter time span is not with the percentage.",f:a=>a.d5!==a.p91},
+    {id:"c8",t:"The range “30 to 50” sits with the shorter time span.",f:a=>a.r30===a.d5},
+    {id:"c9",t:"The percentage shares a story with an even bare number.",f:a=>a.p91===a.n4||a.p91===a.n6}]}
+  ];
+
+  // All full assignments consistent with the rules, the given clues and the facts already filed.
+  function solutions(day,clueIds,placed){
+    const ks=day.stories.map(s=>s.k), cards=day.cards, out=[];
+    const cl=day.clues.filter(c=>clueIds.includes(c.id));
+    const count={},kc={};ks.forEach(k=>{count[k]=0;kc[k]={}});
+    const a={};
+    (function rec(i){
+      if(i===cards.length){ if(cl.every(c=>c.f(a))) out.push(Object.assign({},a)); return; }
+      const c=cards[i];
+      for(const k of (placed[c.id]?[placed[c.id]]:ks)){
+        if(count[k]>=(day.per||3)) continue;
+        if(c.kind&&day.kinds[c.kind]!==undefined&&(kc[k][c.kind]||0)>=day.kinds[c.kind]) continue;
+        a[c.id]=k;count[k]++;if(c.kind)kc[k][c.kind]=(kc[k][c.kind]||0)+1;
+        rec(i+1);
+        count[k]--;if(c.kind)kc[k][c.kind]--;delete a[c.id];
+      }
+    })(0);
+    return out;
+  }
+  function provable(day,clueIds,placed){
+    const sols=solutions(day,clueIds,placed),res={};
+    if(!sols.length) return res;
+    day.cards.forEach(c=>{ if(placed[c.id]) return; const k=sols[0][c.id]; if(sols.every(s=>s[c.id]===k)) res[c.id]=k; });
+    return res;
+  }
+  function visibleClues(day,placed){
+    return day.clues.filter(c=>c.start||day.cards.some(x=>x.clue===c.id&&placed[x.id])).map(c=>c.id);
+  }
+  // Smallest set of visible clues that proves some card right now (for hints).
+  function bestHint(day,placed){
+    const vis=visibleClues(day,placed);
+    const subsets=[[]];
+    for(let size=1;size<=Math.min(3,vis.length);size++){
+      (function pick(start,acc){ if(acc.length===size){subsets.push(acc.slice());return;}
+        for(let i=start;i<vis.length;i++){acc.push(vis[i]);pick(i+1,acc);acc.pop();} })(0,[]);
+    }
+    for(const sub of subsets){ const p=provable(day,sub,placed); const ids=Object.keys(p); if(ids.length) return {clues:sub,card:ids[0],story:p[ids[0]]}; }
+    return null;
+  }
+  root.ENGINE={DAYS,solutions,provable,visibleClues,bestHint};
+})(typeof window!=="undefined"?window:globalThis);
+</script>
+
+<script>
+(function(){
+  const E=window.ENGINE,$=id=>document.getElementById(id);
+  let hintTarget=null,hintLevel=0;
+  let D=0,placed,hinted,mistakes,hints,sel,startT,timerId,done,cleared=window.ENGINE.DAYS.map(()=>false),lastVis=[],shaken=null,log;
+
+  function day(){return E.DAYS[D]}
+  function init(){
+    placed={};hinted={};mistakes=0;hints=0;sel=null;startT=null;done=false;log=[];hintTarget=null;hintLevel=0;
+    clearInterval(timerId);$("timer").textContent="0:00";
+    $("done").hidden=true;$("hint").disabled=false;
+    lastVis=E.visibleClues(day(),placed);
+    say("");renderAll(true);
+  }
+  function tick(){ if(!startT) return; const s=Math.floor((Date.now()-startT)/1000); $("timer").textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+  function startClock(){ if(startT||done) return; startT=Date.now(); timerId=setInterval(tick,250); }
+  function fmt(ms){const s=Math.round(ms/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+
+  function renderAll(first){
+    const d=day();
+    // days
+    const dz=$("days");dz.innerHTML="";
+    E.DAYS.forEach((x,i)=>{const b=document.createElement("button");b.className="day";b.setAttribute("aria-pressed",i===D?"true":"false");
+      b.innerHTML="<b>"+x.label+(cleared[i]?" ✓":"")+"</b><span>"+x.size+"</span>";b.onclick=()=>{D=i;init();};dz.appendChild(b);});
+    $("rule").textContent=d.rule;
+    $("theme").textContent=d.theme;
+    $("dateLine").textContent=d.label+" · "+(d.id.startsWith("d1")?"today's good news":"a fresh set of good news");
+    const hz=$("heads");hz.innerHTML="";d.stories.forEach(s=>{const li=document.createElement("li");li.innerHTML=s.head+"<span>"+s.dl+"</span>";hz.appendChild(li);});
+    // clues
+    const vis=E.visibleClues(d,placed);
+    const ol=$("clues");ol.innerHTML="";
+    d.clues.forEach(c=>{const li=document.createElement("li");li.id="clue-"+c.id;
+      if(vis.includes(c.id)){li.className="clue"+(!first&&!lastVis.includes(c.id)?" new":"");li.textContent=c.t;}
+      else{li.className="clue locked";li.textContent="Hidden on one of the facts. File it correctly to reveal this clue.";}
+      ol.appendChild(li);});
+    lastVis=vis;
+    // tray
+    const tray=$("tray");tray.innerHTML="";
+    const loose=d.cards.filter(c=>!placed[c.id]);
+    if(!loose.length){const e=document.createElement("span");e.className="empty";e.textContent="Every fact is filed.";tray.appendChild(e);}
+    loose.forEach(c=>{const b=document.createElement("button");b.className="card";b.id="card-"+c.id;b.textContent=c.t;
+      b.setAttribute("aria-pressed",sel===c.id?"true":"false");
+      b.onclick=()=>{startClock();sel=(sel===c.id)?null:c.id;say(sel?"Now tap the story you can prove it belongs to.":"");renderAll();};
+      tray.appendChild(b);});
+    // clippings
+    const cz=$("clips");cz.innerHTML="";
+    d.stories.forEach(s=>{
+      const el=document.createElement("article");el.className="clip"+(sel?" target":"");el.id="story-"+s.k;
+      el.innerHTML='<p class="dl">'+s.dl+'</p><h3>'+s.head+'</h3><p class="txt">'+s.txt+'</p>';
+      const f=document.createElement("div");f.className="filed";
+      const mine=d.cards.filter(c=>placed[c.id]===s.k);
+      mine.forEach(c=>{const r=document.createElement("div");r.className="fact"+(hinted[c.id]?" hinted":"");r.innerHTML="<b>"+c.t+"</b><span>"+c.means+"</span>";f.appendChild(r);});
+      for(let i=mine.length;i<d.per;i++){const r=document.createElement("div");r.className="slot";r.textContent="Empty slot";f.appendChild(r);}
+      el.appendChild(f);
+      const btn=document.createElement("button");btn.className="fileBtn";btn.textContent="File it here";btn.hidden=!sel||mine.length>=d.per;
+      btn.onclick=(e)=>{e.stopPropagation();file(s.k);};
+      el.appendChild(btn);
+      el.addEventListener("click",()=>{ if(sel) file(s.k); });
+      cz.appendChild(el);
+    });
+    // status
+    const n=Object.keys(placed).length;
+    $("filedCount").textContent=n+" of "+d.cards.length+" filed";
+    $("mistakes").textContent=mistakes+(mistakes===1?" mistake":" mistakes");
+    $("hintsUsed").textContent=hints+(hints===1?" hint":" hints");
+    $("sky").style.setProperty("--p",(n/d.cards.length).toFixed(3));
+    if(shaken){const el=$("card-"+shaken);if(el){el.classList.add("shake");}shaken=null;}
+  }
+
+  function file(k){
+    if(!sel||done) return;
+    startClock();
+    const d=day(),card=d.cards.find(c=>c.id===sel);
+    const vis=E.visibleClues(d,placed);
+    const sols=E.solutions(d,vis,placed);
+    const fits=sols.filter(s=>s[card.id]===k).length;
+    if(fits===0){
+      // the clues already rule this out: a real mistake
+      mistakes++;log.push("x");shaken=sel;
+      say("The clues already rule that out. That counts as a mistake.",true);renderAll();return;
+    }
+    if(fits<sols.length){
+      // still possible but not proven: same neutral message whether it is right or wrong
+      shaken=sel;
+      say("The clues don't prove that yet. Keep looking.",true);renderAll();return;
+    }
+    placed[card.id]=k;log.push(hinted[card.id]?"h":"ok");
+    const before=vis.length,after=E.visibleClues(d,placed).length;
+    sel=null;
+    const lead=hinted[card.id]?"The night editor filed "+card.t+" in "+d.stories.find(s=>s.k===k).head+". ":"Filed. ";
+    say(lead+(after>before?"A new clue has turned up.":""));
+    renderAll();
+    if(Object.keys(placed).length===d.cards.length) finish();
+  }
+
+  function hint(){
+    if(done) return;
+    startClock();
+    const d=day();
+    document.querySelectorAll(".hl").forEach(e=>e.classList.remove("hl"));
+    const h=E.bestHint(d,placed);if(!h) return;
+    if(hintTarget!==h.card) hints++;   // one hint per fact, however far up the ladder you go
+    const stage=hintStage(h);
+    if(stage===1){
+      const nums=h.clues.map(id=>d.clues.findIndex(c=>c.id===id)+1);
+      h.clues.forEach(id=>{const el=$("clue-"+id);if(el)el.classList.add("hl");});
+      say(nums.length>1?"Read clues "+nums.join(" and ")+" together. They prove where one fact goes.":nums.length?"Read clue "+nums[0]+" again. It proves where one fact goes.":"The rule above already proves where one fact goes.");
+    }else if(stage===2){
+      const c=d.cards.find(x=>x.id===h.card);
+      renderAll();const el=$("card-"+h.card);if(el)el.classList.add("hl");
+      h.clues.forEach(id=>{const e2=$("clue-"+id);if(e2)e2.classList.add("hl");});
+      say("Look at "+c.t+". Where do those clues send it?");
+      return;
+    }else{
+      hinted[h.card]=true;sel=h.card;
+      const st=d.stories.find(s=>s.k===h.story);
+      say("The night editor files "+d.cards.find(x=>x.id===h.card).t+" in "+st.head+".");
+      file(h.story);return;
+    }
+    renderAll();
+    h.clues.forEach(id=>{const el=$("clue-"+id);if(el)el.classList.add("hl");});
+  }
+  // escalate hints for the same target card: clues, then the card, then file it
+  function hintStage(h){
+    if(hintTarget!==h.card){hintTarget=h.card;hintLevel=0;}
+    hintLevel=Math.min(hintLevel+1,3);return hintLevel;
+  }
+
+  function finish(){
+    done=true;clearInterval(timerId);const ms=startT?Date.now()-startT:0;cleared[D]=true;
+    $("hint").disabled=true;
+    const clean=mistakes===0&&hints===0;
+    $("doneTitle").textContent=clean?"First light":"The paper's out";
+    $("doneLine").textContent="All "+day().cards.length+" facts filed in "+fmt(ms)+" with "+mistakes+(mistakes===1?" mistake":" mistakes")+" and "+hints+(hints===1?" hint.":" hints.");
+    const row=log.map(x=>x==="ok"?"🟩":x==="h"?"🟨":"🟥").join("");
+    $("share").textContent="HOPE TODAY · Copy Desk · "+day().label+" · "+day().size+"\n⏱ "+fmt(ms)+" · "+mistakes+" mistake"+(mistakes===1?"":"s")+" · "+hints+" hint"+(hints===1?"":"s")+"\n"+row+"\n"+(clean?"☀ First light":"🌤 The paper's out");
+    const nx=E.DAYS.findIndex((_,i)=>!cleared[i]);
+    $("next").textContent=nx===-1?"Play day 1 again":"Play "+E.DAYS[nx].label+" · "+E.DAYS[nx].size;
+    $("next").onclick=()=>{D=nx===-1?0:nx;init();window.scrollTo({top:0,behavior:"smooth"});};
+    $("done").hidden=false;renderAll();
+    $("done").scrollIntoView({behavior:"smooth",block:"center"});
+  }
+  function say(t,bad){const m=$("msg");m.textContent=t;m.className="msg"+(bad?" bad":"");}
+
+  $("hint").onclick=hint;
+  $("reset").onclick=()=>{hintTarget=null;hintLevel=0;init();};
+  $("copy").onclick=()=>{const t=$("share").textContent;
+    try{navigator.clipboard.writeText(t).then(()=>say("Copied."),sel2);}catch(e){sel2();}
+    function sel2(){const r=document.createRange();r.selectNodeContents($("share"));const s=getSelection();s.removeAllRanges();s.addRange(r);say("Selected. Copy it from here.");}};
+  init();
+})();
+</script>

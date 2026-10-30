@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.classList.add("js")</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hope Today · Copy Desk</title>
+  {% include "_analytics.html" %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+  {#- Copy Desk: the second step after the word puzzle (PLAN.md Part 3).
+      Same design system as puzzle.html. The page runs no solver: harness/desk.py precomputes
+      a state table (what is provable, what is still possible, the best hint) for every state. -#}
+  <style>
+    :root {
+      --paper: #e3e2da;
+      --ink: #1c1c1c;
+      --muted: #38424a;
+      --accent: #2c3620;        /* olive: buttons, filed facts */
+      --accent-ink: #e3e2da;
+      --field-1: #b7c8be;       /* sage */
+      --field-2: #d6c4b8;       /* blush */
+      --field-3: #b2bdc5;       /* light slate */
+      --warn: #8a3b2b;
+      --backdrop-dim: 1;
+
+      --margin: clamp(16px, 4vw, 56px);
+      --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+      --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
+      --step-lead: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem);
+      --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --paper: #d9d7cc; --backdrop-dim: 0.9; }
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { font-size: clamp(100%, 0.4vw + 11px, 150%); }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
+      align-content: start;
+      gap: 16px;
+      padding: clamp(8px, 3svh, 48px) var(--margin);
+      background: #2c3620;
+      color: var(--ink);
+      font-family: "Literata", Georgia, serif;
+      font-size: var(--step-body);
+      line-height: 1.55;
+    }
+    h1, h2, h3 {
+      font-family: "Rokkitt", "Arial Narrow", sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    p { margin: 0; }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    .card {
+      width: min(60rem, 100%);
+      min-width: 0;
+      container-type: inline-size;
+      background: var(--paper);
+      padding: clamp(18px, min(4vw, 4svh), 44px);
+      display: grid;
+      gap: clamp(12px, 2svh, 24px);
+    }
+
+    /* Masthead: the good news comes first. */
+    .mast { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 16px;
+            border-bottom: 3px solid var(--ink); padding-bottom: 8px; }
+    .mast h1 { font-size: clamp(2rem, 9cqw, 4rem); }
+    .mast .date { font-weight: 600; font-size: var(--step-lead); }
+    .theme { font-size: var(--step-head); }
+    .heads { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+    .heads li { background: var(--field-3); padding: 6px 12px; font-family: "Rokkitt", sans-serif; font-weight: 800;
+                text-transform: uppercase; font-size: 1rem; line-height: 1.1; }
+    .heads li:nth-child(2) { background: var(--field-1); }
+    .heads li:nth-child(3) { background: var(--field-2); }
+    .heads span { display: block; font-family: "Literata", serif; font-weight: 400; text-transform: none; font-size: var(--step-small); }
+
+    .label { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+    .label h2 { font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.6rem); }
+    .skip { font-size: var(--step-small); color: var(--muted); }
+    .how { font-size: 0.95em; max-width: 62ch; }
+
+    .status { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: baseline; background: var(--accent);
+              color: var(--accent-ink); padding: 10px 14px; font-weight: 600; }
+    .status .timer { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.6rem; font-variant-numeric: tabular-nums; min-width: 4ch; }
+
+    .desk { display: grid; gap: clamp(14px, 2svh, 22px); grid-template-columns: minmax(0, 1fr); }
+    @container (min-width: 46rem) { .desk { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); align-items: start; } }
+    .box { display: grid; gap: 10px; align-content: start; min-width: 0; }
+    .box h3 { font-size: 1.3rem; }
+    .rule { font-size: 0.95em; border-left: 4px solid var(--accent); padding-left: 10px; }
+    .clues { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: c; }
+    .clues li { counter-increment: c; position: relative; padding: 8px 12px 8px 2.4em; background: var(--field-1); font-size: 0.95em; line-height: 1.45; }
+    .clues li::before { content: counter(c); position: absolute; left: 0.7em; top: 0.45em; font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.15em; }
+    .clues li.locked { background: none; outline: 2px dotted var(--muted); outline-offset: -2px; color: var(--muted); font-style: italic; }
+    .clues li.lit { background: #f0d98d; }
+    .clues li.new { animation: arrive 700ms ease; }
+    @keyframes arrive { from { background: #f0d98d; transform: translateY(-4px); } }
+
+    .tray { display: flex; flex-wrap: wrap; gap: 8px; min-height: 2.6rem; }
+    .fact { border: 2px dashed var(--muted); background: var(--paper); padding: 6px 12px; font-family: "Rokkitt", sans-serif;
+            font-weight: 800; font-size: 1.3rem; min-width: 3.5rem; transition: transform 120ms ease; }
+    .fact:hover { transform: translateY(-2px); }
+    .fact[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-style: solid; border-color: var(--ink); }
+    .fact.lit { outline: 4px solid #e6b94f; outline-offset: 2px; }
+    .fact.shake { animation: shake 400ms ease; }
+    @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+    .tray .empty { color: var(--muted); font-style: italic; align-self: center; }
+
+    .stories { display: grid; gap: 12px; }
+    .story { display: grid; gap: 6px; padding: 12px 14px; background: #efeee8; border: 0; border-top: 4px solid var(--ink); text-align: left; width: 100%; }
+    .story.target { box-shadow: inset 0 0 0 3px var(--accent); }
+    .story .dl { font-size: var(--step-small); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .story h3 { font-size: 1.35rem; }
+    .story .blurb { font-size: 0.95em; }
+    .filed { display: grid; gap: 4px; border-top: 1px solid #c8c6bb; padding-top: 6px; }
+    .filed .slot { font-size: var(--step-small); color: var(--muted); font-style: italic; }
+    .filed .got { display: flex; gap: 10px; align-items: baseline; animation: arrive 600ms ease; }
+    .filed .got b { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.15rem; min-width: 5.5rem; }
+    .filed .got span { font-size: var(--step-small); }
+    .filed .got.helped b { text-decoration: underline dotted; }
+    .file-here { justify-self: start; border: 0; background: var(--accent); color: var(--accent-ink); font-family: "Rokkitt", sans-serif;
+                 font-weight: 800; text-transform: uppercase; padding: 10px 16px; font-size: 1rem; min-height: 44px; }
+
+    .feedback { min-height: 1.6em; font-weight: 600; }
+    .feedback.warn { color: var(--warn); }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .button { border: 0; background: var(--accent); color: var(--accent-ink); font-family: "Rokkitt", sans-serif; font-weight: 800;
+              font-size: var(--step-lead); text-transform: uppercase; text-decoration: none; padding: 12px 24px; transition: transform 120ms ease; }
+    .button.soft { background: var(--field-1); color: var(--ink); }
+    .button:hover { transform: translateY(-2px); }
+    .button:active { transform: translateY(1px) scale(0.98); }
+    .link { border: 0; background: none; padding: 8px 0; text-decoration: underline; }
+
+    .result { display: grid; gap: 12px; }
+    .result h2 { font-size: clamp(1.8rem, 5.5svh, 3.4rem); }
+    .share-text { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85em; white-space: pre-wrap; background: #efeee8; padding: 10px 12px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fact, .button, .fact.shake, .clues li.new, .filed .got { transition: none; animation: none; }
+    }
+  </style>
+</head>
+<body>
+  {% include "_dawn.html" %}
+
+  <header class="card" aria-labelledby="theme">
+    <div class="mast"><h1>Hope Today</h1><span class="date">{{ today|nice_date }}</span></div>
+    <h2 class="theme" id="theme">{{ theme }}</h2>
+    <ul class="heads">
+      {% for s in desk.stories %}<li>{{ s.head }}<span>{{ s.dl }}</span></li>{% endfor %}
+    </ul>
+  </header>
+
+  <main class="card" id="desk-card">
+    <div class="label">
+      <h2>Copy Desk{% if label %} <span class="skip">· {{ label }}</span>{% endif %}</h2>
+      <a class="skip" id="skip" href="{{ deck_href }}">Skip to the good news →</a>
+    </div>
+    <p class="how">The night desk dropped {{ desk.cards|length }} facts from these stories. Tap a fact, then “File it here” on the story it came from.
+      The desk only takes a fact once the clues <em>prove</em> where it goes. Filing one where the clues already rule it out is a mistake.</p>
+
+    <div class="status" aria-live="off">
+      <span class="timer" id="timer" role="timer">0:00</span>
+      <span id="count"></span><span id="mistakes"></span><span id="hints-used"></span>
+    </div>
+
+    <div class="desk">
+      <section class="box" aria-labelledby="clues-title">
+        <h3 id="clues-title">Clues</h3>
+        <p class="rule">{{ desk.rule }}</p>
+        <ol class="clues" id="clues"></ol>
+      </section>
+      <section class="box" aria-labelledby="facts-title">
+        <h3 id="facts-title">Loose facts</h3>
+        <div class="tray" id="tray"></div>
+        <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+        <div class="stories" id="stories"></div>
+        <div class="actions" id="actions">
+          <button class="button soft" type="button" id="hint">Hint</button>
+        </div>
+      </section>
+    </div>
+
+    <section class="result" id="result" hidden aria-labelledby="result-title">
+      <h2 id="result-title">First light</h2>
+      <p id="result-line"></p>
+      <p class="share-text" id="share-text"></p>
+      <div class="actions">
+        <a class="button" href="{{ deck_href }}" id="open-deck">Open today's good news</a>
+        <button class="button soft" type="button" id="share">Share</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const DESK = {{ desk|tojson }};
+      // Built and checked by harness/desk.py. Light obfuscation, like the word puzzle's answer.
+      // states: for every reachable state, what's visible, provable, still possible, and the best hint.
+      // means / clues: what must not be plain text in the page (a meaning names its story;
+      // a hidden clue shown early would let you skip the puzzle).
+      const DATA = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob("{{ table_b64 }}"), c => c.charCodeAt(0))));
+      const TABLE = DATA.states;
+      const KEY = "hope-desk-{{ today }}-{{ desk_id }}";
+      const WORD_KEY = "{{ word_key }}";
+      const IS_LATEST = {{ "true" if is_latest else "false" }};
+      const ev = name => { if (IS_LATEST) window.track?.(name); };   // archive plays don't count
+
+      // ----- saved progress (merged over defaults; anything that doesn't fit the table resets) -----
+      const fresh = () => ({ filed: {}, hinted: [], helped: [], hintCard: null, hintLevel: 0,
+                             mistakes: 0, hints: 0, log: [], elapsed: 0, status: "playing" });
+      if (location.hash === "#reset") { try { localStorage.removeItem(KEY); } catch {} history.replaceState(null, "", location.pathname); }
+      let state;
+      try { state = { ...fresh(), ...(JSON.parse(localStorage.getItem(KEY)) || {}) }; } catch { state = fresh(); }
+      const keyOf = () => Object.keys(state.filed).sort().join(",");
+      const valid = () => TABLE[keyOf()] && Object.entries(state.filed).every(([c, s]) => DESK.cards.some(x => x.id === c) && Number.isInteger(s));
+      if (!valid()) state = fresh();
+      const row = () => TABLE[keyOf()];
+
+      const $ = id => document.getElementById(id);
+      const byId = Object.fromEntries(DESK.cards.map(c => [c.id, c]));
+      let sel = null, lastVis = row().vis, startedAt = null, tick = null;
+
+      // ----- timer: counts up from the first tap; saved continuously so a killed tab keeps its time -----
+      const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+      const elapsed = () => state.elapsed + (startedAt ? (Date.now() - startedAt) / 1000 : 0);
+      const save = () => { try { localStorage.setItem(KEY, JSON.stringify({ ...state, elapsed: elapsed() })); } catch {} };
+      const showTime = () => { $("timer").textContent = fmt(elapsed()); };
+      const startClock = () => {
+        if (startedAt || state.status !== "playing") return;
+        if (!state.elapsed && !state.log.length && !state.hints) ev("desk-start");
+        startedAt = Date.now();
+        tick = setInterval(() => { showTime(); save(); }, 1000);
+      };
+      const stopClock = () => { state.elapsed = elapsed(); startedAt = null; clearInterval(tick); showTime(); };
+      const pause = () => { if (startedAt) { stopClock(); save(); } };
+      addEventListener("pagehide", pause);
+      document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
+
+      // Feedback is re-announced even when the same words repeat (screen readers skip unchanged text).
+      const say = (text, warn) => {
+        const f = $("feedback");
+        f.textContent = "";
+        f.classList.toggle("warn", !!warn);
+        requestAnimationFrame(() => { f.textContent = text; });
+      };
+
+      // The dawn behind the page brightens as facts are filed.
+      const baseDim = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--backdrop-dim")) || 1;
+      const setDawn = () => {
+        const n = Object.keys(state.filed).length / DESK.cards.length;
+        document.documentElement.style.setProperty("--backdrop-dim", (baseDim * (0.55 + 0.45 * n)).toFixed(3));
+      };
+
+      const clueText = id => DATA.clues[id];
+      function paint() {
+        const focusId = document.activeElement?.id;          // rebuilding buttons must not lose keyboard focus
+        const r = row(), playing = state.status === "playing";
+        const ol = $("clues"); ol.innerHTML = "";
+        DESK.clues.forEach(c => {
+          const li = document.createElement("li"); li.id = "clue-" + c.id;
+          if (r.vis.includes(c.id)) { li.textContent = clueText(c.id); if (!lastVis.includes(c.id)) li.classList.add("new"); }
+          else { li.className = "locked"; li.textContent = "Hidden on one of the facts. File it to reveal this clue."; }
+          ol.appendChild(li);
+        });
+        lastVis = r.vis;
+        const tray = $("tray"); tray.innerHTML = "";
+        const loose = DESK.cards.filter(c => !(c.id in state.filed));
+        if (!loose.length) tray.innerHTML = '<span class="empty">Every fact is filed.</span>';
+        loose.forEach(c => {
+          const b = document.createElement("button");
+          b.type = "button"; b.className = "fact"; b.id = "fact-" + c.id; b.textContent = c.t;
+          b.setAttribute("aria-pressed", sel === c.id ? "true" : "false");
+          b.disabled = !playing;
+          b.addEventListener("click", () => {
+            startClock(); sel = sel === c.id ? null : c.id;
+            say(sel ? "Now tap “File it here” on the story you can prove it belongs to." : "");
+            paint();
+          });
+          tray.appendChild(b);
+        });
+        const box = $("stories"); box.innerHTML = "";
+        DESK.stories.forEach((s, i) => {
+          const mine = DESK.cards.filter(c => state.filed[c.id] === i);
+          const open = sel && mine.length < DESK.per;          // a full story can't take a fact
+          const el = document.createElement("article");
+          el.className = "story" + (open ? " target" : ""); el.id = "story-" + i;
+          el.innerHTML = `<p class="dl"></p><h3></h3><p class="blurb"></p>`;
+          el.querySelector(".dl").textContent = s.dl;
+          el.querySelector("h3").textContent = s.head;
+          el.querySelector(".blurb").textContent = s.blurb;
+          const filed = document.createElement("div"); filed.className = "filed";
+          mine.forEach(c => {
+            const g = document.createElement("div"); g.className = "got" + (state.helped.includes(c.id) ? " helped" : "");
+            g.innerHTML = "<b></b><span></span>";
+            g.querySelector("b").textContent = c.t; g.querySelector("span").textContent = DATA.means[c.id];
+            filed.appendChild(g);
+          });
+          for (let k = mine.length; k < DESK.per; k++) filed.insertAdjacentHTML("beforeend", '<div class="slot">Empty slot</div>');
+          el.appendChild(filed);
+          if (open) {                                          // only this button files: stray taps on the text do nothing
+            const btn = document.createElement("button"); btn.type = "button"; btn.className = "file-here"; btn.id = "file-" + i;
+            btn.textContent = "File it here";
+            btn.addEventListener("click", () => file(i));
+            el.appendChild(btn);
+          }
+          box.appendChild(el);
+        });
+        const n = Object.keys(state.filed).length;
+        $("count").textContent = `${n} of ${DESK.cards.length} filed`;
+        $("mistakes").textContent = `${state.mistakes} ${state.mistakes === 1 ? "mistake" : "mistakes"}`;
+        $("hints-used").textContent = `${state.hints} ${state.hints === 1 ? "hint" : "hints"}`;
+        $("actions").hidden = !playing;
+        setDawn();
+        const back = focusId && $(focusId);
+        if (back) back.focus({ preventScroll: true });
+        else if (focusId && focusId.startsWith("file-")) document.querySelector(".fact")?.focus({ preventScroll: true });
+      }
+
+      function file(story) {
+        if (!sel || state.status !== "playing") return;
+        startClock();
+        const r = row(), card = sel;
+        if (r.prov[card] === story) {
+          state.filed[card] = story;
+          state.log.push(state.hinted.includes(card) ? "h" : "ok");   // any hint on this fact shows yellow
+          if (state.hintCard === card) { state.hintCard = null; state.hintLevel = 0; }
+          sel = null;
+          const more = TABLE[keyOf()].vis.length > r.vis.length;
+          say((state.helped.includes(card) ? `The night editor filed ${byId[card].t}.` : "Filed.") + (more ? " A new clue has turned up." : ""));
+          save(); paint();
+          if (Object.keys(state.filed).length === DESK.cards.length) finish(true);
+          return;
+        }
+        const shake = () => { const el = $("fact-" + card); if (el) { el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); } };
+        if (!r.poss[card].includes(story)) {           // the clues already rule this out: a mistake
+          state.mistakes += 1; state.log.push("x"); save(); paint(); shake();
+          say("The clues already rule that out. That counts as a mistake.", true);
+          return;
+        }
+        paint(); shake();                              // still possible but not proven: neutral, same words either way
+        say("The clues don't prove that yet. Keep looking.");
+      }
+
+      // Hint ladder for one fact: which clues to read, then which fact, then the night editor files it.
+      // One hint per fact, however far up the ladder you go (kept across reloads).
+      $("hint").addEventListener("click", () => {
+        if (state.status !== "playing") return;
+        startClock();
+        const h = row().hint; if (!h) return;
+        if (state.hintCard !== h.card) { state.hintCard = h.card; state.hintLevel = 0; }
+        if (!state.hinted.includes(h.card)) { state.hinted.push(h.card); state.hints += 1; ev(`desk-hint-${Math.min(state.hints, 4)}`); }
+        state.hintLevel = Math.min(state.hintLevel + 1, 3);
+        save();
+        const nums = h.clues.map(id => DESK.clues.findIndex(c => c.id === id) + 1);
+        const light = () => h.clues.forEach(id => $("clue-" + id)?.classList.add("lit"));
+        const where = nums.length > 1 ? `clues ${nums.join(" and ")}` : nums.length ? `clue ${nums[0]}` : "the rule above";
+        if (state.hintLevel === 1) {
+          paint(); light();
+          say(nums.length > 1 ? `Read clues ${nums.join(" and ")} together. They prove where one fact goes.`
+            : nums.length ? `Read clue ${nums[0]} again. It proves where one fact goes.`
+            : "The rule above already proves where one fact goes. Count the empty slots.");
+        } else if (state.hintLevel === 2) {
+          paint(); light(); $("fact-" + h.card)?.classList.add("lit");
+          say(`Look at ${byId[h.card].t}. Where does ${where} send it?`);
+        } else {
+          if (!state.helped.includes(h.card)) state.helped.push(h.card);
+          sel = h.card; file(h.story);
+        }
+      });
+
+      $("skip").addEventListener("click", () => { if (state.status === "playing") ev("desk-skip"); });
+
+      function wordLine() {
+        try {
+          const w = WORD_KEY && JSON.parse(localStorage.getItem(WORD_KEY));
+          if (!w || w.status === "playing") return "";
+          const extra = Math.max(0, (w.hints || 0) - 1);          // hint 1 is free, as on the word page
+          return w.status === "solved"
+            ? `\u{1F524} solved in ${w.guesses} ${w.guesses === 1 ? "guess" : "guesses"} · ${extra} ${extra === 1 ? "hint" : "hints"}\n`
+            : "\u{1F524} the word beat me\n";
+        } catch { return ""; }
+      }
+      const shareText = () => {
+        const clean = !state.mistakes && !state.hints;
+        const squares = state.log.map(x => x === "ok" ? "\u{1F7E9}" : x === "h" ? "\u{1F7E8}" : "\u{1F7E5}").join("");
+        return `HOPE TODAY · {{ today|nice_date }}\n${wordLine()}\u{1F5C2} Copy Desk ${fmt(state.elapsed)} · ${state.mistakes} ${state.mistakes === 1 ? "mistake" : "mistakes"}${clean ? " ☀" : ""}\n${squares}`;
+      };
+
+      function finish(celebrate) {
+        stopClock();
+        state.status = "done";
+        save();
+        const clean = !state.mistakes && !state.hints;
+        $("result-title").textContent = clean ? "First light" : "The paper's out";
+        $("result-line").textContent = `All ${DESK.cards.length} facts filed in ${fmt(state.elapsed)}, with ${state.mistakes} ${state.mistakes === 1 ? "mistake" : "mistakes"} and ${state.hints} ${state.hints === 1 ? "hint" : "hints"}. Your good news is ready.`;
+        $("share-text").textContent = shareText();
+        $("result").hidden = false;
+        paint();
+        if (celebrate) {
+          ev("desk-solved"); ev(`desk-mistakes-${Math.min(state.mistakes, 3)}${state.mistakes >= 3 ? "+" : ""}`);
+          window.riseSun?.();
+          $("result").scrollIntoView({ behavior: "smooth", block: "center" });
+          $("open-deck").focus({ preventScroll: true });
+        }
+      }
+
+      $("share").addEventListener("click", async () => {
+        ev("desk-share");
+        const text = shareText();
+        try { await navigator.clipboard.writeText(text); $("share").textContent = "Copied!"; }
+        catch { prompt("Copy this:", text); }
+      });
+
+      paint();
+      showTime();
+      if (state.status === "done") finish(false);
+    })();
+  </script>
+</body>
+</html>
