@@ -17,8 +17,9 @@ REQUIRED = ["headline", "summary", "key_points", "why_it_matters", "url"]
 
 def check_stories(stories):
     """Return a readable problem for the model to fix, or None if all good."""
-    if not 3 <= len(stories) <= 7:
-        return f"Need 3 to 7 stories, got {len(stories)}."
+    # Min is 1, not 3: a short honest deck beats one padded with weak or old stories.
+    if not 1 <= len(stories) <= 7:
+        return f"Need 1 to 7 stories, got {len(stories)}."
 
     for n, story in enumerate(stories, start=1):
         for field in REQUIRED:
@@ -92,7 +93,7 @@ if __name__ == "__main__":
         },
     ]
     # Bad input: these should return errors and write no file.
-    print(render_deck("Too few", "test", sample[:2]))
+    print(render_deck("Too few", "test", []))
     print(render_deck("No url", "test", [sample[0], sample[1], {**sample[2], "url": ""}]))
 
     print(render_deck("Good news from the ocean", "any good ocean news?", sample))
