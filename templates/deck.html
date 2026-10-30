@@ -263,8 +263,21 @@
 
     /* ---------- Phone ---------- */
     @media (max-width: 700px) {
-      html { scroll-snap-type: y proximity; }
-      .clipping { grid-template-columns: 1fr; padding: 32px 20px; }
+      /* Phones: plain scrolling. Stories are taller than the screen, and snapping to
+         whole slides made swiping jump around mid-story. */
+      html { scroll-snap-type: none; }
+      .slide { min-height: auto; padding-block: 28px; }
+      .cover, .contents, .closing { min-height: 100svh; }
+      /* Phone-sized reading: smaller text, tighter spacing, no tilt (it slants every line). */
+      .clipping { grid-template-columns: 1fr; padding: 28px 18px; gap: 14px; transform: none; }
+      .clipping-text { gap: 14px; }
+      .clipping h2 { font-size: 1.9rem; }
+      .clipping .summary { font-size: 1.125rem; line-height: 1.5; }
+      .points, .why, .points li { font-size: 1.0625rem; line-height: 1.5; }
+      .points { gap: 6px; }
+      .why { padding: 12px 14px; }
+      .clipping .photo { aspect-ratio: 16 / 9; }
+      body .dots { display: none; }   /* they sat on top of the text; scrolling needs no dots (body: beats the later .dots rule) */
       .cover-card h1 { flex-direction: column; gap: 0; }
       .postcard-body { grid-template-columns: 1fr; }
       .stamp { width: 52px; top: 52px; right: 20px; border-width: 4px; }
@@ -341,7 +354,7 @@
         <span>{{ title }}</span>
       </div>
       {% if topic %}
-      <p class="cover-said">Today's good news: <q>{{ topic }}</q>. Here is what is going right.</p>
+      <p class="cover-said">Here is what is going right today.</p>
       {% else %}
       <p class="cover-said">You said <q>{{ user_answer }}</q>. Here is what is going right.</p>
       {% endif %}
