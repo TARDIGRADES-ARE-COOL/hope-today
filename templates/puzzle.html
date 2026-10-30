@@ -222,7 +222,7 @@
 
     <ul class="hints" id="hints">
       {% for hint in puzzle.hints %}
-      <li data-level="{{ hint.level }}" {% if not hint.free %}hidden{% endif %}>
+      <li data-level="{{ hint.level }}" hidden>
         <strong>{{ "Free hint" if hint.free else "Hint " ~ hint.level }}:</strong> {{ hint.text|safe if hint.free else hint.text }}
       </li>
       {% endfor %}
@@ -277,7 +277,9 @@
       if (location.hash === "#reset") { try { localStorage.removeItem(KEY); } catch {} history.replaceState(null, "", location.pathname); }
       const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch { return null; } };
       const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
-      const state = load() || { guesses: 0, hints: 1, status: "playing" };   // hint 1 is free
+      // Hints opened so far. Hint 1 is free (tap to see it) and doesn't count against you.
+      const state = load() || { guesses: 0, hints: 0, status: "playing" };
+      const extraHints = () => Math.max(0, state.hints - 1);
 
       const $ = id => document.getElementById(id);
       const input = $("guess"), entry = $("entry"), boxes = [...entry.querySelectorAll(".box")];
@@ -299,7 +301,7 @@
             document.querySelector(`.word[data-i="${i}"]`)?.classList.add("lit"));
         }
         $("more-hint").hidden = state.hints >= hintItems.length || state.status !== "playing";
-        $("more-hint").textContent = `Hint ${state.hints + 1}`;
+        $("more-hint").textContent = state.hints === 0 ? "Free hint" : `Hint ${state.hints + 1}`;
         if (typeof drawPicture === "function") drawPicture();
       };
       // Pixel reveal: how many pixels across at each step; 0 = the full photo.
@@ -311,7 +313,7 @@
       const drawPicture = () => {
         if (!picture || !photo.naturalWidth) return;
         const step = state.status === "playing"
-          ? STEPS[Math.min(STEPS.length - 1, state.guesses + state.hints - 1)] : 0;
+          ? STEPS[Math.min(STEPS.length - 1, state.guesses + extraHints())] : 0;
         const pg = picture.getContext("2d"), cw = picture.width, ch = picture.height;
         // Crop the photo to fill the frame, like object-fit: cover.
         const scale = Math.max(cw / photo.naturalWidth, ch / photo.naturalHeight);
@@ -365,7 +367,7 @@
         const solved = status === "solved";
         $("puzzle").classList.toggle("solved", solved);
         $("result-title").textContent = solved ? "You got it!" : `It was ${ANSWER}`;
-        const g = state.guesses, h = state.hints - 1;
+        const g = state.guesses, h = extraHints();
         $("result-line").textContent = solved
           ? `${ANSWER} in ${g} ${g === 1 ? "guess" : "guesses"}, with ${h} extra ${h === 1 ? "hint" : "hints"}. Your good news is ready.`
           : "{{ 'Here is where the picture came from.' if puzzle.type == 'pixel' else 'Here is how the clue worked.' }} Your good news is ready anyway.";
@@ -408,7 +410,7 @@
       });
       $("give-up").addEventListener("click", () => finish("gave-up", true));
       $("share").addEventListener("click", async () => {
-        const g = state.guesses, h = state.hints - 1;
+        const g = state.guesses, h = extraHints();
         const streak = readStreak().count ? ` \u00B7 \u{1F525} ${readStreak().count}` : "";
         {% if branch %}const extra = bstate.done ? ` \u00B7 Branch out: ${branchScore()} pts${bstate.found.some(i => ANSWERS[i].n === GEM) ? " \u{1F48E}" : ""}` : "";{% else %}const extra = "";{% endif %}
         const text = state.status === "solved"

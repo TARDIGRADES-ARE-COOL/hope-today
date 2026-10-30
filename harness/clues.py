@@ -21,6 +21,11 @@ INSTRUCTIONS = {
     "halves": "Two clues, two halves: join them to get today's topic.",
     "pixel": "Guess today's topic from the picture.",
 }
+# What players see above a sentence clue. It doesn't say which trick: working that out is
+# part of the fun (naming the trick here, plus a free hint, made it too easy).
+# INSTRUCTIONS above still describe each trick, for the free hint and the AI prompts.
+MYSTERY = "Today's topic is tucked into this sentence. Can you spot how?"
+SENTENCE_TYPES = {"anagram", "hidden", "first", "backwards"}
 # The daily run rotates through these, so the trick changes from day to day.
 ROTATION = ["hidden", "anagram", "first", "backwards", "halves"]
 
@@ -116,6 +121,11 @@ def check_first(sentence, answer):
     n, target = len(answer), letters(answer)
     runs = [i for i in range(len(words) - n + 1) if "".join(w[:1] for w in words[i:i + n]) == target]
     problems = [] if runs else [f"no run of {n} words whose first letters spell {answer}"]
+    # Too easy if the run is the whole sentence: it must be hidden among other words.
+    if runs and runs[0] == 0:
+        problems.append("the run starts at the first word; it should be hidden further in")
+    if len(words) - n < 3:
+        problems.append("needs at least 3 words outside the run, so there is something to look past")
     return problems + basic_problems(words, answer), (list(range(runs[0], runs[0] + n)) if runs else [])
 
 
@@ -273,7 +283,7 @@ def build_hints(kind, sentence, answer, highlight, day_number=0, halves=None):
         steps = ["The trick: the answer was hiding backwards across the words.",
                  f"Where: in “{' '.join(spot)}”.", f"How: {how} → read backwards → {answer}"]
     elif kind == "first":
-        where = f"Start at “{spot[0]}” and read the first letters of the next {len(answer)} words…"
+        where = f"Find {len(answer)} words in a row; the first one starts with {answer[0]}."
         steps = ["The trick: the first letters of a run of words spelled the answer.",
                  f"Where: “{' '.join(spot)}”.",
                  f"How: {' · '.join(w[0].upper() for w in spot)} → {answer}"]
@@ -338,8 +348,9 @@ def natural_scores(sentences):
 
 def theme_hint(answer, topic, sentence):
     """Level 2: a playful definition of the word. Two checks: it never contains the answer,
-    and a separate solver model can get the answer from it (so it isn't too vague)."""
-    tried = []
+    and a separate solver model gets the answer in its top 5 but not as its first guess
+    (helpful, not a giveaway)."""
+    tried, backup = [], None
     for _ in range(3):
         response = client.chat.completions.create(
             model=CLUE_MODEL,
@@ -349,15 +360,20 @@ def theme_hint(answer, topic, sentence):
                 f"(e.g. for HEALTH: 'What doctors check on, and what you raise a glass to.'). At most "
                 "14 words; you may start with one emoji. Never say the word or any word containing it. "
                 "Describe the word, not today's news story."
-                + (f" These were too vague, do better: {tried}" if tried else "")
+                + (f" Earlier tries were too vague or too obvious; aim in between: {tried}" if tried else "")
             )}],
         )
         text = response.choices[0].message.content.strip().strip('"')
         if letters(answer) in letters(text) or len(text.split()) > 16:
             continue
-        if answer in solver_guesses(text, len(answer)):
+        guesses = solver_guesses(text, len(answer))
+        if answer in guesses[1:]:
             return text
+        if answer in guesses:
+            backup = backup or text          # too direct; keep it in case nothing better comes
         tried.append(text)
+    if backup:
+        return backup
     return f"\U0001F305 Think about what today's good news is about: {html.escape(topic.lower())}." \
         if letters(answer) not in letters(topic) else "\U0001F305 Think about the happiest part of today's news."
 
@@ -431,7 +447,8 @@ CLUE_PROMPT = (
     "ignoring spaces, starting or ending inside a word (e.g. CORAL in 'arctic oral').\n"
     "backwards: {answer} spelled BACKWARDS ({reversed}) by consecutive letters across two or "
     "three words, starting or ending inside a word.\n"
-    "first: {n} consecutive words whose first letters spell {answer} in order.\n"
+    "first: {n} consecutive words whose first letters spell {answer} in order, hidden in the "
+    "middle of a longer sentence: not starting at the first word, with at least 3 other words.\n"
     "Leave 'fodder' empty except for anagram. Never use {answer} itself. Check every letter."
 )
 CLUE_SCHEMA = {
@@ -502,7 +519,7 @@ def make_puzzle(answer, topic, rounds=2, day_number=0):
                                       halves=c.get("halves"))
         puzzles.append({
             "type": c["type"],
-            "instruction": INSTRUCTIONS[c["type"]],
+            "instruction": MYSTERY if c["type"] in SENTENCE_TYPES else INSTRUCTIONS[c["type"]],
             "sentence": c["sentence"],
             "length": len(answer),
             "answer": answer,
@@ -529,7 +546,9 @@ if __name__ == "__main__":
         (check_anagram("We saw S O L A R panels.", "SOLAR", "S O L A R")[0] != [], True),        # spelled out
         (check_backwards("Everyone in the village cheered.", "LIVE")[0], []),                     # e-v-i-l backwards
         (check_backwards("Everyone cheered the evil end.", "LIVE")[0] != [], True),               # 'evil' is a whole word
-        (check_first("Happy otters play everywhere now.", "HOPE")[0], []),
+        (check_first("This week happy otters play everywhere along rivers.", "HOPE")[0], []),
+        (check_first("Today happy otters play everywhere now.", "HOPE")[0] != [], True),          # only 2 words outside
+        (check_first("Rehab experts celebrate older veterans enjoying renewed yoga.", "RECOVERY")[0] != [], True),  # whole sentence
         (check_first("Happy people everywhere.", "HOPE")[0] != [], True),
         (halves_splits("WILDLIFE"), [("WILD", "LIFE")]),
         (halves_splits("SOLAR"), []),
