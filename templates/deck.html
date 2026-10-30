@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script>document.documentElement.classList.add("js")</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hope Today · {{ title }}</title>
@@ -276,6 +277,63 @@
       .stamp { width: 52px; top: 52px; right: 20px; border-width: 4px; }
       .postcard h2 { padding-right: 64px; min-height: 96px; }   /* at least as tall as the stamp */
     }
+
+    /* ---------- Layer 11: feedback, entrances, slide dots, Keep this ---------- */
+    .button, .bars a, .keep, .dots button, .source a, .postcard a {
+      transition: transform 120ms ease;
+    }
+    .button:hover, .bars a:hover, .keep:hover { transform: translateY(-2px); }
+    .button:active, .bars a:active, .keep:active { transform: translateY(1px) scale(0.98); }
+    .source a:hover, .postcard a:hover { transform: translateX(3px); display: inline-block; }
+
+    /* Parts of each slide rise in one after another as the slide arrives. Only with JS on. */
+    .js .rise {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 500ms ease, transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: calc(var(--i, 0) * 75ms);
+    }
+    .js .slide.in .rise { opacity: 1; transform: none; }
+
+    .keep {
+      font: inherit;
+      font-weight: 600;
+      background: var(--field-1);
+      color: var(--ink);
+      border: 0;
+      padding: 6px 14px;
+      cursor: pointer;
+    }
+    .keep[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+    html:not(.js) .keep, html:not(.js) .dots { display: none; }
+
+    .dots {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 5;
+      display: flex;
+      gap: 6px;
+    }
+    .dots button {
+      width: 12px;
+      height: 12px;
+      padding: 0;
+      border: 0;
+      background: var(--paper);
+      opacity: 0.45;
+      cursor: pointer;
+    }
+    .dots button[aria-current="true"] { opacity: 1; transform: scale(1.25); }
+
+    .kept[hidden] { display: none; }
+    .kept { display: grid; gap: 10px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .js .rise { transform: none; transition: opacity 300ms ease; transition-delay: 0ms; }
+      .button, .bars a, .keep, .dots button, .source a, .postcard a { transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -333,6 +391,8 @@
       <p class="why"><strong>Why it matters to you:</strong> {{ story.why_it_matters }}</p>
       <p class="source">
         <span>The Guardian · {{ story.date|nice_date }}</span>
+        <button class="keep" type="button" aria-pressed="false"
+                data-headline="{{ story.headline }}" data-url="{{ story.url }}">Keep this</button>
         <a href="{{ story.url }}" target="_blank" rel="noopener">Read the full story</a>
       </p>
       </div>
@@ -355,6 +415,10 @@
           <p class="postcard-message">{{ stories|length }} real {{ "story" if stories|length == 1 else "stories" }} about what you care about, every one from the last month. Come back tomorrow and there will be more.</p>
         </div>
         <div class="postcard-right">
+          <div class="kept" id="kept" hidden>
+            <h3>Your clippings</h3>
+            <ul id="kept-list"></ul>
+          </div>
           <h3>Read them in full</h3>
           <ul>
             {% for story in stories %}
@@ -396,9 +460,10 @@
         sky(Math.floor(rand() * W), Math.floor(rand() * 34), 1, 1, rand() < 0.3 ? "#fff4dc" : "#8f9bb3");
       }
 
-      // ---- Still layer 2: hills, trees, meadow (transparent above the ridges) ----
-      const hillLayer = layer(), hill = painter(hillLayer.getContext("2d"));
-      const ridge = (base, rough, colour, wave) => {
+      // ---- Still layers 2-4: far, mid and near hills (transparent above the ridges) ----
+      // Separate layers so they can move at different speeds as you scroll (parallax).
+      const farLayer = layer(), midLayer = layer(), nearLayer = layer();
+      const ridge = (paint, base, rough, colour, wave) => {
         const tops = [];
         let y = base;
         for (let x = 0; x < W; x++) {
@@ -406,13 +471,15 @@
           y = Math.max(base - 14, Math.min(base + 10, y));
           const top = Math.round(y + wave(x));
           tops.push(top);
-          hill(x, top, 1, H - top, colour);
+          paint(x, top, 1, H - top, colour);
         }
         return tops;
       };
-      ridge(HORIZON - 22, 3, "#7c6f78", () => 0);                                    // far mountains
-      ridge(HORIZON - 4, 0.6, "#566355", x => Math.sin(x / 23) * 6);                   // mid hills
-      const near = ridge(HORIZON + 18, 0.4, "#2c3620", x => Math.sin(x / 37 + 1) * 8); // near hills
+      const far = painter(farLayer.getContext("2d")), mid = painter(midLayer.getContext("2d"));
+      const hill = painter(nearLayer.getContext("2d"));
+      ridge(far, HORIZON - 22, 3, "#7c6f78", () => 0);                                     // far mountains
+      ridge(mid, HORIZON - 4, 0.6, "#566355", x => Math.sin(x / 23) * 6);                    // mid hills
+      const near = ridge(hill, HORIZON + 18, 0.4, "#2c3620", x => Math.sin(x / 37 + 1) * 8); // near hills
       for (let x = 4; x < W; x += 6 + Math.floor(rand() * 10)) {                      // pine trees
         const h = 6 + Math.floor(rand() * 10), base = near[x];
         for (let r = 0; r < h; r++) {
@@ -425,7 +492,17 @@
 
       // ---- Things that move ----
       const px = painter(g);
-      const sunX = Math.round(W * 0.86), sunY = HORIZON - 30;
+      const sunX = Math.round(W * 0.86);
+      let sunY = HORIZON - 30;
+
+      // How far through the deck the reader is, 0 at the cover to 1 at the closing card.
+      let progress = 0;
+      const track = () => {
+        const room = document.documentElement.scrollHeight - innerHeight;
+        progress = room > 0 ? Math.min(1, Math.max(0, scrollY / room)) : 0;
+      };
+      addEventListener("scroll", track, { passive: true });
+      track();
       const clouds = Array.from({ length: 5 }, () => ({
         x: rand() * W, y: 40 + Math.floor(rand() * 50),
         len: 14 + Math.floor(rand() * 26), speed: 0.6 + rand() * 1.6,   // pixels per second
@@ -451,6 +528,9 @@
       function draw(seconds) {
         g.drawImage(skyLayer, 0, 0);
 
+        // The sun rises as you read: 30 pixels higher by the closing card.
+        sunY = HORIZON - 30 - Math.round(progress * 30);
+
         // Sun: a dithered halo that breathes in and out by whole pixels.
         const halo = 22 + Math.round((Math.sin(seconds * 1.3) + 1) * 2);
         disc(halo, "#ffe2a8", true);
@@ -471,7 +551,10 @@
           for (const [dx, dy] of wings) px(x + dx, y + dy, 1, 1, "#3b2f38");
         }
 
-        g.drawImage(hillLayer, 0, 0);                                  // hills last: birds pass behind them
+        // Hills last, so birds pass behind them. Nearer hills sink further as you scroll.
+        g.drawImage(farLayer, 0, Math.round(progress * 4));
+        g.drawImage(midLayer, 0, Math.round(progress * 10));
+        g.drawImage(nearLayer, 0, Math.round(progress * 18));
       }
 
       // About 12 frames a second, like an old game. Still image if the visitor prefers less motion.
@@ -485,6 +568,85 @@
         requestAnimationFrame(loop);                                   // browsers pause this in hidden tabs
       };
       requestAnimationFrame(loop);
+    })();
+
+    // Deck behaviour: slide entrances, keyboard and dot navigation, and Keep this.
+    (() => {
+      const slides = [...document.querySelectorAll(".slide")];
+
+      // Entrances: give each part of a slide an order, then reveal it when the slide arrives.
+      const parts = ".cover-card > *, .contents-inner > h2, .bars li, .clipping .photo, " +
+                    ".clipping-text > *, .postcard-body > *";
+      for (const slide of slides) {
+        slide.querySelectorAll(parts).forEach((el, i) => {
+          el.classList.add("rise");
+          el.style.setProperty("--i", i);
+        });
+      }
+
+      // Dots: one per slide, the current one brighter. Clicking a dot jumps there.
+      const dots = document.createElement("nav");
+      dots.className = "dots";
+      dots.setAttribute("aria-label", "Slides");
+      slides.forEach((slide, i) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Go to slide ${i + 1} of ${slides.length}`);
+        dot.addEventListener("click", () => slide.scrollIntoView());
+        dots.append(dot);
+      });
+      document.body.append(dots);
+
+      let current = 0;
+      const seen = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("in");
+          current = slides.indexOf(entry.target);
+          [...dots.children].forEach((dot, i) => dot.setAttribute("aria-current", i === current));
+        }
+      }, { threshold: 0.4 });
+      slides.forEach(slide => seen.observe(slide));
+
+      // Keys: right/down/space/page down go forward, left/up/page up go back.
+      const go = step => slides[Math.min(slides.length - 1, Math.max(0, current + step))].scrollIntoView();
+      addEventListener("keydown", e => {
+        if (e.altKey || e.ctrlKey || e.metaKey || e.target.closest("input, textarea")) return;
+        const step = { ArrowRight: 1, ArrowDown: 1, PageDown: 1, " ": e.shiftKey ? -1 : 1,
+                       ArrowLeft: -1, ArrowUp: -1, PageUp: -1 }[e.key];
+        if (!step) return;
+        e.preventDefault();
+        go(step);
+      });
+
+      // Keep this: kept stories are listed on the closing postcard and remembered for today.
+      const key = "hope-kept-{{ today }}";
+      const load = () => { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } };
+      const save = urls => { try { localStorage.setItem(key, JSON.stringify(urls)); } catch {} };
+      const buttons = [...document.querySelectorAll(".keep")];
+      const render = () => {
+        const kept = buttons.filter(b => b.getAttribute("aria-pressed") === "true");
+        const list = document.getElementById("kept-list");
+        list.replaceChildren(...kept.map(b => {
+          const li = document.createElement("li"), a = document.createElement("a");
+          a.href = b.dataset.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = b.dataset.headline;
+          li.append(a);
+          return li;
+        }));
+        document.getElementById("kept").hidden = kept.length === 0;
+      };
+      const saved = load();
+      for (const b of buttons) {
+        if (saved.includes(b.dataset.url)) { b.setAttribute("aria-pressed", "true"); b.textContent = "Kept"; }
+        b.addEventListener("click", () => {
+          const on = b.getAttribute("aria-pressed") !== "true";
+          b.setAttribute("aria-pressed", on);
+          b.textContent = on ? "Kept" : "Keep this";
+          save(buttons.filter(x => x.getAttribute("aria-pressed") === "true").map(x => x.dataset.url));
+          render();
+        });
+      }
+      render();
     })();
   </script>
 </body>
