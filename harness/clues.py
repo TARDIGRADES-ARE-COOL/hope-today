@@ -65,42 +65,80 @@ def check_hidden(sentence, answer):
     return problems, span
 
 
-def build_hints(kind, sentence, answer, highlight):
-    """Three hint levels and a give-up walkthrough, all worked out in code from the
-    verified clue, so every hint is correct and really leads to the answer."""
+# Level 1 hints: generic and playful, teaching the trick with a different word.
+# A few of each so the free hint changes from day to day. Examples are checked below.
+FREE_HINTS = {
+    "hidden": [
+        ("Sneaky one! The answer is hiding in plain sight, stretched across words. "
+         "Like CAT hiding in \u201cpubli<b>c at</b>tention\u201d.", "public attention", "CAT"),
+        ("Hide and seek! Read straight through the spaces and the answer pops out. "
+         "OWL is hiding in \u201csl<b>ow l</b>ane\u201d.", "slow lane", "OWL"),
+        ("Don't trust the spaces. EAR is tucked into \u201cth<b>e ar</b>t class\u201d; "
+         "today's answer is hiding the same way.", "the art class", "EAR"),
+    ],
+    "anagram": [
+        ("Shuffle time! Some letters in the sentence are the answer in disguise. "
+         "LISTEN is just SILENT, mixed up.", "SILENT", "LISTEN"),
+        ("Letter scramble! Find the word whose letters rearrange into the answer, "
+         "like HEART becoming EARTH.", "HEART", "EARTH"),
+        ("Things aren't in order today. The answer is a word in the sentence with its "
+         "letters jumbled: THING turns into NIGHT.", "THING", "NIGHT"),
+    ],
+}
+
+
+def free_hint(kind, day_number):
+    """Level 1: the same playful explanation for everyone, rotating by day."""
+    text, _, _ = FREE_HINTS[kind][day_number % len(FREE_HINTS[kind])]
+    return text
+
+
+def build_hints(kind, sentence, answer, highlight, day_number=0):
+    """Hint levels and a give-up walkthrough, worked out in code from the verified clue.
+    Level 2 (the theme nudge) is filled in later by theme_hint()."""
     spot = [words_of(sentence)[i] for i in highlight]
-    joined = "".join(letters(w) for w in spot)
-    first, n = answer[0], len(answer)
+    quoted = " and ".join(f"\u201c{w}\u201d" for w in spot)
     if kind == "hidden":
+        joined = "".join(letters(w) for w in spot)
         at = joined.find(letters(answer))
-        before, after = joined[:at], joined[at + n:]
-        hints = [
-            {"level": 1, "free": True,
-             "text": "The answer hides across the gaps between words. Ignore the spaces."},
-            {"level": 2, "free": False, "text": f"Look closely at: {' '.join(spot)}"},
-            {"level": 3, "free": False,
-             "text": f"Join them with no space: {joined.upper()}. Find the {n} letters starting with {first}."},
-        ]
-        how = f"{before} · {answer} · {after}".strip(" ·")
+        how = f"{joined[:at]} · {answer} · {joined[at + len(answer):]}".strip(" ·")
+        where = f"Peek between {quoted}\u2026"
         steps = [
             "The trick: the answer was hiding across the words.",
-            f"Where: in \"{' '.join(spot)}\".",
-            f"How: {how} → {answer}",
+            f"Where: in \u201c{' '.join(spot)}\u201d.",
+            f"How: {how} \u2192 {answer}",
         ]
     else:
-        hints = [
-            {"level": 1, "free": True,
-             "text": "One word, or two side by side, is the answer with its letters mixed up."},
-            {"level": 2, "free": False, "text": f"The letters to mix up are in: {' '.join(spot)}"},
-            {"level": 3, "free": False,
-             "text": f"In alphabetical order they are: {' '.join(sorted(answer))}. It starts with {first}."},
-        ]
+        where = f"Try unscrambling {quoted}\u2026"
         steps = [
             "The trick: some letters in the sentence were the answer, mixed up.",
-            f"Where: in \"{' '.join(spot)}\".",
-            f"How: {' '.join(spot).upper()} → rearranged → {answer}",
+            f"Where: in \u201c{' '.join(spot)}\u201d.",
+            f"How: {' '.join(spot).upper()} \u2192 rearranged \u2192 {answer}",
         ]
+    hints = [
+        {"level": 1, "free": True, "text": free_hint(kind, day_number)},
+        {"level": 2, "free": False, "text": ""},          # theme nudge, added by theme_hint()
+        {"level": 3, "free": False, "text": where, "highlight": highlight},
+    ]
     return hints, {"answer": answer, "steps": steps}
+
+
+def theme_hint(answer, topic, sentence):
+    """Level 2: a playful nudge about the meaning. Code checks it never gives the answer away."""
+    for _ in range(3):
+        response = client.chat.completions.create(
+            model=CLUE_MODEL,
+            messages=[{"role": "user", "content": (
+                f"A word puzzle's answer is {answer}; today's good news is about '{topic}'. The clue "
+                f"sentence is: \"{sentence}\". Write ONE playful hint, at most 14 words, that nudges "
+                "the player toward the meaning of the answer without saying it or any word containing "
+                "it. Warm and fun; you may start with one emoji."
+            )}],
+        )
+        text = response.choices[0].message.content.strip().strip('"')
+        if letters(answer) not in letters(text) and len(text.split()) <= 16:
+            return text
+    return "\U0001F305 Think about the happiest part of today's news."
 
 
 CLUE_PROMPT = (
@@ -137,7 +175,7 @@ CLUE_SCHEMA = {
 }
 
 
-def make_puzzle(answer, topic, rounds=2):
+def make_puzzle(answer, topic, rounds=2, day_number=0):
     """Ask for candidate clues, keep only those Python can verify, build the hints in code."""
     answer = answer.upper()
     prompt = CLUE_PROMPT.format(answer=answer, n=len(answer), topic=topic,
@@ -164,7 +202,7 @@ def make_puzzle(answer, topic, rounds=2):
 
     puzzles = []
     for c in valid:
-        hints, solution = build_hints(c["type"], c["sentence"], answer, c["highlight"])
+        hints, solution = build_hints(c["type"], c["sentence"], answer, c["highlight"], day_number)
         puzzles.append({
             "type": c["type"],
             "instruction": INSTRUCTIONS[c["type"]],
@@ -192,17 +230,16 @@ if __name__ == "__main__":
     for got, expected in tests:
         print("  ok" if got == expected else f"  FAIL got {got}")
 
-    examples = [
-        ("hidden", "Communities rewild landscapes, giving otters room to thrive.", "WILDLAND",
-         check_hidden("Communities rewild landscapes, giving otters room to thrive.", "WILDLAND")[1]),
-        ("anagram", "Rangers file wild meadow sightings.", "WILDLIFE",
-         check_anagram("Rangers file wild meadow sightings.", "WILDLIFE", "file wild")[1]),
-    ]
-    for kind, sentence, answer, spot in examples:
-        hints, solution = build_hints(kind, sentence, answer, spot)
-        print(f"\n[{kind}] \"{sentence}\" ({len(answer)})")
-        for h in hints:
-            print(f"  Level {h['level']}{' (free)' if h['free'] else ''}: {h['text']}")
-        print("  Give up:")
-        for step in solution["steps"]:
-            print(f"    {step}")
+    print("free-hint examples really work:")
+    for _, phrase, word in FREE_HINTS["hidden"]:
+        print("  ok" if not check_hidden(phrase, word)[0] else f"  FAIL {word} in {phrase}")
+    for _, mixed, word in FREE_HINTS["anagram"]:
+        print("  ok" if sorted(mixed) == sorted(word) and mixed != word else f"  FAIL {mixed}/{word}")
+
+    sentence = "Communities rewild landscapes, giving otters room to thrive."
+    hints, solution = build_hints("hidden", sentence, "WILDLAND", check_hidden(sentence, "WILDLAND")[1])
+    hints[1]["text"] = theme_hint("WILDLAND", "Saving wild places", sentence)
+    print(f"\n\"{sentence}\" (8)")
+    for h in hints:
+        print(f"  Level {h['level']}{' (free)' if h['free'] else ''}: {h['text']}")
+    print("  Give up: " + " / ".join(solution["steps"]))

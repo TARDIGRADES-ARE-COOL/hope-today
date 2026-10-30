@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.classList.add("js")</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hope Today · daily puzzle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #e3e2da;
+      --ink: #1c1c1c;
+      --muted: #38424a;
+      --accent: #2c3620;        /* olive: buttons, solved boxes */
+      --accent-ink: #e3e2da;
+      --field-1: #b7c8be;       /* sage */
+      --field-2: #d6c4b8;       /* blush */
+      --field-3: #b2bdc5;       /* light slate */
+      --backdrop-dim: 1;
+
+      --margin: clamp(16px, 4vw, 56px);
+      --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+      --step-body: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+      --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+      --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --paper: #d9d7cc; --backdrop-dim: 0.9; }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: clamp(24px, 5vh, 64px) var(--margin);
+      background: #2c3620;
+      color: var(--ink);
+      font-family: "Literata", Georgia, serif;
+      font-size: var(--step-body);
+      line-height: 1.6;
+    }
+    h1, h2 {
+      font-family: "Rokkitt", "Arial Narrow", sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    p { margin: 0; }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    /* The puzzle is one paper card, like the deck's cover. */
+    .card {
+      width: min(820px, 100%);
+      container-type: inline-size;
+      background: var(--paper);
+      padding: clamp(24px, 4vw, 48px);
+      display: grid;
+      gap: clamp(20px, 3vh, 28px);
+    }
+    .card h1 { font-size: 13cqw; display: flex; justify-content: space-between; gap: 0.3em; }
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 6px 24px;
+      font-size: var(--step-lead);
+      font-weight: 600;
+    }
+    .instruction { font-size: var(--step-lead); font-weight: 600; }
+    .clue { font-size: clamp(1.5rem, 1.1rem + 2vw, 2.5rem); line-height: 1.35; }
+    .clue .word { transition: background-color 300ms ease; }
+    .clue .lit { background: var(--field-2); }
+    .clue .count { color: var(--muted); white-space: nowrap; }
+
+    /* Letter boxes. A real input sits on top, so phones get their keyboard. */
+    .entry { position: relative; display: flex; gap: 6px; flex-wrap: wrap; }
+    .box {
+      width: clamp(36px, 8cqw, 56px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      background: var(--field-3);
+      font-family: "Rokkitt", sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+      transition: background-color 250ms ease, color 250ms ease, transform 250ms ease;
+    }
+    .box.next { background: var(--field-1); }
+    .solved .box { background: var(--accent); color: var(--accent-ink); }
+    .entry input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      opacity: 0;
+      font-size: 16px;                       /* stops phones zooming in */
+      text-transform: uppercase;
+    }
+    .entry.shake { animation: shake 400ms ease; }
+    @keyframes shake {
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .actions[hidden] { display: none; }    /* display: flex would otherwise beat [hidden] */
+    .button {
+      border: 0;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-family: "Rokkitt", sans-serif;
+      font-weight: 800;
+      font-size: var(--step-lead);
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 12px 24px;
+      transition: transform 120ms ease;
+    }
+    .button.soft { background: var(--field-1); color: var(--ink); }
+    .button:hover { transform: translateY(-2px); }
+    .button:active { transform: translateY(1px) scale(0.98); }
+    .give-up { border: 0; background: none; padding: 8px 0; text-decoration: underline; margin-left: auto; }
+    .feedback { min-height: 1.6em; font-weight: 600; }
+
+    .hints { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .hints li { padding: 12px 16px; }
+    .hints li:nth-child(1) { background: var(--field-3); }
+    .hints li:nth-child(2) { background: var(--field-1); }
+    .hints li:nth-child(3) { background: var(--field-2); }
+    .hints strong { font-weight: 600; }
+
+    .result[hidden] { display: none; }
+    .result { display: grid; gap: 14px; }
+    .result h2 { font-size: var(--step-head); }
+    .steps { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+    .steps[hidden] { display: none; }
+    .result .actions .button { flex: 0 0 auto; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .entry.shake { animation: none; }
+      .box, .button, .clue .word { transition: none; }
+    }
+    @media (max-width: 700px) {
+      .card h1 { flex-direction: column; gap: 0; font-size: 20cqw; }
+    }
+  </style>
+</head>
+<body>
+  {% include "_dawn.html" %}
+
+  <main class="card" id="puzzle">
+    <h1><span>Hope</span> <span>Today</span></h1>
+    <div class="facts">
+      <span>{{ today|nice_date }}</span>
+      <span>Daily puzzle</span>
+      <span>{{ puzzle.length }} letters</span>
+    </div>
+
+    <p class="instruction">{{ puzzle.instruction }}</p>
+    <p class="clue">
+      {%- for word in puzzle.sentence.split() %}
+      <span class="word" data-i="{{ loop.index0 }}">{{ word }}</span>
+      {%- endfor %} <span class="count">({{ puzzle.length }})</span>
+    </p>
+
+    <form class="entry" id="entry" autocomplete="off">
+      {% for _ in range(puzzle.length) %}<span class="box" aria-hidden="true"></span>{% endfor %}
+      <input id="guess" name="guess" maxlength="{{ puzzle.length }}" aria-label="Your guess, {{ puzzle.length }} letters"
+             autocapitalize="characters" spellcheck="false" enterkeyhint="go">
+    </form>
+
+    <div class="actions" id="actions">
+      <button class="button" type="submit" form="entry">Check</button>
+      <button class="button soft" type="button" id="more-hint">Another hint</button>
+      <button class="give-up" type="button" id="give-up">Give up</button>
+    </div>
+    <p class="feedback" id="feedback" aria-live="polite"></p>
+
+    <ul class="hints" id="hints">
+      {% for hint in puzzle.hints %}
+      <li data-level="{{ hint.level }}" {% if not hint.free %}hidden{% endif %}>
+        <strong>{{ "Free hint" if hint.free else "Hint " ~ hint.level }}:</strong> {{ hint.text|safe if hint.free else hint.text }}
+      </li>
+      {% endfor %}
+    </ul>
+
+    <section class="result" id="result" hidden aria-live="polite">
+      <h2 id="result-title"></h2>
+      <p id="result-line"></p>
+      <ol class="steps" id="steps" hidden>
+        {% for step in puzzle.solution.steps %}<li>{{ step }}</li>{% endfor %}
+      </ol>
+      <div class="actions">
+        <a class="button" href="deck.html">Open today's good news</a>
+        <button class="button soft" type="button" id="share">Share</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      // Light obfuscation so the answer isn't plain text in the page source.
+      const ANSWER = atob("{{ answer_b64 }}");
+      const LENGTH = ANSWER.length;
+      const KEY = "hope-puzzle-{{ today }}";
+      // For testing: open the page with #reset to play today's puzzle again from the start.
+      if (location.hash === "#reset") { try { localStorage.removeItem(KEY); } catch {} history.replaceState(null, "", location.pathname); }
+      const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch { return null; } };
+      const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+      const state = load() || { guesses: 0, hints: 1, status: "playing" };   // hint 1 is free
+
+      const $ = id => document.getElementById(id);
+      const input = $("guess"), entry = $("entry"), boxes = [...entry.querySelectorAll(".box")];
+      const hintItems = [...$("hints").children];
+
+      const paint = () => {
+        const v = input.value.toUpperCase().replace(/[^A-Z]/g, "");
+        input.value = v;
+        boxes.forEach((b, i) => {
+          b.textContent = v[i] || "";
+          b.classList.toggle("next", i === v.length && state.status === "playing");
+        });
+      };
+      const showHints = () => {
+        hintItems.forEach(li => { li.hidden = Number(li.dataset.level) > state.hints; });
+        // The last hint lights up the words where the answer is hiding.
+        if (state.hints >= hintItems.length || state.status === "gave-up") {
+          JSON.parse('{{ puzzle.highlight|tojson }}').forEach(i =>
+            document.querySelector(`.word[data-i="${i}"]`)?.classList.add("lit"));
+        }
+        $("more-hint").hidden = state.hints >= hintItems.length || state.status !== "playing";
+        $("more-hint").textContent = `Hint ${state.hints + 1}`;
+      };
+      // Accept the answer, or a simple plural either way.
+      const matches = g => g === ANSWER || g === ANSWER + "S" || g + "S" === ANSWER;
+
+      const finish = (status, celebrate) => {
+        state.status = status;
+        save();
+        input.value = ANSWER;
+        input.disabled = true;
+        paint();
+        $("actions").hidden = true;
+        $("feedback").textContent = "";
+        const solved = status === "solved";
+        $("puzzle").classList.toggle("solved", solved);
+        $("result-title").textContent = solved ? "You got it!" : `It was ${ANSWER}`;
+        const g = state.guesses, h = state.hints - 1;
+        $("result-line").textContent = solved
+          ? `${ANSWER} in ${g} ${g === 1 ? "guess" : "guesses"}, with ${h} extra ${h === 1 ? "hint" : "hints"}. Your good news is ready.`
+          : "Here's how the clue worked. Your good news is ready anyway.";
+        $("steps").hidden = solved;
+        $("result").hidden = false;
+        showHints();
+        if (celebrate) {
+          window.riseSun?.();
+          $("result").scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      };
+
+      input.addEventListener("input", paint);
+      entry.addEventListener("submit", e => {
+        e.preventDefault();
+        if (state.status !== "playing") return;
+        const guess = input.value.toUpperCase().replace(/[^A-Z]/g, "");
+        if (guess.length < LENGTH - 1) {
+          $("feedback").textContent = `It's ${LENGTH} letters.`;
+          return;
+        }
+        state.guesses += 1;
+        if (matches(guess)) return finish("solved", true);
+        save();
+        $("feedback").textContent = ["Not quite. Try again!", "Close? Have another go.", "Nope, but you've got this."][state.guesses % 3];
+        entry.classList.remove("shake");
+        void entry.offsetWidth;                // restart the shake animation
+        entry.classList.add("shake");
+        input.select();
+      });
+      $("more-hint").addEventListener("click", () => {
+        state.hints = Math.min(hintItems.length, state.hints + 1);
+        save();
+        showHints();
+        input.focus();
+      });
+      $("give-up").addEventListener("click", () => finish("gave-up", true));
+      $("share").addEventListener("click", async () => {
+        const g = state.guesses, h = state.hints - 1;
+        const text = state.status === "solved"
+          ? `Hope Today {{ today|nice_date }}: solved in ${g} ${g === 1 ? "guess" : "guesses"}, ${h} extra ${h === 1 ? "hint" : "hints"} \u{1F305}`
+          : `Hope Today {{ today|nice_date }}: this one beat me \u{1F305}`;
+        try { await navigator.clipboard.writeText(text); $("share").textContent = "Copied!"; }
+        catch { prompt("Copy this:", text); }
+      });
+
+      // Pick up where the player left off today.
+      paint();
+      showHints();
+      if (state.status !== "playing") finish(state.status, false);
+      else input.focus();
+    })();
+  </script>
+</body>
+</html>

@@ -1,12 +1,12 @@
 """Part 2: the daily run. Nobody types a topic; the agent finds where this week's good news is."""
+import base64
 import json
+import sys
 from datetime import date, timedelta
 from pathlib import Path
 
-import sys
-
-from clues import make_puzzle
-from deck import render_deck
+from clues import make_puzzle, theme_hint
+from deck import env, render_deck
 from llm import client
 from tools import IMAGES, fetch_article, search_news
 
@@ -298,12 +298,14 @@ def write_stories(topic):
 
 def choose_puzzle(topic, day=None):
     """A verified clue for the topic's answer. Clue type alternates by day for variety."""
-    puzzles, rejected = make_puzzle(topic["answer"], topic["topic"])
+    day_number = (day or date.today()).toordinal()
+    puzzles, rejected = make_puzzle(topic["answer"], topic["topic"], day_number=day_number)
     if not puzzles:
         return None, rejected
-    wanted = "anagram" if (day or date.today()).toordinal() % 2 == 0 else "hidden"
-    same_type = [p for p in puzzles if p["type"] == wanted]
-    return (same_type or puzzles)[0], rejected
+    wanted = "anagram" if day_number % 2 == 0 else "hidden"
+    puzzle = ([p for p in puzzles if p["type"] == wanted] or puzzles)[0]
+    puzzle["hints"][1]["text"] = theme_hint(topic["answer"], topic["topic"], puzzle["sentence"])
+    return puzzle, rejected
 
 
 def build_day(topic, puzzle, day=None):
@@ -315,6 +317,12 @@ def build_day(topic, puzzle, day=None):
                          topic=topic["topic"], path=folder / "deck.html")
     if "error" in result:
         raise SystemExit(f"Deck failed: {result['error']}")
+    # The puzzle page comes first; solving (or giving up) leads to the deck.
+    page = env.get_template("puzzle.html").render(
+        today=day, puzzle=puzzle,
+        answer_b64=base64.b64encode(topic["answer"].encode()).decode(),
+    )
+    (folder / "index.html").write_text(page, encoding="utf-8")
     # The puzzle page will read this file. Keep the answer out of the deck itself.
     (folder / "day.json").write_text(json.dumps({
         "date": day, "topic": topic["topic"], "answer": topic["answer"],
@@ -387,7 +395,7 @@ if __name__ == "__main__":
     folder, stories = build_day(today, puzzle)
     for s in stories:
         print(f"  - {s['headline']}")
-    print(f"Saved {folder}/deck.html and day.json")
+    print(f"Saved {folder}/index.html (puzzle), deck.html and day.json")
 
     if save:
         save_day(history, today["topic"], today["answer"], [s["url"] for s in stories])
