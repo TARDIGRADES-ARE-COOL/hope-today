@@ -1,5 +1,6 @@
 """Part 2: the daily run. Nobody types a topic; the agent finds where this week's good news is."""
 import base64
+import hashlib
 import json
 import sys
 from datetime import date, timedelta
@@ -327,6 +328,7 @@ def build_day(topic, puzzle, day=None):
     # The puzzle page comes first; solving (or giving up) leads to the deck.
     page = env.get_template("puzzle.html").render(
         today=day, puzzle=puzzle,
+        puzzle_id=hashlib.sha1(puzzle["sentence"].encode()).hexdigest()[:8],
         answer_b64=base64.b64encode(topic["answer"].encode()).decode(),
     )
     (folder / "index.html").write_text(page, encoding="utf-8")
@@ -375,12 +377,20 @@ if __name__ == "__main__":
 
     history = load_history()
     blocked = blocked_answers(history)
-    existing = DAILY / date.today().isoformat() / "day.json"
-    if fresh and existing.exists():
-        old = json.loads(existing.read_text(encoding="utf-8"))
-        blocked.add(old["answer"])
-        history = {**history, "urls": history["urls"] + [s["url"] for s in old["stories"]]}  # in memory only
-        print("Fresh: skipping today's existing topic and its stories")
+    # --fresh remembers every puzzle already made today (in tested.json), so repeated
+    # test runs keep moving to new topics. History itself is untouched.
+    folder_today = DAILY / date.today().isoformat()
+    tested_file, existing = folder_today / "tested.json", folder_today / "day.json"
+    tested = json.loads(tested_file.read_text(encoding="utf-8")) if tested_file.exists() else []
+    if fresh:
+        if existing.exists():
+            old = json.loads(existing.read_text(encoding="utf-8"))
+            if old["answer"] not in [t["answer"] for t in tested]:
+                tested.append({"answer": old["answer"], "urls": [s["url"] for s in old["stories"]]})
+                tested_file.write_text(json.dumps(tested, indent=2), encoding="utf-8")
+        blocked |= {t["answer"] for t in tested}
+        history = {**history, "urls": history["urls"] + [u for t in tested for u in t["urls"]]}
+        print(f"Fresh: skipping {len(tested)} topic(s) already tested today")
 
     found = unseen(sweep(), history)
     print(f"{len(found)} new candidate articles from the last {WINDOW_DAYS} days")

@@ -210,7 +210,9 @@
       // Light obfuscation so the answer isn't plain text in the page source.
       const ANSWER = atob("{{ answer_b64 }}");
       const LENGTH = ANSWER.length;
-      const KEY = "hope-puzzle-{{ today }}";
+      // Progress is saved per puzzle, not per date, so a regenerated puzzle never inherits
+      // an old one's "solved" state (that bug once showed a player the new answer).
+      const KEY = "hope-puzzle-{{ today }}-{{ puzzle_id }}";
       // For testing: open the page with #reset to play today's puzzle again from the start.
       if (location.hash === "#reset") { try { localStorage.removeItem(KEY); } catch {} history.replaceState(null, "", location.pathname); }
       const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch { return null; } };
