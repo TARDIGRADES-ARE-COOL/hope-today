@@ -3,34 +3,489 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ title }}</title>
+  <title>Hope Today · {{ title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+
+  {#- A torn paper edge, as clip-path points. Fixed offsets so every deck tears the same way. -#}
+  {%- set tear = [0, 5, 2, 7, 1, 4, 8, 3, 6, 1, 5, 2, 7, 3, 0, 6, 2, 5, 1, 7, 3] -%}
+  {%- macro torn_edge() -%}
+    polygon(
+    {%- for d in tear %}{{ (loop.index0 * 5) }}% {{ d }}px, {% endfor -%}
+    {%- for d in tear|reverse %}{{ 100 - loop.index0 * 5 }}% calc(100% - {{ d }}px){{ ", " if not loop.last }}{% endfor -%}
+    )
+  {%- endmacro %}
+
+  <style>
+    :root {
+      --bg: #a6b3bc;            /* slate: the table the clippings lie on */
+      --paper: #e3e2da;
+      --ink: #1c1c1c;
+      --muted: #38424a;
+      --accent: #2c3620;        /* olive: buttons and the closing card */
+      --accent-ink: #e3e2da;
+      --field-1: #b7c8be;       /* sage */
+      --field-2: #d6c4b8;       /* blush */
+      --field-3: #b2bdc5;       /* light slate */
+      --backdrop-dim: 1;
+
+      --margin: clamp(16px, 4vw, 56px);
+      --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+      --step-body: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+      --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+      --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1f2622;
+        --paper: #d9d7cc;
+        --accent: #2c3620;
+        --field-1: #b0c0b6;
+        --field-2: #cdbcb0;
+        --field-3: #aab5bd;
+        --backdrop-dim: 0.9;      /* the scene is already dusky; only a touch darker at night */
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: #2c3620;      /* shown only if the dawn scene can't be drawn */
+      color: var(--ink);
+      font-family: "Literata", Georgia, serif;
+      font-size: var(--step-body);
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      font-family: "Rokkitt", "Arial Narrow", sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      margin: 0;
+      text-wrap: balance;
+    }
+    p { margin: 0; }
+    a { color: inherit; }
+    img { display: block; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    .slide {
+      position: relative;
+      min-height: 100svh;
+      scroll-snap-align: start;
+      display: grid;
+      align-items: center;
+      padding: clamp(32px, 6vh, 72px) var(--margin);
+      overflow: hidden;
+    }
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(var(--backdrop-dim));
+      image-rendering: pixelated;   /* keep the pixels chunky when scaled up */
+    }
+    .photo {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 5 / 4;
+      object-fit: cover;
+    }
+
+    .button {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-family: "Rokkitt", sans-serif;
+      font-weight: 800;
+      font-size: var(--step-lead);
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 28px;
+    }
+
+    /* ---------- Title: a paper card over the first story's photo ---------- */
+    .cover { justify-items: center; }
+    .cover-card {
+      position: relative;
+      width: min(880px, 100%);
+      container-type: inline-size;
+      background: var(--paper);
+      padding: clamp(24px, 4vw, 48px);
+      display: grid;
+      gap: clamp(20px, 3vh, 32px);
+      min-height: min(760px, 82svh);
+      align-content: space-between;
+    }
+    .cover-card h1 {
+      font-size: 14cqw;          /* fills the card's width, whatever the screen */
+      display: flex;
+      justify-content: space-between;
+      gap: 0.3em;
+    }
+    .cover-facts {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 24px;
+      font-size: var(--step-lead);
+      font-weight: 600;
+    }
+    .cover-said { font-size: var(--step-lead); max-width: 32ch; }
+    .cover-photos {
+      display: grid;
+      gap: 8px;
+    }
+    .cover-photos img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+    .cover-said q { font-style: italic; }
+    .cover-foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: var(--step-small);
+      color: var(--muted);
+    }
+
+    /* ---------- Contents: one giant word, one filled bar per story ---------- */
+    .contents { justify-items: center; }
+    .contents-inner {
+      width: min(720px, 100%);
+      container-type: inline-size;
+      background: var(--paper);
+      padding: clamp(24px, 4vw, 48px);
+      min-height: min(760px, 82svh);
+      display: grid;
+      align-content: center;
+    }
+    .contents h2 { font-size: 29cqw; line-height: 0.8; margin-bottom: 20px; }
+    .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .bars a {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      min-height: 56px;
+      padding: 14px 18px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .bars li:nth-child(3n+1) a { background: var(--field-1); }
+    .bars li:nth-child(3n+2) a { background: var(--field-2); }
+    .bars li:nth-child(3n+3) a { background: var(--field-3); }
+    .bars span { font-size: var(--step-small); font-weight: 400; white-space: nowrap; }
+
+    /* ---------- Story: a torn clipping over the story's own photo ---------- */
+    .story { justify-items: center; }
+    .clipping {
+      position: relative;
+      width: min(1180px, 100%);
+      background: var(--paper);
+      padding: clamp(32px, 4vw, 52px) clamp(24px, 3.5vw, 48px);
+      clip-path: {{ torn_edge() }};
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: clamp(24px, 3.5vw, 48px);
+      align-items: center;
+      transform: rotate(var(--tilt, 0deg));
+    }
+    .clipping:not(:has(.photo)) { grid-template-columns: 1fr; width: min(780px, 100%); }
+    .clipping-text { display: grid; gap: 20px; }
+    .clipping h2 { font-size: var(--step-head); }
+    .clipping .summary { font-size: var(--step-lead); line-height: 1.45; }
+    .points { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .points li { position: relative; padding-left: 26px; }
+    .points li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+    }
+    .why { padding: 16px 20px; }
+    .why strong { font-weight: 600; }
+    .story:nth-of-type(3n+1) .why { background: var(--field-1); }
+    .story:nth-of-type(3n+2) .why { background: var(--field-2); }
+    .story:nth-of-type(3n+3) .why { background: var(--field-3); }
+    .source {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 16px;
+      font-size: var(--step-small);
+      color: var(--muted);
+    }
+    .source a { font-weight: 600; color: var(--ink); }
+
+    /* ---------- Closing: the back of a postcard on the olive table ---------- */
+    .closing { justify-items: center; }
+    .postcard { position: relative; width: min(1000px, 100%); }
+    .scallops { display: block; width: 100%; height: 28px; fill: var(--paper); }
+    .postcard-body {
+      background: var(--paper);
+      padding: clamp(24px, 4vw, 56px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 5vw, 72px);
+    }
+    .postcard h2 { grid-column: 1 / -1; font-size: var(--step-head); padding-right: 110px; }
+    .postcard-message { font-size: var(--step-lead); line-height: 1.45; }
+    .postcard-right { display: grid; gap: 16px; align-content: start; }
+    .stamp {
+      position: absolute;       /* top-right corner, where a stamp goes */
+      top: clamp(48px, 5vw, 72px);
+      right: clamp(24px, 4vw, 56px);
+      width: 88px;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border: 6px solid var(--accent-ink);
+      outline: 2px dotted var(--muted);
+    }
+    .postcard h3 { font-size: var(--step-lead); }
+    .postcard ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .imprint {
+      grid-column: 1 / -1;
+      max-width: 70ch;
+      justify-self: center;
+      text-align: center;
+      font-size: var(--step-small);
+      color: var(--muted);
+    }
+
+    @media (max-width: 1000px) {
+      .clipping { grid-template-columns: 1fr; width: min(680px, 100%); }
+      .clipping-text { display: contents; }     /* let the headline move above the photo */
+      .clipping h2 { order: -1; }
+    }
+
+    /* ---------- Phone ---------- */
+    @media (max-width: 700px) {
+      html { scroll-snap-type: y proximity; }
+      .clipping { grid-template-columns: 1fr; padding: 32px 20px; }
+      .cover-card h1 { flex-direction: column; gap: 0; }
+      .postcard-body { grid-template-columns: 1fr; }
+      .stamp { width: 52px; top: 52px; right: 20px; border-width: 4px; }
+      .postcard h2 { padding-right: 64px; min-height: 96px; }   /* at least as tall as the stamp */
+    }
+  </style>
 </head>
 <body>
-  <section>
-    <h1>{{ title }}</h1>
-    <p>You said: {{ user_answer }}</p>
-    <p>{{ today }} · {{ stories|length }} truly good {{ "story" if stories|length == 1 else "stories" }}</p>
+  <canvas class="backdrop" id="dawn" width="320" height="180" aria-hidden="true"></canvas>
+
+  <section class="slide cover" aria-label="Cover">
+    <div class="cover-card">
+      <h1><span>Hope</span> <span>Today</span></h1>
+      <div class="cover-facts">
+        <span>{{ today|nice_date }}</span>
+        <span>{{ stories|length }} good {{ "story" if stories|length == 1 else "stories" }}</span>
+        <span>{{ title }}</span>
+      </div>
+      <p class="cover-said">You said <q>{{ user_answer }}</q>. Here is what is going right.</p>
+      {%- set thumbs = (stories | selectattr("image") | list)[:4] %}
+      {% if thumbs %}
+      <div class="cover-photos" style="grid-template-columns: repeat({{ thumbs|length }}, 1fr)">
+        {% for story in thumbs %}
+        <img src="{{ story.image }}" alt="" width="160" height="160">
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="cover-foot">
+        <span>Real stories from The Guardian, all from the last month.</span>
+        <a class="button" href="#contents">Start reading</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide contents" id="contents" aria-label="Contents">
+    <div class="contents-inner">
+      <h2>Today</h2>
+      <ul class="bars">
+        {% for story in stories %}
+        <li><a href="#story-{{ loop.index }}">{{ story.headline }} <span>{{ story.date|nice_date }}</span></a></li>
+        {% endfor %}
+      </ul>
+    </div>
   </section>
 
   {% for story in stories %}
-  <section>
-    {% if story.image %}
-    <img src="{{ story.image }}" alt="" width="500">
-    {% endif %}
-    <h2>{{ story.headline }}</h2>
-    <p><strong>What happened:</strong> {{ story.summary }}</p>
-    <ul>
-      {% for point in story.key_points %}
-      <li>{{ point }}</li>
-      {% endfor %}
-    </ul>
-    <p><strong>Why it matters:</strong> {{ story.why_it_matters }}</p>
-    <p>{{ story.date }} · <a href="{{ story.url }}">Read the full story</a></p>
+  <section class="slide story" id="story-{{ loop.index }}" aria-label="{{ story.headline }}">
+    <article class="clipping" style="--tilt: {{ loop.cycle('-0.8deg', '0.6deg', '-0.4deg') }}">
+      {% if story.image %}
+      <img class="photo" src="{{ story.image }}" alt="" width="1000" height="800" loading="lazy">
+      {% endif %}
+      <div class="clipping-text">
+      <h2>{{ story.headline }}</h2>
+      <p class="summary">{{ story.summary }}</p>
+      <ul class="points">
+        {% for point in story.key_points %}
+        <li>{{ point }}</li>
+        {% endfor %}
+      </ul>
+      <p class="why"><strong>Why it matters to you:</strong> {{ story.why_it_matters }}</p>
+      <p class="source">
+        <span>The Guardian · {{ story.date|nice_date }}</span>
+        <a href="{{ story.url }}" target="_blank" rel="noopener">Read the full story</a>
+      </p>
+      </div>
+    </article>
   </section>
   {% endfor %}
 
-  <section>
-    <h2>There is hope today.</h2>
+  <section class="slide closing" aria-label="Closing">
+    <div class="postcard">
+      {#- Twelve scallops along the top edge of the card. -#}
+      <svg class="scallops" viewBox="0 0 1200 28" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 28 V14 {% for i in range(12) %}A50 14 0 0 1 {{ (i + 1) * 100 }} 14 {% endfor %}V28 Z"/>
+      </svg>
+      <div class="postcard-body">
+        {% if stories[-1].image %}
+        <img class="stamp" src="{{ stories[-1].image }}" alt="" width="88" height="117" loading="lazy">
+        {% endif %}
+        <h2>There is hope today.</h2>
+        <div>
+          <p class="postcard-message">{{ stories|length }} real {{ "story" if stories|length == 1 else "stories" }} about what you care about, every one from the last month. Come back tomorrow and there will be more.</p>
+        </div>
+        <div class="postcard-right">
+          <h3>Read them in full</h3>
+          <ul>
+            {% for story in stories %}
+            <li><a href="{{ story.url }}" target="_blank" rel="noopener">{{ story.headline }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <p class="imprint">Stories and story photographs: The Guardian. Dawn scene drawn fresh each day. Made by Hope Today on {{ today|nice_date }}.</p>
+      </div>
+    </div>
   </section>
+
+  <script>
+    // A pixel-art dawn, drawn at 320x180 and scaled up with crisp pixels.
+    // Seeded by today's date: the layout stays, but clouds, stars, birds and trees change daily.
+    // The sky and hills are drawn once into hidden layers; each frame only adds what moves.
+    (() => {
+      const canvas = document.getElementById("dawn");
+      const g = canvas.getContext("2d");
+      const W = canvas.width, H = canvas.height, HORIZON = 118;
+
+      let seed = Number("{{ today }}".replaceAll("-", "")) % 2147483647 || 7;
+      const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+      const painter = ctx => (x, y, w, h, colour) => { ctx.fillStyle = colour; ctx.fillRect(x, y, w, h); };
+      const layer = () => Object.assign(document.createElement("canvas"), { width: W, height: H });
+
+      // ---- Still layer 1: sky and stars ----
+      const skyLayer = layer(), sky = painter(skyLayer.getContext("2d"));
+      const bands = ["#1d2b45", "#2b3d5c", "#41566f", "#6b6e80", "#a3808a", "#d39a8c", "#eeb48e", "#f6cf9d"];
+      const band = HORIZON / bands.length;
+      bands.forEach((colour, i) => {
+        const top = Math.round(i * band);
+        sky(0, top, W, Math.round((i + 1) * band) - top, colour);
+        if (i === 0) return;
+        for (let x = 0; x < W; x += 2) sky(x, top, 1, 1, bands[i - 1]);       // dithered seam
+        for (let x = 1; x < W; x += 4) sky(x, top + 1, 1, 1, bands[i - 1]);
+      });
+      for (let i = 0; i < 40; i++) {
+        sky(Math.floor(rand() * W), Math.floor(rand() * 34), 1, 1, rand() < 0.3 ? "#fff4dc" : "#8f9bb3");
+      }
+
+      // ---- Still layer 2: hills, trees, meadow (transparent above the ridges) ----
+      const hillLayer = layer(), hill = painter(hillLayer.getContext("2d"));
+      const ridge = (base, rough, colour, wave) => {
+        const tops = [];
+        let y = base;
+        for (let x = 0; x < W; x++) {
+          y += (rand() - 0.5) * rough;
+          y = Math.max(base - 14, Math.min(base + 10, y));
+          const top = Math.round(y + wave(x));
+          tops.push(top);
+          hill(x, top, 1, H - top, colour);
+        }
+        return tops;
+      };
+      ridge(HORIZON - 22, 3, "#7c6f78", () => 0);                                    // far mountains
+      ridge(HORIZON - 4, 0.6, "#566355", x => Math.sin(x / 23) * 6);                   // mid hills
+      const near = ridge(HORIZON + 18, 0.4, "#2c3620", x => Math.sin(x / 37 + 1) * 8); // near hills
+      for (let x = 4; x < W; x += 6 + Math.floor(rand() * 10)) {                      // pine trees
+        const h = 6 + Math.floor(rand() * 10), base = near[x];
+        for (let r = 0; r < h; r++) {
+          const half = Math.floor(r / 2);
+          hill(x - half, base - h + r, half * 2 + 1, 1, "#212916");
+        }
+      }
+      hill(0, H - 14, W, 14, "#1a2012");                                               // meadow
+      for (let x = 0; x < W; x += 3 + Math.floor(rand() * 6)) hill(x, H - 15, 1, 1, "#1a2012");
+
+      // ---- Things that move ----
+      const px = painter(g);
+      const sunX = Math.round(W * 0.86), sunY = HORIZON - 30;
+      const clouds = Array.from({ length: 5 }, () => ({
+        x: rand() * W, y: 40 + Math.floor(rand() * 50),
+        len: 14 + Math.floor(rand() * 26), speed: 0.6 + rand() * 1.6,   // pixels per second
+      }));
+      const birds = Array.from({ length: 4 }, () => ({
+        x: rand() * W, y: 46 + Math.floor(rand() * 30),
+        speed: 7 + rand() * 6, phase: rand() * 10,
+      }));
+      const WINGS_UP = [[0, 0], [1, 1], [2, 2], [3, 1], [4, 0]];
+      const WINGS_DOWN = [[0, 2], [1, 1], [2, 2], [3, 1], [4, 2]];
+
+      const disc = (r, colour, dither) => {
+        for (let y = -r; y <= r; y++) {
+          for (let x = -r; x <= r; x++) {
+            if (x * x + y * y > r * r) continue;
+            if (dither && (x + y) % 2) continue;                       // every other pixel: a soft glow
+            px(sunX + x, sunY + y, 1, 1, colour);
+          }
+        }
+      };
+      const wrap = (x, span) => ((x % span) + span) % span;
+
+      function draw(seconds) {
+        g.drawImage(skyLayer, 0, 0);
+
+        // Sun: a dithered halo that breathes in and out by whole pixels.
+        const halo = 22 + Math.round((Math.sin(seconds * 1.3) + 1) * 2);
+        disc(halo, "#ffe2a8", true);
+        disc(20, "#ffd99a");
+        disc(15, "#fff1c8");
+
+        for (const c of clouds) {
+          const x = Math.round(wrap(c.x + seconds * c.speed, W + 50)) - 50;
+          px(x + 3, c.y, c.len - 6, 1, "#fbd9b8");
+          px(x, c.y + 1, c.len, 2, "#f6c6a2");
+          px(x + 2, c.y + 3, c.len - 4, 1, "#dfa28e");
+        }
+
+        for (const b of birds) {
+          const x = Math.round(wrap(b.x + seconds * b.speed, W + 20)) - 10;
+          const y = b.y + Math.round(Math.sin(seconds * 0.9 + b.phase) * 2);
+          const wings = Math.floor(seconds * 4 + b.phase) % 2 ? WINGS_UP : WINGS_DOWN;
+          for (const [dx, dy] of wings) px(x + dx, y + dy, 1, 1, "#3b2f38");
+        }
+
+        g.drawImage(hillLayer, 0, 0);                                  // hills last: birds pass behind them
+      }
+
+      // About 12 frames a second, like an old game. Still image if the visitor prefers less motion.
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        draw(0);
+        return;
+      }
+      let last = -Infinity;
+      const loop = now => {
+        if (now - last >= 83) { draw(now / 1000); last = now; }
+        requestAnimationFrame(loop);                                   // browsers pause this in hidden tabs
+      };
+      requestAnimationFrame(loop);
+    })();
+  </script>
 </body>
 </html>

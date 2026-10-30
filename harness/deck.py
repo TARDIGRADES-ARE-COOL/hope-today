@@ -12,6 +12,17 @@ OUTPUT = ROOT / "output"
 # plain text. A "<script>" in a headline shows up as text instead of running.
 env = Environment(loader=FileSystemLoader(TEMPLATES), autoescape=True)
 
+
+def nice_date(iso):
+    """'2026-10-25' → '25 Oct 2026'. Leaves anything else untouched."""
+    try:
+        return date.fromisoformat(iso).strftime("%-d %b %Y")
+    except (TypeError, ValueError):
+        return iso
+
+
+env.filters["nice_date"] = nice_date
+
 REQUIRED = ["headline", "summary", "key_points", "why_it_matters", "url"]
 
 
@@ -59,46 +70,63 @@ def render_deck(title, user_answer, stories):
 
 
 if __name__ == "__main__":
-    # Fake stories so we can test the deck without calling OpenAI or Guardian.
+    # Real stories and photos from a past run, so the design is built against real
+    # text lengths and images, without calling OpenAI or Guardian.
     sample = [
         {
-            "headline": "Coral reef shows record recovery",
-            "summary": "Surveys found coral cover on parts of the reef at its highest in decades.",
+            "headline": "Roman colour-changing glass",
+            "summary": "Scientists have recreated the glass of the Lycurgus Cup, which glows green or red depending on the light.",
             "key_points": [
-                "Coral cover reached 36%, the highest since records began in 1986",
-                "Recovery was strongest on the northern reef",
-                "Scientists warn heatwaves could still reverse the gains",
+                "Made by a team at the University of Sheffield",
+                "The effect comes from gold and silver nanoparticles in the glass",
+                "The Roman recipe had been lost for about 1,600 years",
             ],
-            "why_it_matters": "You asked about the ocean: reefs can bounce back when given a chance.",
-            "url": "https://www.theguardian.com/environment/oceans",
-            "date": "2026-10-28",
-        },
-        {
-            "headline": "Whale numbers climb off Brazil",
-            "summary": "Humpback whales have returned to near pre-whaling numbers in the South Atlantic.",
-            "key_points": [
-                "Population grew from about 450 in the 1950s to around 25,000",
-                "Commercial whaling bans made the difference",
-            ],
-            "why_it_matters": "Protection works: a species once nearly gone is thriving again.",
-            "url": "https://www.theguardian.com/environment/whales",
-            "date": "2026-10-27",
-        },
-        {
-            "headline": "High seas treaty comes into force",
-            "summary": "Enough countries have ratified the treaty to protect international waters.",
-            "key_points": [
-                "60 countries ratified, triggering the treaty",
-                "Allows marine protected areas outside national waters",
-                "Covers about two-thirds of the world's ocean",
-            ],
-            "why_it_matters": "Two-thirds of the ocean finally gets a legal path to protection.",
-            "url": "https://www.theguardian.com/environment/marine-life",
+            "why_it_matters": "Old craft and new science meeting: a lost skill brought back by curiosity.",
+            "url": "https://www.theguardian.com/science/2026/oct/25/scientists-rediscover-ancient-roman-colour-changing-glass",
+            "image": "https://media.guim.co.uk/36274fa02586505fbfdfcdc84de3302a298d0f0e/84_0_2690_2152/1000.jpg",
             "date": "2026-10-25",
+        },
+        {
+            "headline": "Bananas get a lifeline",
+            "summary": "Researchers have bred a fertile version of the Cavendish, the banana most of the world eats.",
+            "key_points": [
+                "Cavendish plants are clones, so one disease can wipe them out",
+                "A fertile plant means new, disease-resistant varieties can be bred",
+                "The aim is to replace the vulnerable Cavendish, not just protect it",
+            ],
+            "why_it_matters": "A staple food for millions gets a real chance against the disease threatening it.",
+            "url": "https://www.theguardian.com/global-development/2026/oct/22/have-scientists-finally-found-a-way-to-save-the-banana-from-disaster",
+            "image": "https://media.guim.co.uk/acd57c35350ea477e5e54107c57603bee7d5a111/127_0_1705_1365/1000.jpg",
+            "date": "2026-10-22",
+        },
+        {
+            "headline": "Orangutans pick laughter",
+            "summary": "Orangutans preferred food linked to the sound of laughter, a new study suggests.",
+            "key_points": [
+                "Apes chose between foods paired with different sounds",
+                "Food linked to laughter was picked more often",
+            ],
+            "why_it_matters": "Joy may be a language we share with our closest relatives.",
+            "url": "https://www.theguardian.com/science/2026/oct/21/orangutans-prefer-food-laughter-sounds-study",
+            "image": "https://media.guim.co.uk/57d6699032b4f8a4e77d45cb0c3923d3dafb9870/721_0_4320_3456/1000.jpg",
+            "date": "2026-10-21",
+        },
+        {
+            "headline": "Japan heads for Phobos",
+            "summary": "Japan has launched a mission to land on Mars's moon Phobos and bring rocks back to Earth.",
+            "key_points": [
+                "The first mission to return samples from Phobos",
+                "Expected to reach Mars orbit in August 2027",
+                "Five space agencies are working together on it",
+            ],
+            "why_it_matters": "Countries pooling their science to answer how Mars and its moons were born.",
+            "url": "https://www.theguardian.com/world/2026/oct/20/japan-mars-moon-mission-phobos-collect-rocks",
+            "image": "https://media.guim.co.uk/8b8c7baa851530aa5cc92126c0aa8893b34bf1b7/0_63_3016_2414/500.jpg",
+            "date": "2026-10-19",
         },
     ]
     # Bad input: these should return errors and write no file.
     print(render_deck("Too few", "test", []))
     print(render_deck("No url", "test", [sample[0], sample[1], {**sample[2], "url": ""}]))
 
-    print(render_deck("Good news from the ocean", "any good ocean news?", sample))
+    print(render_deck("Good news in science", "good news about science and nature", sample))

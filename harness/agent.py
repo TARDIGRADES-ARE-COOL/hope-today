@@ -7,8 +7,12 @@ from tools import TOOL_SCHEMAS, TOOLS
 MAX_TURNS = 15                               # budget: never loop forever (fetches need turns)
 MAX_DECK_TRIES = 3                           # stop if render_deck keeps failing
 
-# python harness/agent.py "good news about science"
-question = sys.argv[1] if len(sys.argv) > 1 else "any good ocean news?"
+# Ask the one question. A command-line answer skips the prompt (handy for testing):
+#   python harness/agent.py "good news about science"
+if len(sys.argv) > 1:
+    question = sys.argv[1]
+else:
+    question = input("How can I show you there is hope today?\n> ").strip() or "surprise me"
 
 # Safety gate: runs before the loop. Someone in crisis gets care and real support, not slides;
 # a message good news can't answer gets a short pointer instead of a wasted search.

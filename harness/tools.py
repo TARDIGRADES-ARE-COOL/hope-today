@@ -47,7 +47,7 @@ def find_topics(query):
 def search_news(tag, since=None):
     """Recent Guardian articles for a tag id from find_topics."""
     if since is None:
-        since = (date.today() - timedelta(days=7)).isoformat()   # default: last week
+        since = (date.today() - timedelta(days=30)).isoformat()  # default: whole window, newest first
 
     # Hard cap: never older than 30 days, whatever the model asks for.
     # ISO dates compare correctly as strings.
@@ -192,7 +192,7 @@ TOOL_SCHEMAS = [
                         "type": "string",
                         "description": (
                             "Optional ISO date (YYYY-MM-DD); only return stories after it. "
-                            "Default is 7 days ago; anything older than 30 days is capped."
+                            "Default is the last 30 days, newest first; anything older is capped."
                         ),
                     },
                 },
@@ -222,6 +222,10 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "render_deck",
+            # strict: OpenAI guarantees the call matches this schema, so required fields
+            # can't be left out (the model kept dropping why_it_matters without it).
+            # Strict mode needs every field required and no extra fields allowed.
+            "strict": True,
             "description": (
                 "Build the final slide deck. Call this last, once, with the best 1-7 "
                 "genuinely hopeful stories. Returns an error message if a story is incomplete."
@@ -244,7 +248,7 @@ TOOL_SCHEMAS = [
                             "properties": {
                                 "headline": {
                                     "type": "string",
-                                    "description": "Your own headline, 32 characters or fewer.",
+                                    "description": "Your own headline, 26 characters or fewer, in short words.",
                                 },
                                 "summary": {
                                     "type": "string",
@@ -265,11 +269,13 @@ TOOL_SCHEMAS = [
                                 "url": {"type": "string", "description": "The article url from search_news."},
                                 "date": {"type": "string", "description": "The article date from search_news."},
                             },
-                            "required": ["headline", "summary", "key_points", "why_it_matters", "url"],
+                            "required": ["headline", "summary", "key_points", "why_it_matters", "url", "date"],
+                            "additionalProperties": False,
                         },
                     },
                 },
                 "required": ["title", "user_answer", "stories"],
+                "additionalProperties": False,
             },
         },
     },
