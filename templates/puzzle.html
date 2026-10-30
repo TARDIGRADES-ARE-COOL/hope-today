@@ -78,6 +78,8 @@
     .clue .word { transition: background-color 300ms ease; }
     .clue .lit { background: var(--field-2); }
     .clue .count { color: var(--muted); white-space: nowrap; }
+    /* Pixel reveal: the photo starts as big blocks and sharpens with each guess or hint. */
+    .picture { width: 100%; aspect-ratio: 5 / 4; display: block; background: var(--field-3); image-rendering: pixelated; }
 
     /* Letter boxes. A real input sits on top, so phones get their keyboard. */
     .entry { position: relative; display: flex; gap: 6px; flex-wrap: wrap; }
@@ -164,11 +166,16 @@
     </div>
 
     <p class="instruction">{{ puzzle.instruction }}</p>
+    {% if puzzle.type == "pixel" %}
+    <canvas class="picture" id="picture" width="1000" height="800" role="img"
+            aria-label="Today's picture, shown as big pixels that sharpen as you play"></canvas>
+    {% else %}
     <p class="clue">
       {%- for word in puzzle.sentence.split() %}
       <span class="word" data-i="{{ loop.index0 }}">{{ word }}</span>
       {%- endfor %} <span class="count">({{ puzzle.length }})</span>
     </p>
+    {% endif %}
 
     <form class="entry" id="entry" autocomplete="off">
       {% for _ in range(puzzle.length) %}<span class="box" aria-hidden="true"></span>{% endfor %}
@@ -240,7 +247,40 @@
         }
         $("more-hint").hidden = state.hints >= hintItems.length || state.status !== "playing";
         $("more-hint").textContent = `Hint ${state.hints + 1}`;
+        if (typeof drawPicture === "function") drawPicture();
       };
+      // Pixel reveal: how many pixels across at each step; 0 = the full photo.
+      // Every wrong guess and every extra hint moves one step sharper.
+      const picture = $("picture");
+      const STEPS = [6, 10, 16, 26, 44, 0];
+      const photo = new Image();
+      const tiny = document.createElement("canvas");
+      const drawPicture = () => {
+        if (!picture || !photo.naturalWidth) return;
+        const step = state.status === "playing"
+          ? STEPS[Math.min(STEPS.length - 1, state.guesses + state.hints - 1)] : 0;
+        const pg = picture.getContext("2d"), cw = picture.width, ch = picture.height;
+        // Crop the photo to fill the frame, like object-fit: cover.
+        const scale = Math.max(cw / photo.naturalWidth, ch / photo.naturalHeight);
+        const sw = cw / scale, sh = ch / scale;
+        const sx = (photo.naturalWidth - sw) / 2, sy = (photo.naturalHeight - sh) / 2;
+        if (!step) {
+          pg.imageSmoothingEnabled = true;
+          pg.drawImage(photo, sx, sy, sw, sh, 0, 0, cw, ch);
+          return;
+        }
+        // Shrink to a few pixels, then blow it back up without smoothing: chunky blocks.
+        tiny.width = step;
+        tiny.height = Math.round(step * ch / cw);
+        tiny.getContext("2d").drawImage(photo, sx, sy, sw, sh, 0, 0, tiny.width, tiny.height);
+        pg.imageSmoothingEnabled = false;
+        pg.drawImage(tiny, 0, 0, tiny.width, tiny.height, 0, 0, cw, ch);
+      };
+      if (picture) {
+        photo.onload = drawPicture;
+        photo.src = "{{ puzzle.image or '' }}";
+      }
+
       // Accept the answer, or a simple plural either way.
       const matches = g => g === ANSWER || g === ANSWER + "S" || g + "S" === ANSWER;
 
@@ -275,7 +315,7 @@
         const g = state.guesses, h = state.hints - 1;
         $("result-line").textContent = solved
           ? `${ANSWER} in ${g} ${g === 1 ? "guess" : "guesses"}, with ${h} extra ${h === 1 ? "hint" : "hints"}. Your good news is ready.`
-          : "Here's how the clue worked. Your good news is ready anyway.";
+          : "{{ 'Here is where the picture came from.' if puzzle.type == 'pixel' else 'Here is how the clue worked.' }} Your good news is ready anyway.";
         $("steps").hidden = solved;
         const streak = celebrate ? bumpStreak() : readStreak();   // only count a finish once
         $("streak").textContent = streakText(streak);
@@ -299,6 +339,7 @@
         state.guesses += 1;
         if (matches(guess)) return finish("solved", true);
         save();
+        drawPicture();                         // pixel mode: a wrong guess sharpens the photo
         // Encouraging but honest: never hint that a wrong guess is close.
         $("feedback").textContent = ["Not quite. Try again!", "Not this one. Have another go.", "Nope, but you've got this."][state.guesses % 3];
         entry.classList.remove("shake");

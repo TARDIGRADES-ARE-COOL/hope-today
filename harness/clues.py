@@ -204,6 +204,38 @@ def build_hints(kind, sentence, answer, highlight, day_number=0):
     return hints, {"answer": answer, "steps": steps}
 
 
+INSTRUCTIONS["pixel"] = "Guess today's topic from the picture."
+
+
+def make_pixel_puzzle(answer, topic, stories):
+    """Pixel reveal: guess the topic from one of its story photos, which sharpens as you play.
+    Everything but hint 2 is built in code; returns None if no story has a photo."""
+    story = next((s for s in stories if s.get("image")), None)
+    if not story:
+        return None
+    answer = answer.upper()
+    return {
+        "type": "pixel",
+        "instruction": INSTRUCTIONS["pixel"],
+        "sentence": "",
+        "image": story["image"],
+        "length": len(answer),
+        "answer": answer,
+        "highlight": [],
+        "hints": [
+            {"level": 1, "free": True,
+             "text": "It starts as a blur of big pixels. Every wrong guess or hint makes the picture sharper."},
+            {"level": 2, "free": False, "text": theme_hint(answer, topic, "")},
+            {"level": 3, "free": False, "text": f"It starts with {answer[0]} and ends with {answer[-1]}."},
+        ],
+        "solution": {"answer": answer, "steps": [
+            f"The picture came from: \u201c{story['title']}\u201d.",
+            f"Today's topic: {topic}.",
+            f"The answer: {answer}.",
+        ]},
+    }
+
+
 SOLVER_MODEL = "gpt-5.4-mini"     # a separate model plays the role of a player
 
 

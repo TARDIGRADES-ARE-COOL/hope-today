@@ -8,7 +8,7 @@ from pathlib import Path
 
 from wordfreq import zipf_frequency
 
-from clues import fresh_free_hint, make_puzzle, theme_hint
+from clues import fresh_free_hint, make_pixel_puzzle, make_puzzle, theme_hint
 from deck import env, render_deck
 from llm import client
 from tools import IMAGES, fetch_article, search_news
@@ -68,9 +68,9 @@ SECTIONS = {
 WINDOW_DAYS = 7
 
 
-def sweep():
+def sweep(days=WINDOW_DAYS):
     """Step 1: every recent news article from the sections above, each url once."""
-    since = (date.today() - timedelta(days=WINDOW_DAYS)).isoformat()
+    since = (date.today() - timedelta(days=days)).isoformat()
     candidates = {}
     for section, tag in SECTIONS.items():
         results = search_news(tag, since=since, page_size=50)
@@ -344,8 +344,11 @@ def write_stories(topic):
             for i, s in enumerate(topic["stories"]) if i in written]
 
 
-def choose_puzzle(topic, day=None):
+def choose_puzzle(topic, day=None, mode="wordplay"):
     """A verified clue for the topic's answer. Clue type alternates by day for variety."""
+    if mode == "pixel":
+        puzzle = make_pixel_puzzle(topic["answer"], topic["topic"], topic["stories"])
+        return puzzle, ([] if puzzle else ["no story photo"])
     day_number = (day or date.today()).toordinal()
     puzzles, rejected = make_puzzle(topic["answer"], topic["topic"], day_number=day_number)
     if not puzzles:
@@ -369,7 +372,7 @@ def build_day(topic, puzzle, day=None):
     # The puzzle page comes first; solving (or giving up) leads to the deck.
     page = env.get_template("puzzle.html").render(
         today=day, puzzle=puzzle,
-        puzzle_id=hashlib.sha1(puzzle["sentence"].encode()).hexdigest()[:8],
+        puzzle_id=hashlib.sha1((puzzle["sentence"] or puzzle.get("image", "")).encode()).hexdigest()[:8],
         answer_b64=base64.b64encode(topic["answer"].encode()).decode(),
     )
     (folder / "index.html").write_text(page, encoding="utf-8")
@@ -413,7 +416,11 @@ if __name__ == "__main__":
     #   --save   record the day in history.json (the real daily run)
     #   --fresh  testing: treat today's existing puzzle as used, so a different topic is picked
     #   --blind  testing: don't print the answer, clue or headlines, so you can play unspoiled
+    #   --mode pixel  testing: force the pixel-reveal game mode
     save, fresh, blind = ("--save" in sys.argv), ("--fresh" in sys.argv), ("--blind" in sys.argv)
+    mode = sys.argv[sys.argv.index("--mode") + 1] if "--mode" in sys.argv else "wordplay"
+    #   --days N  testing: look back N days instead of 7 (after testing has used up this week's stories)
+    days = int(sys.argv[sys.argv.index("--days") + 1]) if "--days" in sys.argv else WINDOW_DAYS
     say = (lambda *a: None) if blind else print     # spoiler lines go through say()
 
     history = load_history()
@@ -433,8 +440,8 @@ if __name__ == "__main__":
         history = {**history, "urls": history["urls"] + [u for t in tested for u in t["urls"]]}
         print(f"Fresh: skipping {len(tested)} topic(s) already tested today")
 
-    found = unseen(sweep(), history)
-    print(f"{len(found)} new candidate articles from the last {WINDOW_DAYS} days")
+    found = unseen(sweep(days), history)
+    print(f"{len(found)} new candidate articles from the last {days} days")
 
     keep = strong(judge(found))
     print(f"{len(keep)} strong good-news stories")
@@ -447,7 +454,7 @@ if __name__ == "__main__":
     # The best topic whose answer gets a clue that passes the checks.
     today = puzzle = None
     for topic in topics:
-        puzzle, clue_rejects = choose_puzzle(topic)
+        puzzle, clue_rejects = choose_puzzle(topic, mode=mode)
         if puzzle:
             today = topic
             break
