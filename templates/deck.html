@@ -14,6 +14,9 @@
 
   {% for story in stories %}
   <section>
+    {% if story.image %}
+    <img src="{{ story.image }}" alt="" width="500">
+    {% endif %}
     <h2>{{ story.headline }}</h2>
     <p><strong>What happened:</strong> {{ story.summary }}</p>
     <ul>

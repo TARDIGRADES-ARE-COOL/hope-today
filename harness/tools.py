@@ -13,6 +13,19 @@ GUARDIAN_KEY = os.environ["GUARDIAN_API_KEY"]
 # so the model cannot invent stories.
 SEEN_URLS = set()
 
+# article url → image url. Kept here, not sent to the model: the harness adds
+# images to the deck itself, so the model never copies long image urls around.
+IMAGES = {}
+
+
+def pick_image(item):
+    """Widest version of the article's main image (Guardian max is 1000px), else the thumbnail."""
+    for element in item.get("elements", []):
+        if element["relation"] == "main" and element["type"] == "image":
+            widest = max(element["assets"], key=lambda a: int(a["typeData"].get("width", 0)))
+            return widest["file"]
+    return item.get("fields", {}).get("thumbnail")
+
 
 def find_topics(query):
     params = {
@@ -46,7 +59,8 @@ def search_news(tag, since=None):
         "type": "article",
         "order-by": "newest",
         "from-date": since,
-        "show-fields": "trailText",
+        "show-fields": "trailText,thumbnail",
+        "show-elements": "image",
         "page-size": 20,                                          # default is 10
         "api-key": GUARDIAN_KEY,
     }
@@ -67,10 +81,11 @@ def search_news(tag, since=None):
         stories.append({
             "title": item["webTitle"],
             "url": item["webUrl"],
-            "snippet": item["fields"]["trailText"],
+            "snippet": item.get("fields", {}).get("trailText", ""),
             "date": item["webPublicationDate"][:10],
         })
         SEEN_URLS.add(item["webUrl"])
+        IMAGES[item["webUrl"]] = pick_image(item)
     return stories
 
 
@@ -112,6 +127,9 @@ def checked_render_deck(title, user_answer, stories):
             "None of these urls were in your search results. Only use real articles "
             "from search_news; if you have too few, search more tags."
         )}
+
+    for story in real:
+        story["image"] = IMAGES.get(story["url"])
 
     # Some real, some not: build the deck from the real ones instead of failing it all.
     result = render_deck(title, user_answer, real)
