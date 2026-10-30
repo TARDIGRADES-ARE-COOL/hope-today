@@ -17,6 +17,9 @@ from tools import IMAGES, fetch_article, fetched, search_news
 DAILY = Path(__file__).resolve().parent.parent / "daily"
 HISTORY = DAILY / "history.json"
 TOPIC_COOLDOWN_DAYS = 30
+# Round two ("Branch out", harness/branch.py) is switched off: it felt like a separate game and
+# leaned on general knowledge. The page hides it when there's no branch. True brings it back.
+BRANCH_OUT = False
 # How common an answer must be (Zipf scale: 'nature' 5.0, 'coral' 3.9, 'otter' 3.4,
 # 'kelp' 2.9, 'wildland' 2.4). Below this, most players would never guess it.
 MIN_COMMONNESS = 3.3
@@ -367,7 +370,8 @@ def build_day(topic, puzzle, day=None):
     stories = write_stories(topic)
     # Round two, built from the articles we just read (they're cached in tools.fetched).
     texts = [fetched[s["url"]]["text"] for s in topic["stories"] if s["url"] in fetched]
-    branch = make_branch(topic["topic"], topic["answer"], [s["title"] for s in topic["stories"]], texts)
+    branch = make_branch(topic["topic"], topic["answer"], [s["title"] for s in topic["stories"]], texts) \
+        if BRANCH_OUT else None
     folder = DAILY / day
     result = render_deck(f"Good news: {topic['topic']}", "", stories,
                          topic=topic["topic"], path=folder / "deck.html")
@@ -381,7 +385,7 @@ def build_day(topic, puzzle, day=None):
         branch=branch,
         branch_b64=base64.b64encode(json.dumps(
             [{"n": a["name"], "a": a["aliases"], "t": a["tier"], "p": a["points"]} for a in branch["answers"]]
-        ).encode()).decode(),
+        ).encode()).decode() if branch else "",
     )
     (folder / "index.html").write_text(page, encoding="utf-8")
     # The puzzle page will read this file. Keep the answer out of the deck itself.
