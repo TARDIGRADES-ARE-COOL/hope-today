@@ -299,7 +299,8 @@
       </ol>
       <div class="actions">
         {% if branch %}<button class="button" type="button" id="start-branch">Branch out</button>{% endif %}
-        <a class="button {{ 'soft' if branch }}" href="deck.html">Open today's good news</a>
+        {% if has_desk %}<a class="button {{ 'soft' if branch }}" href="desk.html">Next: Copy Desk</a>
+        {% else %}<a class="button {{ 'soft' if branch }}" href="deck.html">Open today's good news</a>{% endif %}
         <button class="button soft" type="button" id="share">Share</button>
         <a class="button soft" href="../archive/">Past puzzles</a>
       </div>

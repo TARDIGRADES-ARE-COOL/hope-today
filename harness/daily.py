@@ -11,6 +11,8 @@ from wordfreq import zipf_frequency
 from branch import make_branch
 from clues import ROTATION, fresh_free_hint, make_pixel_puzzle, make_puzzle, theme_hint
 from deck import env, render_deck
+from desk import render_page
+from desk_make import make_desk
 from llm import client
 from tools import IMAGES, fetch_article, fetched, search_news
 
@@ -20,6 +22,11 @@ TOPIC_COOLDOWN_DAYS = 30
 # Round two ("Branch out", harness/branch.py) is switched off: it felt like a separate game and
 # leaned on general knowledge. The page hides it when there's no branch. True brings it back.
 BRANCH_OUT = False
+# Copy Desk (PLAN.md Part 3): the step between the word puzzle and the deck. DESK builds it
+# (--desk turns it on for one run); LIVE_DESK marks it for site.py to publish. Shadow week:
+# DESK on, LIVE_DESK off, so day.json gets a desk the site never shows.
+DESK = False
+LIVE_DESK = False
 # How common an answer must be (Zipf scale: 'nature' 5.0, 'coral' 3.9, 'otter' 3.4,
 # 'kelp' 2.9, 'wildland' 2.4). Below this, most players would never guess it.
 MIN_COMMONNESS = 3.3
@@ -373,7 +380,23 @@ def choose_puzzle(topic, day=None, mode="wordplay", force_type=None, strict=Fals
     return puzzle, rejected
 
 
-def build_day(topic, puzzle, day=None):
+def build_desk(stories, folder, day, theme, puzzle_id, log, spoilers):
+    """The day's Copy Desk, rendered to desk.html, or None. Never raises: a desk bug must not cost the day."""
+    try:
+        desk = make_desk(stories, [fetched[s["url"]]["text"] for s in stories[:3]],
+                         live=LIVE_DESK, log=log, spoilers=spoilers)
+        if desk:
+            render_page(desk, folder / "desk.html", today=day, theme=theme, label="",
+                        word_key=f"hope-puzzle-{day}-{puzzle_id}")
+            return desk
+        print("No desk today")
+    except Exception as e:                       # noqa: BLE001 (any failure means no desk today)
+        print(f"No desk today: {type(e).__name__}: {e}")
+    (folder / "desk.html").unlink(missing_ok=True)   # never leave an old run's desk behind
+    return None
+
+
+def build_day(topic, puzzle, day=None, spoilers=True):
     """Write the day's deck and its data file into daily/YYYY-MM-DD/."""
     day = (day or date.today()).isoformat()
     stories = write_stories(topic)
@@ -386,10 +409,12 @@ def build_day(topic, puzzle, day=None):
                          topic=topic["topic"], path=folder / "deck.html")
     if "error" in result:
         raise SystemExit(f"Deck failed: {result['error']}")
-    # The puzzle page comes first; solving (or giving up) leads to the deck.
+    pid = hashlib.sha1((puzzle["sentence"] or puzzle.get("image", "")).encode()).hexdigest()[:8]
+    desk = build_desk(stories, folder, day, topic["topic"], pid, print, spoilers) if DESK else None
+    # The puzzle page comes first; solving (or giving up) leads to the desk, if there is one, then the deck.
     page = env.get_template("puzzle.html").render(
-        today=day, puzzle=puzzle,
-        puzzle_id=hashlib.sha1((puzzle["sentence"] or puzzle.get("image", "")).encode()).hexdigest()[:8],
+        today=day, puzzle=puzzle, has_desk=bool(desk),
+        puzzle_id=pid,
         answer_b64=base64.b64encode(topic["answer"].encode()).decode(),
         branch=branch,
         branch_b64=base64.b64encode(json.dumps(
@@ -401,6 +426,7 @@ def build_day(topic, puzzle, day=None):
     (folder / "day.json").write_text(json.dumps({
         "date": day, "topic": topic["topic"], "answer": topic["answer"],
         "why": topic["why"], "puzzle": puzzle, "branch": branch, "stories": stories,
+        **({"desk": desk} if desk else {}),
     }, indent=2), encoding="utf-8")
     return folder, stories
 
@@ -451,6 +477,9 @@ if __name__ == "__main__":
     force_type = sys.argv[sys.argv.index("--type") + 1] if "--type" in sys.argv else None
     #   --strict  testing: with --type, skip topics that can't get that trick instead of falling back
     strict = "--strict" in sys.argv
+    #   --desk  build today's Copy Desk too (the shadow week runs with this; site.py shows it only once live)
+    if "--desk" in sys.argv:
+        DESK = True
     say = (lambda *a: None) if blind else print     # spoiler lines go through say()
 
     history = load_history()
@@ -503,7 +532,7 @@ if __name__ == "__main__":
         say(f"  Level {h['level']}{' (free)' if h['free'] else ''}: {h['text']}")
     say(f"  Give up: {' / '.join(puzzle['solution']['steps'])}")
 
-    folder, stories = build_day(today, puzzle)
+    folder, stories = build_day(today, puzzle, spoilers=not blind)
     for s in stories:
         say(f"  - {s['headline']}")
     print(f"Puzzle ready ({puzzle['length']} letters, {len(stories)} stories): {folder}/index.html")

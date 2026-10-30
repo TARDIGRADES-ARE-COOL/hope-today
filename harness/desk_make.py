@@ -8,7 +8,9 @@ Any failure gives None: the day simply has no desk.
 
     python harness/desk_make.py 2026-10-30      # read-only test on a past day; prints spoilers
 """
+import hashlib
 import json
+import random
 import re
 
 from desk import Desk, DeskError, build_table, check, desk_id, encode_table
@@ -236,7 +238,7 @@ def resolve(budget, data, words):
     return mismatches
 
 
-def word_clues(budget, data, names, log):
+def word_clues(budget, data, names, log, spoilers):
     """Phrase every clue, check the words in code, then round-trip them through the resolver.
     One retry with the problems. Returns ({clue id: text}, []) or (None, problems)."""
     request = phrase_request(data, names)
@@ -248,7 +250,8 @@ def word_clues(budget, data, names, log):
         problems = phrase_problems(words, data) or resolve(budget, data, words)
         if not problems:
             return words, []
-        log(f"    rejected: {problems[0]}" + (f" (+{len(problems) - 1} more)" if len(problems) > 1 else ""))
+        log(f"    rejected: {problems[0]}" + (f" (+{len(problems) - 1} more)" if len(problems) > 1 else "")
+            if spoilers else f"    clues rejected ({len(problems)} problem(s))")
     return None, problems
 
 
@@ -280,22 +283,38 @@ def blind_guess(budget, data):
 
 # ---------- The whole desk ----------
 
-def make_desk(stories, texts, per=2, live=False, log=lambda *a: None):
+def shuffle_cards(data):
+    """The picker returns cards story by story, and the page shows them in data order, so that
+    order would give the answer away. Shuffle (seeded by the facts, so a rerun is the same desk)
+    and renumber the ids, which are in the page source too."""
+    rng = random.Random(json.dumps(data["cards"], sort_keys=True))
+    cards = list(data["cards"])
+    while True:
+        rng.shuffle(cards)
+        homes = [c["home"] for c in cards]
+        if homes != sorted(homes):                        # never story-by-story order
+            break
+    return {**data, "cards": [{**c, "id": f"f{n}"} for n, c in enumerate(cards)]}
+
+
+def make_desk(stories, texts, per=2, live=False, log=lambda *a: None, spoilers=False):
     """Build a fair desk from the day's top 3 stories (written by write_stories) and their fetched
     article texts. Returns the day.json "desk" dict, or None. Raises only DeskError/model errors;
-    daily.py wraps the call so a desk problem can never cost the day."""
+    daily.py wraps the call so a desk problem can never cost the day.
+    spoilers=False keeps clue texts out of the log (the Action runs with --blind)."""
     stories, texts = stories[:3], texts[:3]
     if len(stories) < 3 or len(texts) < 3:
         log("desk: fewer than 3 stories")
         return None
     budget = Budget()
     avoid = []
-    for pick in range(2):
+    for pick in range(2):                                 # a second pick if the first fails or is too easy
         budget.spend(2)                                   # pick_facts makes up to 2 calls
         picked, problems = pick_facts(stories, texts, per, avoid)
         if not picked:
-            log(f"desk: facts failed the checks ({problems[0]})")
-            return None
+            log(f"  facts failed the checks ({len(problems)} problem(s))"
+                + (f": {problems[0]}" if spoilers else ""))
+            continue
         base = {"per": per, "rule": RULE[per], "kinds": {}, "stories": picked["stories"], "cards": picked["cards"]}
         score, easy = blind_guess(budget, base)
         log(f"  blind guesser placed {score} of {len(base['cards'])} facts with no clues")
@@ -303,17 +322,19 @@ def make_desk(stories, texts, per=2, live=False, log=lambda *a: None):
             break
         avoid = easy
     else:
-        log("desk: facts too easy to place without clues")
+        log("desk: no fair set of facts")
         return None
 
+    base = shuffle_cards(base)
+    first = int(hashlib.sha1(json.dumps(base["cards"], sort_keys=True).encode()).hexdigest()[:8], 16)
     tries = 0
-    for seed in range(SEEDS):
+    for seed in range(first, first + SEEDS):              # seeds from the facts: different logic each day
         data, stats = search(base, seed=seed)
         tries += stats["attempts"]
         if not data:
             log(f"  seed {seed}: no structure in {stats['attempts']} attempts")
             continue
-        words, problems = word_clues(budget, data, card_names(data["cards"]), log)
+        words, problems = word_clues(budget, data, card_names(data["cards"]), log, spoilers)
         if not words:
             log(f"  seed {seed}: clues couldn't be worded")
             continue
@@ -345,7 +366,7 @@ if __name__ == "__main__":
     for s in stories:
         tools.SEEN_URLS.add(s["url"])                     # fetch_article only reads urls it has seen
         texts.append(tools.fetch_article(s["url"])["text"])
-    desk = make_desk(stories, texts, log=print)
+    desk = make_desk(stories, texts, log=print, spoilers=True)
     if not desk:
         print("FAIL: no desk")
         sys.exit(1)

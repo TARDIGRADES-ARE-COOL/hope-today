@@ -19,6 +19,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20       # a normal run takes about 3 minutes; never hang for the 6-hour default
     env:
       TZ: Asia/Singapore       # so "today" is the Singapore date, not UTC's yesterday
       BROWSER: "true"          # render_deck tries to open a browser; there isn't one here
@@ -36,7 +37,9 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
-        run: python harness/daily.py --save --blind      # --blind: the log never shows the answer
+        # --blind: the log never shows the answer. --desk: build Copy Desk into day.json too;
+        # site.py publishes it only once daily.LIVE_DESK is True (shadow week until then).
+        run: python harness/daily.py --save --blind --desk
 
       - name: Save the day and history
         run: |
