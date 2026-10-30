@@ -179,6 +179,42 @@
     .chips .t-Gem { background: var(--accent); color: var(--accent-ink); }
     .chips .missed { background: none; outline: 2px dotted var(--muted); font-weight: 400; }
     .branch-end { display: grid; gap: 12px; }
+    /* How to play */
+    .how {
+      border: 0;
+      background: none;
+      padding: 0;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    .tutorial {
+      width: min(40rem, calc(100% - 32px));
+      max-height: calc(100svh - 32px);
+      border: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .tutorial::backdrop { background: rgb(28 28 28 / 0.6); }
+    .tutorial-body { padding: clamp(20px, 4vw, 36px); display: grid; gap: 16px; }
+    .tutorial h2 { font-size: var(--step-head); }
+    .tutorial h3 {
+      font-family: "Rokkitt", sans-serif;
+      font-weight: 800;
+      font-size: var(--step-lead);
+      text-transform: uppercase;
+      margin: 8px 0 0;
+    }
+    .tricks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .tricks li { padding: 12px 16px; }
+    .tricks li:nth-child(5n+1) { background: var(--field-3); }
+    .tricks li:nth-child(5n+2) { background: var(--field-1); }
+    .tricks li:nth-child(5n+3) { background: var(--field-2); }
+    .tricks li:nth-child(5n+4) { background: var(--field-3); }
+    .tricks li:nth-child(5n+5) { background: var(--field-1); }
+    .tricks strong { font-weight: 600; }
+    .tricks b { background: var(--paper); }     /* no padding: it split words like "th e vil lage" */
+    .tutorial .button { justify-self: start; }
     .streak { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: var(--step-lead); text-transform: uppercase; }
     .result .actions .button { flex: 0 0 auto; }
 
@@ -198,7 +234,7 @@
     <h1><span>Hope</span> <span>Today</span></h1>
     <div class="facts">
       <span>{{ today|nice_date }}</span>
-      <span>Daily puzzle</span>
+      <button class="how" type="button" id="how">How to play</button>
       <span>{{ puzzle.length }} letters</span>
     </div>
 
@@ -271,6 +307,31 @@
     </section>
     {% endif %}
   </main>
+
+  <dialog class="tutorial" id="tutorial" aria-labelledby="tutorial-title">
+    <div class="tutorial-body">
+      <h2 id="tutorial-title" tabindex="-1" autofocus>How to play</h2>
+      <p>Every day there's one puzzle. Its answer is the topic of today's good news. Solve it (or give up) and the good news is yours to read.</p>
+
+      <h3>Find the answer</h3>
+      <p>The clue is a sentence with the answer tucked inside it. Each day uses one of five tricks, and working out which one is half the fun. The number in brackets is how many letters the answer has.</p>
+      <ul class="tricks">
+        <li><strong>Hidden:</strong> the answer runs across words, ignoring the spaces. CAT hides in “publi<b>c at</b>tention”.</li>
+        <li><strong>Mix it up:</strong> a word in the sentence has the answer's letters, shuffled. HEART rearranged is EARTH.</li>
+        <li><strong>First letters:</strong> the first letters of a run of words spell it. <b>H</b>appy <b>O</b>tters <b>P</b>lay <b>E</b>verywhere spells HOPE.</li>
+        <li><strong>Backwards:</strong> hidden across words, but right to left. “th<b>e vil</b>lage” read backwards gives LIVE.</li>
+        <li><strong>Two halves:</strong> two little clues, one for each half; join the answers. SUN + FLOWER = SUNFLOWER.</li>
+      </ul>
+
+      <h3>Stuck? Use a hint</h3>
+      <p>The first hint is free: it tells you which trick today's clue uses. Hint 2 describes what the word means. Hint 3 shows where to look. Still stuck? Give up and we'll walk you through how the clue worked.</p>
+
+      <h3>Come back tomorrow</h3>
+      <p>Type your guess and press Check. Wrong guesses cost nothing. Finish a puzzle every day to grow your 🔥 streak, and share how you did without spoiling the answer.</p>
+
+      <button class="button" type="button" id="tutorial-close">Let's play</button>
+    </div>
+  </dialog>
 
   <script>
     (() => {
@@ -503,6 +564,16 @@
       $("branch-done").addEventListener("click", () => { bstate.done = true; bsave(); paintBranch(); });
       paintBranch();
       {% endif %}
+
+      // How to play: opens by itself on a player's first visit, then whenever they tap it.
+      const tutorial = $("tutorial");
+      const openTutorial = () => { tutorial.showModal(); tutorial.scrollTop = 0; };   // start at the top
+      $("how").addEventListener("click", openTutorial);
+      $("tutorial-close").addEventListener("click", () => tutorial.close());
+      tutorial.addEventListener("close", () => { if (state.status === "playing") input.focus(); });
+      let seenTutorial = false;
+      try { seenTutorial = localStorage.getItem("hope-tutorial-seen") === "1"; localStorage.setItem("hope-tutorial-seen", "1"); } catch {}
+      if (!seenTutorial) openTutorial();
 
       // Pick up where the player left off today.
       paint();
