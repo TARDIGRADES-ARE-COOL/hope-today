@@ -121,7 +121,7 @@ def fetch_article(url):
 
 
 def checked_render_deck(title, user_answer, stories):
-    """render_deck, but first drop any story the model did not get from search_news."""
+    """render_deck, but only with stories the model found with search_news and read with fetch_article."""
     real = [s for s in stories if s.get("url") in SEEN_URLS]
     dropped = [s.get("headline", "?") for s in stories if s.get("url") not in SEEN_URLS]
 
@@ -131,13 +131,25 @@ def checked_render_deck(title, user_answer, stories):
             "from search_news; if you have too few, search more tags."
         )}
 
+    # Key points must come from the article, not the one-line snippet.
+    unread = [s for s in real if s["url"] not in fetched]
+    if unread:
+        if len(fetched) < MAX_ARTICLES:
+            return {"error": (
+                "Read these with fetch_article first, then take key_points from the article: "
+                f"{[s.get('headline', '?') for s in unread]}"
+            )}
+        # Budget used up, so the model can't fix it: keep only the stories it read.
+        real = [s for s in real if s["url"] in fetched]
+        dropped += [s.get("headline", "?") for s in unread]
+
     for story in real:
         story["image"] = IMAGES.get(story["url"])
 
     # Some real, some not: build the deck from the real ones instead of failing it all.
     result = render_deck(title, user_answer, real)
     if dropped and "error" not in result:
-        result["dropped"] = f"Not in search results, left out: {dropped}"
+        result["dropped"] = f"Not found or not read, left out: {dropped}"
     return result
 
 
