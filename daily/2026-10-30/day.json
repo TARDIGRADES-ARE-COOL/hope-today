@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-30",
+  "topic": "Saving wild places",
+  "answer": "WILDLIFE",
+  "why": "These stories are bright wins for protecting habitats, from bought-and-saved estates to a wetland victory and a major conservation land deal.",
+  "puzzle": {
+    "type": "halves",
+    "instruction": "Two clues, two halves: join them to get today's topic.",
+    "sentence": "Untamed, like a party gone feral + Existence: the ultimate board game",
+    "length": 8,
+    "answer": "WILDLIFE",
+    "highlight": [],
+    "hints": [
+      {
+        "level": 1,
+        "free": true,
+        "text": "Solve each clue, then glue the two answers together to reveal the topic. Like PAN + CAKE = PANCAKE."
+      },
+      {
+        "level": 2,
+        "free": false,
+        "text": "\ud83e\udd8a Nature\u2019s untamed creatures and plants, thriving without human taming."
+      },
+      {
+        "level": 3,
+        "free": false,
+        "text": "The first half has 4 letters and starts with W.",
+        "highlight": []
+      }
+    ],
+    "solution": {
+      "answer": "WILDLIFE",
+      "steps": [
+        "The trick: two little clues, one for each half of the word.",
+        "Halves: WILD + LIFE.",
+        "How: WILD + LIFE \u2192 WILDLIFE"
+      ]
+    }
+  },
+  "branch": null,
+  "stories": [
+    {
+      "headline": "Big Save for Wooroora",
+      "summary": "A conservation group has raised over $19 million to buy and protect the Wooroora cattle station in far north Queensland.",
+      "key_points": [
+        "More than $19m in private donations has been raised.",
+        "Wooroora spans more than 20,000 hectares.",
+        "It lies about 100km south-west of Cairns and borders Yourka Reserve.",
+        "At least 12 threatened species have been recorded there."
+      ],
+      "why_it_matters": "Protecting this intact habitat helps safeguard rare wildlife, rainforest links, and country with deep cultural value for future generations.",
+      "url": "https://www.theguardian.com/australia-news/2026/oct/29/worldwide-legacy-almost-20m-raised-to-protect-majestic-tract-of-land-in-far-north-queensland",
+      "date": "2026-10-28",
+      "image": "https://media.guim.co.uk/d4ba7963d29c474ea5b6a53aee97a4182cbdb851/0_0_1000_800/1000.jpg"
+    },
+    {
+      "headline": "Rothbury Fund Hits Goal",
+      "summary": "Campaigners have raised \u00a330 million to buy the Rothbury estate in Northumberland and begin a major rewilding project.",
+      "key_points": [
+        "The estate covers more than 3,800 hectares.",
+        "The campaign raised \u00a330m, including \u00a317m from the public.",
+        "David Attenborough backed the effort.",
+        "The land is in Northumberland and was put up for sale two years ago."
+      ],
+      "why_it_matters": "Turning a huge estate into a nature recovery landscape shows how public support can restore habitats and reconnect wildlife across whole regions.",
+      "url": "https://www.theguardian.com/environment/2026/oct/30/wildlife-trusts-northumberland-nature-recovery-rothbury-estate",
+      "date": "2026-10-30",
+      "image": "https://media.guim.co.uk/b6e6723b45528d6d3b81c5360836086c570a405a/0_0_4582_3055/1000.jpg"
+    },
+    {
+      "headline": "Fen Fight Wins Again",
+      "summary": "A Norfolk couple won another court case to protect Catfield Fen from pollution washing in from nearby arable fields.",
+      "key_points": [
+        "The couple farm 460 acres in the Norfolk Broads.",
+        "Lady Justice Lieven ruled Natural England failed its duty.",
+        "Catfield Fen holds 2,500 species, including fen orchid and breeding bittern.",
+        "They have spent 15 years and \u00a31.5m on the fight."
+      ],
+      "why_it_matters": "The ruling strengthens protection for a rare wetland and shows that determined action can defend wild places from lasting damage.",
+      "url": "https://www.theguardian.com/environment/2026/oct/24/norfolk-couple-who-took-on-environmental-regulators-three-times-and-won",
+      "date": "2026-10-24",
+      "image": "https://media.guim.co.uk/892fee34059c9e58ee74039c3f34f32e52326fd8/1000_515_5911_4729/1000.jpg"
+    }
+  ]
+}
