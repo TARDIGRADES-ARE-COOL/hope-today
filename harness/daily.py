@@ -206,8 +206,9 @@ def fit_scores(topic, stories):
         model=JUDGE_MODEL,
         messages=[{"role": "user", "content": (
             f"Today's puzzle topic is '{topic['topic']}' (answer: {topic['answer']}). For each story, "
-            "score 0-10 how clearly it is about this topic. A story that is only loosely or "
-            "creatively connected scores low.\n\n" + listing
+            "score 0-10 how well it belongs to this topic's theme. A story about the theme from a "
+            "different angle still belongs (8-10). Score low (0-4) only when the link is a stretch, "
+            "e.g. a story about ancient glass in a topic about health.\n\n" + listing
         )}],
         response_format={"type": "json_schema", "json_schema": {"name": "fit", "strict": True, "schema": {
             "type": "object",
@@ -228,7 +229,7 @@ def pick_topics(keep, blocked):
         {"role": "system", "content": GROUP_PROMPT},
         {"role": "user", "content": listing + (f"\n\nDo not use these answers: {sorted(blocked)}" if blocked else "")},
     ]
-    for attempt in range(2):                  # one retry with the problems spelled out
+    for attempt in range(3):                  # retries with the problems spelled out
         response = client.chat.completions.create(
             model=JUDGE_MODEL,
             messages=messages,
