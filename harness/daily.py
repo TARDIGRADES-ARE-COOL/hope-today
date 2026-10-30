@@ -104,6 +104,128 @@ def strong(judged):
     return sorted(keep, key=lambda s: s["hopeful"] + s["significant"], reverse=True)
 
 
+GROUP_PROMPT = (
+    "These are this week's best good-news stories. Group them into possible topics for a daily "
+    "word puzzle, best topic first. For each topic give:\n"
+    "topic: a short name (e.g. 'Protecting wild land').\n"
+    "answer: ONE common English word, 4-9 letters, letters only, that a player could guess as the "
+    "topic (e.g. NATURE, SOLAR, CORAL). Not a name, not an acronym, not two words. Pick a "
+    "vivid, specific word that is fun to guess, not a plain or vague one (NATURE over LAND, "
+    "SOLAR over ENERGY, CANCER over HEALTH).\n"
+    "story_ids: the 3-5 stories that clearly belong to this topic (use their ids).\n"
+    "why: one sentence on why this topic is a happy one for today.\n"
+    "A story may appear in more than one topic. Prefer topics whose stories are clearly happy."
+)
+GROUP_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "groups": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "topic": {"type": "string"},
+                    "answer": {"type": "string"},
+                    "story_ids": {"type": "array", "items": {"type": "integer"}},
+                    "why": {"type": "string"},
+                },
+                "required": ["topic", "answer", "story_ids", "why"],
+                "additionalProperties": False,
+            },
+        },
+    },
+    "required": ["groups"],
+    "additionalProperties": False,
+}
+
+
+def answer_problems(answer, blocked):
+    """What's wrong with a proposed answer word, or [] if it's fine."""
+    problems = []
+    word = answer.strip().upper()
+    if not word.isalpha() or not 4 <= len(word) <= 9:
+        problems.append(f"answer '{answer}' must be one word of 4-9 letters")
+    if word in blocked:
+        problems.append(f"answer '{word}' was used in the last {TOPIC_COOLDOWN_DAYS} days")
+    return problems
+
+
+def fix_answer(group, blocked):
+    """A good topic with a bad answer word: ask for another word instead of dropping the topic."""
+    response = client.chat.completions.create(
+        model=JUDGE_MODEL,
+        messages=[{"role": "user", "content": (
+            f"Topic: {group['topic']}. The answer word '{group['answer']}' doesn't work: "
+            f"{'; '.join(answer_problems(group['answer'], blocked))}. Give ONE other common English "
+            "word, 4-9 letters, letters only, vivid and fun to guess, that a player could guess as "
+            "this topic." + (f" Not any of: {sorted(blocked)}." if blocked else "")
+        )}],
+        response_format={"type": "json_schema", "json_schema": {"name": "answer", "strict": True, "schema": {
+            "type": "object", "properties": {"answer": {"type": "string"}},
+            "required": ["answer"], "additionalProperties": False}}},
+    )
+    return json.loads(response.choices[0].message.content)["answer"]
+
+
+def group_problems(group, keep, blocked):
+    """Everything wrong with one proposed topic, or [] if it can be a day."""
+    ids = group["story_ids"]
+    problems = answer_problems(group["answer"], blocked)
+    if not 3 <= len(set(ids)) <= 5:
+        problems.append(f"needs 3-5 different stories, got {len(set(ids))}")
+    if any(not 0 <= i < len(keep) for i in ids):
+        problems.append("uses a story id that isn't in the list")
+    return problems
+
+
+def pick_topics(keep, blocked):
+    """Step 3-4: group the strong stories into topics; return the valid ones, best first."""
+    listing = "\n".join(f"{i}. [{s['section']}] {s['title']} | {s['snippet']}" for i, s in enumerate(keep))
+    messages = [
+        {"role": "system", "content": GROUP_PROMPT},
+        {"role": "user", "content": listing + (f"\n\nDo not use these answers: {sorted(blocked)}" if blocked else "")},
+    ]
+    for attempt in range(2):                  # one retry with the problems spelled out
+        response = client.chat.completions.create(
+            model=JUDGE_MODEL,
+            messages=messages,
+            response_format={"type": "json_schema", "json_schema": {
+                "name": "groups", "strict": True, "schema": GROUP_SCHEMA}},
+        )
+        reply = response.choices[0].message.content
+        groups = json.loads(reply)["groups"]
+
+        valid, rejected = [], []
+        for group in groups:
+            problems = group_problems(group, keep, blocked)
+            # Only the answer word is wrong: repair the word (up to 3 tries), keep the topic.
+            if problems and problems == answer_problems(group["answer"], blocked):
+                old, tried = group["answer"], {group["answer"].strip().upper()}
+                for _ in range(3):
+                    # Failed words go in as "blocked" so the model won't suggest them again.
+                    group = {**group, "answer": fix_answer(group, blocked | tried)}
+                    if not answer_problems(group["answer"], blocked):
+                        break
+                    tried.add(group["answer"].strip().upper())
+                problems = group_problems(group, keep, blocked)
+                if not problems:
+                    rejected.append(f"{group['topic']}: answer '{old}' replaced by '{group['answer']}'")
+            if problems:
+                rejected.append(f"{group['topic']}: {'; '.join(problems)}")
+            else:
+                ids = list(dict.fromkeys(group["story_ids"]))           # drop repeats, keep order
+                valid.append({**group, "answer": group["answer"].strip().upper(),
+                              "stories": [keep[i] for i in ids]})
+        if valid:
+            # Rank in code, not by the model's order: the happiest set of stories wins.
+            mean = lambda t, k: sum(s[k] for s in t["stories"]) / len(t["stories"])
+            valid.sort(key=lambda t: (mean(t, "hopeful"), mean(t, "significant")), reverse=True)
+            return valid, rejected
+        messages += [{"role": "assistant", "content": reply},
+                     {"role": "user", "content": "None of these work: " + " | ".join(rejected) + ". Try again."}]
+    return [], rejected
+
+
 def load_history(path=HISTORY):
     """Past days: every story url shown, and every topic with its date."""
     if not path.exists():
@@ -132,16 +254,22 @@ def blocked_answers(history, today=None):
 
 
 if __name__ == "__main__":
-    found = unseen(sweep(), load_history())
+    history = load_history()
+    found = unseen(sweep(), history)
     print(f"{len(found)} new candidate articles from the last {WINDOW_DAYS} days")
 
-    judged = judge(found)
-    keep = strong(judged)
-    print(f"{len(keep)} strong good-news stories (hopeful 7+, significant 5+, credible 7+)\n")
-    for s in keep:
-        print(f"  H{s['hopeful']} S{s['significant']} C{s['credible']}  [{s['section']}] {s['title'][:75]}")
-        print(f"      {s['reason'][:110]}")
+    keep = strong(judge(found))
+    print(f"{len(keep)} strong good-news stories")
 
-    print("\nLowest 5 on hopeful (should be bad news):")
-    for s in sorted(judged, key=lambda s: s["hopeful"])[:5]:
-        print(f"  H{s['hopeful']}  {s['title'][:80]}")
+    topics, rejected = pick_topics(keep, blocked_answers(history))
+    for r in rejected:
+        print(f"  rejected by code: {r}")
+    if not topics:
+        raise SystemExit("No topic today: no group passed the checks.")
+
+    for rank, t in enumerate(topics, start=1):
+        avg = sum(s["hopeful"] for s in t["stories"]) / len(t["stories"])
+        print(f"\n#{rank}  {t['answer']} ({len(t['answer'])})  {t['topic']}   avg hopeful {avg:.1f}")
+        print(f"    {t['why']}")
+        for s in t["stories"]:
+            print(f"    - H{s['hopeful']}  {s['title'][:85]}")
