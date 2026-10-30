@@ -1,0 +1,64 @@
+# Every morning: make today's puzzle in the cloud, save it, and publish the site.
+# The API keys live in GitHub Secrets and exist only inside this job; the site gets plain HTML.
+name: Daily puzzle
+
+on:
+  schedule:
+    - cron: "0 22 * * *"      # 22:00 UTC = 06:00 the next morning in Singapore
+  workflow_dispatch:           # also a "Run workflow" button for doing it by hand
+
+permissions:
+  contents: write              # save the day and history.json back to the repo
+  pages: write                 # publish to GitHub Pages
+  id-token: write
+
+concurrency:
+  group: daily
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Singapore       # so "today" is the Singapore date, not UTC's yesterday
+      BROWSER: "true"          # render_deck tries to open a browser; there isn't one here
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Make today's puzzle
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
+        run: python harness/daily.py --save --blind      # --blind: the log never shows the answer
+
+      - name: Save the day and history
+        run: |
+          git config user.name "hope-today-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add daily/
+          git commit -m "Daily puzzle $(date +%F)" || echo "Nothing new to save"
+          git push
+
+      - name: Build the site
+        run: python harness/site.py
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

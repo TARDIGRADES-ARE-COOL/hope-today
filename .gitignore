@@ -4,4 +4,9 @@ __pycache__/
 PLAN.md
 output/
 .taste-skill/
-daily/
+# Daily puzzles and history.json are saved in the repo (the cloud run needs them);
+# only local test leftovers stay out.
+daily/logs/
+daily/latest
+daily/*/tested.json
+_site/
