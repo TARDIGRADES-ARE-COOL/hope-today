@@ -31,6 +31,9 @@
     }
 
     * { box-sizing: border-box; }
+    /* [hidden] must always win: display: flex/grid rules kept overriding it and showing
+       buttons that should be gone. One rule here instead of one fix per element. */
+    [hidden] { display: none !important; }
     body {
       margin: 0;
       min-height: 100svh;
@@ -142,6 +145,33 @@
     .result h2 { font-size: var(--step-head); }
     .steps { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
     .steps[hidden] { display: none; }
+    /* Round two: Branch out */
+    .branch[hidden], .branch-end[hidden] { display: none; }
+    .branch { display: grid; gap: 16px; }
+    .branch h2 { font-size: var(--step-head); }
+    .branch .prompt { font-size: clamp(1.4rem, 1.1rem + 1.6vw, 2.2rem); line-height: 1.3; }
+    .branch-form { display: flex; gap: 8px; }
+    .branch-form input {
+      flex: 1;
+      min-width: 0;
+      font: inherit;
+      font-size: max(16px, var(--step-lead));
+      padding: 10px 14px;
+      border: 0;
+      background: var(--field-3);
+      color: var(--ink);
+    }
+    .scoreline { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+                 font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: var(--step-lead); text-transform: uppercase; }
+    .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips li { padding: 4px 10px; font-weight: 600; }
+    .chips .t-Common { background: var(--field-3); }
+    .chips .t-Uncommon { background: var(--field-1); }
+    .chips .t-Rare { background: var(--field-2); }
+    .chips .t-Very { background: #c9a98f; }
+    .chips .t-Gem { background: var(--accent); color: var(--accent-ink); }
+    .chips .missed { background: none; outline: 2px dotted var(--muted); font-weight: 400; }
+    .branch-end { display: grid; gap: 12px; }
     .streak { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: var(--step-lead); text-transform: uppercase; }
     .result .actions .button { flex: 0 0 auto; }
 
@@ -206,10 +236,33 @@
         {% for step in puzzle.solution.steps %}<li>{{ step }}</li>{% endfor %}
       </ol>
       <div class="actions">
-        <a class="button" href="deck.html">Open today's good news</a>
+        {% if branch %}<button class="button" type="button" id="start-branch">Branch out</button>{% endif %}
+        <a class="button {{ 'soft' if branch }}" href="deck.html">Open today's good news</a>
         <button class="button soft" type="button" id="share">Share</button>
       </div>
     </section>
+
+    {% if branch %}
+    <section class="branch" id="branch" hidden aria-live="polite">
+      <h2>Branch out</h2>
+      <p class="prompt">{{ branch.prompt }}</p>
+      <p>Rarer answers score more{% if branch.gem %}, and one rare answer from today's stories is a hidden gem{% endif %}. Three misses and the round ends.</p>
+      <form class="branch-form" id="branch-form" autocomplete="off">
+        <input id="branch-guess" aria-label="Your answer" spellcheck="false" enterkeyhint="send">
+        <button class="button" type="submit">Add</button>
+      </form>
+      <div class="scoreline"><span id="branch-score">0 points</span><span id="branch-misses">Misses: 0 of 3</span></div>
+      <p class="feedback" id="branch-feedback"></p>
+      <ul class="chips" id="branch-found"></ul>
+      <div class="actions" id="branch-actions"><button class="give-up" type="button" id="branch-done">I'm done</button></div>
+      <div class="branch-end" id="branch-end" hidden>
+        <p id="branch-summary"></p>
+        <p>Some you missed:</p>
+        <ul class="chips" id="branch-missed"></ul>
+        <div class="actions"><a class="button" href="deck.html">Open today's good news</a></div>
+      </div>
+    </section>
+    {% endif %}
   </main>
 
   <script>
@@ -357,12 +410,90 @@
       $("share").addEventListener("click", async () => {
         const g = state.guesses, h = state.hints - 1;
         const streak = readStreak().count ? ` \u00B7 \u{1F525} ${readStreak().count}` : "";
+        {% if branch %}const extra = bstate.done ? ` \u00B7 Branch out: ${branchScore()} pts${bstate.found.some(i => ANSWERS[i].n === GEM) ? " \u{1F48E}" : ""}` : "";{% else %}const extra = "";{% endif %}
         const text = state.status === "solved"
-          ? `Hope Today {{ today|nice_date }}: solved in ${g} ${g === 1 ? "guess" : "guesses"}, ${h} extra ${h === 1 ? "hint" : "hints"}${streak} \u{1F305}`
-          : `Hope Today {{ today|nice_date }}: this one beat me${streak} \u{1F305}`;
+          ? `Hope Today {{ today|nice_date }}: solved in ${g} ${g === 1 ? "guess" : "guesses"}, ${h} extra ${h === 1 ? "hint" : "hints"}${extra}${streak} \u{1F305}`
+          : `Hope Today {{ today|nice_date }}: this one beat me${extra}${streak} \u{1F305}`;
         try { await navigator.clipboard.writeText(text); $("share").textContent = "Copied!"; }
         catch { prompt("Copy this:", text); }
       });
+
+      // ---------- Round two: Branch out ----------
+      {% if branch %}
+      const ANSWERS = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob("{{ branch_b64 }}"), c => c.charCodeAt(0))));
+      const GEM = {{ branch.gem|tojson }};
+      const BKEY = KEY + "-branch";
+      const bstate = (() => { try { return JSON.parse(localStorage.getItem(BKEY)); } catch { return null; } })()
+                     || { found: [], misses: 0, done: false, open: false };
+      const bsave = () => { try { localStorage.setItem(BKEY, JSON.stringify(bstate)); } catch {} };
+      const norm = s => s.toLowerCase().replace(/[^a-z]/g, "");
+      const index = new Map();                       // every name and alias -> answer number
+      ANSWERS.forEach((a, i) => [a.n, ...a.a].forEach(n => index.set(norm(n), i)));
+      const oneEdit = (a, b) => {                    // true if a and b differ by at most one letter
+        if (Math.abs(a.length - b.length) > 1) return false;
+        let i = 0, j = 0, edits = 0;
+        while (i < a.length && j < b.length) {
+          if (a[i] === b[j]) { i++; j++; continue; }
+          if (++edits > 1) return false;
+          if (a.length > b.length) i++; else if (b.length > a.length) j++; else { i++; j++; }
+        }
+        return edits + (a.length - i) + (b.length - j) <= 1;
+      };
+      // Forgiving: exact names and aliases, plurals, then one-letter typos on longer words.
+      const lookup = raw => {
+        const g = norm(raw);
+        for (const v of [g, g.replace(/es$/, ""), g.replace(/s$/, ""), g + "s"]) if (index.has(v)) return index.get(v);
+        if (g.length >= 5) for (const [k, i] of index) if (oneEdit(g, k)) return i;
+        return -1;
+      };
+      const tierClass = t => "t-" + t.split(" ")[0];
+      const chip = (a, extra = "") => `<li class="${tierClass(a.t)} ${extra}">${a.t === "Gem" ? "\u{1F48E} " : ""}${a.n.replace(/</g, "&lt;")} \u00B7 ${a.p}</li>`;
+      const branchScore = () => bstate.found.reduce((sum, i) => sum + ANSWERS[i].p, 0);
+
+      const paintBranch = () => {
+        $("branch").hidden = !bstate.open;
+        $("branch-found").innerHTML = bstate.found.map(i => chip(ANSWERS[i])).join("");
+        $("branch-score").textContent = `${branchScore()} points \u00B7 ${bstate.found.length} found`;
+        $("branch-misses").textContent = `Misses: ${bstate.misses} of 3`;
+        $("branch-form").hidden = bstate.done;
+        $("branch-actions").hidden = bstate.done;
+        $("branch-end").hidden = !bstate.done;
+        if (bstate.done) {
+          const gemFound = bstate.found.some(i => ANSWERS[i].n === GEM);
+          $("branch-summary").textContent = `You found ${bstate.found.length} of ${ANSWERS.length} for ${branchScore()} points. ` +
+            (GEM ? (gemFound ? "\u{1F48E} You found the hidden gem!" : `The hidden gem was ${GEM}.`) : "");
+          const missed = ANSWERS.map((a, i) => ({ a, i })).filter(x => !bstate.found.includes(x.i))
+            .sort((x, y) => y.a.p - x.a.p).slice(0, 6);
+          $("branch-missed").innerHTML = missed.map(x => chip(x.a, "missed")).join("");
+        }
+      };
+      $("start-branch").addEventListener("click", () => {
+        bstate.open = true; bsave(); paintBranch();
+        $("branch").scrollIntoView({ behavior: "smooth", block: "start" });
+        $("branch-guess").focus();
+      });
+      $("branch-form").addEventListener("submit", e => {
+        e.preventDefault();
+        const box = $("branch-guess"), raw = box.value.trim();
+        box.value = "";
+        if (!raw || bstate.done) return;
+        const i = lookup(raw);
+        if (i >= 0 && bstate.found.includes(i)) { $("branch-feedback").textContent = "Already got that one."; return; }
+        if (i >= 0) {
+          bstate.found.push(i);
+          const a = ANSWERS[i];
+          $("branch-feedback").textContent = a.t === "Gem" ? `\u{1F48E} ${a.n}: the hidden gem! +${a.p}` : `${a.n}: ${a.t.toLowerCase()}, +${a.p}`;
+        } else {
+          bstate.misses += 1;
+          $("branch-feedback").textContent = `Not on today's list.`;
+          if (bstate.misses >= 3) bstate.done = true;
+        }
+        bsave(); paintBranch();
+        if (!bstate.done) box.focus();
+      });
+      $("branch-done").addEventListener("click", () => { bstate.done = true; bsave(); paintBranch(); });
+      paintBranch();
+      {% endif %}
 
       // Pick up where the player left off today.
       paint();

@@ -8,10 +8,11 @@ from pathlib import Path
 
 from wordfreq import zipf_frequency
 
+from branch import make_branch
 from clues import fresh_free_hint, make_pixel_puzzle, make_puzzle, theme_hint
 from deck import env, render_deck
 from llm import client
-from tools import IMAGES, fetch_article, search_news
+from tools import IMAGES, fetch_article, fetched, search_news
 
 DAILY = Path(__file__).resolve().parent.parent / "daily"
 HISTORY = DAILY / "history.json"
@@ -364,6 +365,9 @@ def build_day(topic, puzzle, day=None):
     """Write the day's deck and its data file into daily/YYYY-MM-DD/."""
     day = (day or date.today()).isoformat()
     stories = write_stories(topic)
+    # Round two, built from the articles we just read (they're cached in tools.fetched).
+    texts = [fetched[s["url"]]["text"] for s in topic["stories"] if s["url"] in fetched]
+    branch = make_branch(topic["topic"], topic["answer"], [s["title"] for s in topic["stories"]], texts)
     folder = DAILY / day
     result = render_deck(f"Good news: {topic['topic']}", "", stories,
                          topic=topic["topic"], path=folder / "deck.html")
@@ -374,12 +378,16 @@ def build_day(topic, puzzle, day=None):
         today=day, puzzle=puzzle,
         puzzle_id=hashlib.sha1((puzzle["sentence"] or puzzle.get("image", "")).encode()).hexdigest()[:8],
         answer_b64=base64.b64encode(topic["answer"].encode()).decode(),
+        branch=branch,
+        branch_b64=base64.b64encode(json.dumps(
+            [{"n": a["name"], "a": a["aliases"], "t": a["tier"], "p": a["points"]} for a in branch["answers"]]
+        ).encode()).decode(),
     )
     (folder / "index.html").write_text(page, encoding="utf-8")
     # The puzzle page will read this file. Keep the answer out of the deck itself.
     (folder / "day.json").write_text(json.dumps({
         "date": day, "topic": topic["topic"], "answer": topic["answer"],
-        "why": topic["why"], "puzzle": puzzle, "stories": stories,
+        "why": topic["why"], "puzzle": puzzle, "branch": branch, "stories": stories,
     }, indent=2), encoding="utf-8")
     return folder, stories
 

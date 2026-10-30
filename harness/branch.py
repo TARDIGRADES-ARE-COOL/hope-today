@@ -121,8 +121,8 @@ def make_branch(topic, answer, story_titles, article_texts):
     mentioned = lambda n: any(f" {spaced(n)}{end} " in text for end in ("", "s", "es"))   # plurals too
     in_news = [a for a in answers if a["zipf"] >= GEM_MIN_ZIPF and any(
         mentioned(n) for n in [a["name"], *a["aliases"]])]
-    pool = in_news or [a for a in answers if a["zipf"] >= GEM_MIN_ZIPF]
-    gem = min(pool, key=lambda a: a["zipf"]) if pool else None
+    # No answer in the stories means no gem today: a random rare answer would break the promise.
+    gem = min(in_news, key=lambda a: a["zipf"]) if in_news else None
     if gem:
         gem.update(tier="Gem", points=GEM_POINTS)
 
