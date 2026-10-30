@@ -68,11 +68,14 @@ def search_news(tag, since=None):
     response = requests.get("https://content.guardianapis.com/search", params=params)
     results = response.json()["response"]["results"]
 
-    # An empty list teaches the model nothing; say why so it can fix the call.
+    # An empty list teaches the model nothing. Look up real tags for the same word
+    # and hand them over, so the model can just pick one.
     if not results:
+        word = tag.split("/")[-1].replace("-", " ")      # 'environment/sea-life' → 'sea life'
+        suggestions = [t["id"] for t in find_topics(word)[:5]]
         return {"error": (
-            f"No articles for tag '{tag}' in the last 30 days. Tags must be exact ids "
-            "from find_topics (e.g. 'science/science', not 'science')."
+            f"No news for tag '{tag}' in the last 30 days. "
+            f"Try one of these real tags: {', '.join(suggestions)}"
         )}
 
     # Same idea as find_topics: only what the model needs to judge and present a story.
