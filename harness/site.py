@@ -17,7 +17,7 @@ SITE_URL = "https://tardigrades-are-cool.github.io/hope-today/"     # where GitH
 PREVIEW_TITLE = "Hope Today: a daily good-news puzzle"
 PREVIEW_TEXT = "One word puzzle a day. Solve it to unlock today's good news."
 # GoatCounter code for privacy-friendly stats (no cookies, no personal data). Empty = off.
-ANALYTICS = ""
+ANALYTICS = "hopetoday"
 
 
 def puzzle_id(p):
