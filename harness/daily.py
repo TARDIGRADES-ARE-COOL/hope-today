@@ -349,13 +349,14 @@ def write_stories(topic):
             for i, s in enumerate(topic["stories"]) if i in written]
 
 
-def choose_puzzle(topic, day=None, mode="wordplay", force_type=None):
+def choose_puzzle(topic, day=None, mode="wordplay", force_type=None, strict=False):
     """A verified clue for the topic's answer. Clue type alternates by day for variety."""
     if mode == "pixel":
         puzzle = make_pixel_puzzle(topic["answer"], topic["topic"], topic["stories"])
         return puzzle, ([] if puzzle else ["no story photo"])
     day_number = (day or date.today()).toordinal()
-    puzzles, rejected = make_puzzle(topic["answer"], topic["topic"], day_number=day_number)
+    wanted_today = force_type or ROTATION[day_number % len(ROTATION)]
+    puzzles, rejected = make_puzzle(topic["answer"], topic["topic"], day_number=day_number, focus=wanted_today)
     if not puzzles:
         return None, rejected
     # Rotate through the clue types day by day; if today's type didn't work, take the next one.
@@ -363,6 +364,8 @@ def choose_puzzle(topic, day=None, mode="wordplay", force_type=None):
     available = {p["type"] for p in puzzles}
     if force_type in available:                                      # testing: --type
         order = [force_type]
+    elif strict and force_type:                                      # testing: --strict
+        return None, rejected + [f"no {force_type} clue for {topic['answer']}"]
     wanted = next(t for t in order if t in available)
     puzzle = next(p for p in puzzles if p["type"] == wanted)
     puzzle["hints"][0]["text"] = fresh_free_hint(puzzle["type"], topic["answer"]) or puzzle["hints"][0]["text"]
@@ -446,6 +449,8 @@ if __name__ == "__main__":
     days = int(sys.argv[sys.argv.index("--days") + 1]) if "--days" in sys.argv else WINDOW_DAYS
     #   --type T  testing: prefer clue type T (hidden, anagram, first, backwards, halves)
     force_type = sys.argv[sys.argv.index("--type") + 1] if "--type" in sys.argv else None
+    #   --strict  testing: with --type, skip topics that can't get that trick instead of falling back
+    strict = "--strict" in sys.argv
     say = (lambda *a: None) if blind else print     # spoiler lines go through say()
 
     history = load_history()
@@ -483,7 +488,7 @@ if __name__ == "__main__":
     # The best topic whose answer gets a clue that passes the checks.
     today = puzzle = None
     for topic in topics:
-        puzzle, clue_rejects = choose_puzzle(topic, mode=mode, force_type=force_type)
+        puzzle, clue_rejects = choose_puzzle(topic, mode=mode, force_type=force_type, strict=strict)
         if puzzle:
             today = topic
             break

@@ -479,35 +479,69 @@ CHECKERS = {
 }
 
 
-def make_puzzle(answer, topic, rounds=2, day_number=0):
+FOCUS_PROMPT = (
+    "Write 8 '{kind}' clues for a friendly daily word puzzle. The answer is {answer} ({n} letters); "
+    "today's good news is about: {topic}. Each is ONE natural, grammatical, upbeat sentence of at "
+    "most 16 words that hints at the good news.\n{rule}\nLeave 'fodder' empty. Never use {answer} "
+    "itself. Check every letter."
+)
+FOCUS_RULES = {
+    "hidden": "{answer} is spelled by consecutive letters across two or three words, ignoring spaces, "
+              "starting or ending inside a word (e.g. CORAL in 'arctic oral').",
+    "backwards": "{answer} spelled BACKWARDS ({reversed}) by consecutive letters across two or three "
+                 "words, starting or ending inside a word. Tip: find word endings and beginnings that "
+                 "together spell {reversed}.",
+    "first": "{n} consecutive words whose first letters spell {answer}, in the middle of a longer "
+             "sentence: not starting at the first word, with at least 3 other words.",
+}
+
+
+def ask_for_clues(prompt, answer):
+    """One request for clues; returns (good clues, rejections). Code checks the letters,
+    then a second model drops sentences that read badly."""
+    response = client.chat.completions.create(
+        model=CLUE_MODEL,
+        messages=[{"role": "user", "content": prompt}],
+        response_format={"type": "json_schema", "json_schema": {
+            "name": "clues", "strict": True, "schema": CLUE_SCHEMA}},
+    )
+    passed, rejected = [], []
+    for clue in json.loads(response.choices[0].message.content)["clues"]:
+        problems, spot = CHECKERS[clue["type"]](clue, answer)
+        if problems:
+            rejected.append(f"{clue['type']}: {clue['sentence']}  -> {'; '.join(problems)}")
+        else:
+            passed.append({**clue, "highlight": spot})
+    valid = []
+    for clue, score in zip(passed, natural_scores([c["sentence"] for c in passed])):
+        if score >= NATURAL_MIN:
+            valid.append(clue)
+        else:
+            rejected.append(f"{clue['type']}: {clue['sentence']}  -> reads unnaturally ({score}/10)")
+    return valid, rejected
+
+
+def make_puzzle(answer, topic, rounds=2, day_number=0, focus=None):
     """Ask for candidate clues, keep only those Python can verify and that read naturally,
-    then build the hints in code. Returns every good puzzle, of every type that worked."""
+    then build the hints in code. Returns every good puzzle, of every type that worked.
+    focus: a trick that must be tried harder (one extra request just for it) if missing."""
     answer = answer.upper()
-    prompt = CLUE_PROMPT.format(answer=answer, n=len(answer), topic=topic,
-                                sorted_letters=" ".join(sorted(answer)), reversed=answer[::-1])
+    fill = dict(answer=answer, n=len(answer), topic=topic,
+                sorted_letters=" ".join(sorted(answer)), reversed=answer[::-1])
     valid, rejected = [], []
     for _ in range(rounds):
-        response = client.chat.completions.create(
-            model=CLUE_MODEL,
-            messages=[{"role": "user", "content": prompt}],
-            response_format={"type": "json_schema", "json_schema": {
-                "name": "clues", "strict": True, "schema": CLUE_SCHEMA}},
-        )
-        passed = []
-        for clue in json.loads(response.choices[0].message.content)["clues"]:
-            problems, spot = CHECKERS[clue["type"]](clue, answer)
-            if problems:
-                rejected.append(f"{clue['type']}: {clue['sentence']}  -> {'; '.join(problems)}")
-            else:
-                passed.append({**clue, "highlight": spot})
-        # Letters work; now drop the ones that read badly.
-        for clue, score in zip(passed, natural_scores([c["sentence"] for c in passed])):
-            if score >= NATURAL_MIN:
-                valid.append(clue)
-            else:
-                rejected.append(f"{clue['type']}: {clue['sentence']}  -> reads unnaturally ({score}/10)")
-        if len({c["type"] for c in valid}) >= 3:          # enough variety; stop early
-            break
+        got, bad = ask_for_clues(CLUE_PROMPT.format(**fill), answer)
+        valid += got
+        rejected += bad
+        if len({c["type"] for c in valid}) >= 3 and (not focus or focus in {c["type"] for c in valid}):
+            break                                          # enough variety; stop early
+
+    # Today's trick missing? One focused request for it before giving up on it.
+    if focus in FOCUS_RULES and focus not in {c["type"] for c in valid}:
+        rule = FOCUS_RULES[focus].format(**fill)
+        got, bad = ask_for_clues(FOCUS_PROMPT.format(kind=focus, rule=rule, **fill), answer)
+        valid += got
+        rejected += bad
 
     halves = make_halves(answer)
     if halves:
