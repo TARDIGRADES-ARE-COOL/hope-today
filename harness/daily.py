@@ -444,6 +444,10 @@ if __name__ == "__main__":
     say = (lambda *a: None) if blind else print     # spoiler lines go through say()
 
     history = load_history()
+    # The scheduled run can fire twice (e.g. after the Mac wakes); one saved puzzle per day.
+    if save and any(t["date"] == date.today().isoformat() for t in history["topics"]):
+        print(f"Today's puzzle ({date.today().isoformat()}) is already saved; nothing to do.")
+        sys.exit(0)
     blocked = blocked_answers(history)
     # --fresh remembers every puzzle already made today (in tested.json), so repeated
     # test runs keep moving to new topics. History itself is untouched.

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Runs scripts/run_daily.sh every day at 06:00. If the Mac is asleep then, it runs on wake.
+     Install:   cp scripts/com.hopetoday.daily.plist ~/Library/LaunchAgents/
+                launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.hopetoday.daily.plist
+     Remove:    launchctl bootout gui/$(id -u)/com.hopetoday.daily
+                rm ~/Library/LaunchAgents/com.hopetoday.daily.plist -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.hopetoday.daily</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/joaquimsarvesh/Desktop/hope-today/scripts/run_daily.sh</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>6</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/Users/joaquimsarvesh/Desktop/hope-today/daily/logs/launchd.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/joaquimsarvesh/Desktop/hope-today/daily/logs/launchd.log</string>
+</dict>
+</plist>
