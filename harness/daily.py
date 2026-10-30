@@ -436,6 +436,11 @@ if __name__ == "__main__":
     #   --blind  testing: don't print the answer, clue or headlines, so you can play unspoiled
     #   --mode pixel  testing: force the pixel-reveal game mode
     save, fresh, blind = ("--save" in sys.argv), ("--fresh" in sys.argv), ("--blind" in sys.argv)
+    #   --out DIR  testing: write the puzzle somewhere else, so a test never replaces the live day
+    if "--out" in sys.argv:
+        if save:
+            sys.exit("--out is for test puzzles; it can't be combined with --save")
+        DAILY = Path(sys.argv[sys.argv.index("--out") + 1]).resolve()
     mode = sys.argv[sys.argv.index("--mode") + 1] if "--mode" in sys.argv else "wordplay"
     #   --days N  testing: look back N days instead of 7 (after testing has used up this week's stories)
     days = int(sys.argv[sys.argv.index("--days") + 1]) if "--days" in sys.argv else WINDOW_DAYS
