@@ -37,11 +37,28 @@ def find_topics(query):
     response = requests.get("https://content.guardianapis.com/tags", params=params)
     results = response.json()["response"]["results"]
 
-    # Keep only what the model needs to pick a tag; every extra field costs tokens.
+    # Many tags are dead or niche ("climate-change-scepticism"), and the model kept picking
+    # them. So count each tag's recent news, drop the empty ones, and put the busiest first.
     topics = []
     for item in results:
-        topics.append({"id": item["id"], "title": item["webTitle"]})
+        recent = count_recent_news(item["id"])
+        if recent:
+            topics.append({"id": item["id"], "title": item["webTitle"], "recent_articles": recent})
+    topics.sort(key=lambda t: t["recent_articles"], reverse=True)
     return topics
+
+
+def count_recent_news(tag):
+    """How many news articles a tag has had in the last 30 days (same filters as search_news)."""
+    params = {
+        "tag": f"{tag},tone/news",
+        "type": "article",
+        "from-date": (date.today() - timedelta(days=30)).isoformat(),
+        "page-size": 1,                                  # we only want the total, not the articles
+        "api-key": GUARDIAN_KEY,
+    }
+    response = requests.get("https://content.guardianapis.com/search", params=params)
+    return response.json()["response"]["total"]
 
 
 def search_news(tag, since=None):
@@ -161,7 +178,8 @@ TOOL_SCHEMAS = [
         "function": {
             "name": "find_topics",
             "description": (
-                "Find Guardian topic tags for a subject. Returns tag ids and titles. "
+                "Find Guardian topic tags for a subject. Returns tag ids, titles and how many "
+                "news articles each had in the last 30 days, busiest first; empty tags are left out. "
                 "Call this first, then pick the tag that best matches what the user means."
             ),
             "parameters": {
