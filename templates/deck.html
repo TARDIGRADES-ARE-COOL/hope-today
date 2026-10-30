@@ -9,7 +9,7 @@
   <section>
     <h1>{{ title }}</h1>
     <p>You said: {{ user_answer }}</p>
-    <p>{{ today }} · {{ stories|length }} truly good {{ "story" if stories|length == 1 else "stories" }} this week</p>
+    <p>{{ today }} · {{ stories|length }} truly good {{ "story" if stories|length == 1 else "stories" }}</p>
   </section>
 
   {% for story in stories %}

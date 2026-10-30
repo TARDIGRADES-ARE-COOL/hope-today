@@ -16,18 +16,23 @@ REQUIRED = ["headline", "summary", "key_points", "why_it_matters", "url"]
 
 
 def check_stories(stories):
-    """Return a readable problem for the model to fix, or None if all good."""
+    """Return every problem for the model to fix in one go, or None if all good."""
     # Min is 1, not 3: a short honest deck beats one padded with weak or old stories.
     if not 1 <= len(stories) <= 7:
         return f"Need 1 to 7 stories, got {len(stories)}."
 
+    # Collect all problems: reporting only the first makes the model retry once per problem.
+    problems = []
     for n, story in enumerate(stories, start=1):
         for field in REQUIRED:
             if not story.get(field):
-                return f"Story {n} is missing '{field}'."
-        if not 2 <= len(story["key_points"]) <= 4:
-            return f"Story {n} needs 2 to 4 key_points, got {len(story['key_points'])}."
-    return None
+                problems.append(f"Story {n} is missing '{field}'.")
+        points = story.get("key_points") or []
+        if len(points) > 4:
+            story["key_points"] = points[:4]          # small problem: fix it, don't reject
+        elif len(points) == 1:
+            problems.append(f"Story {n} needs 2 to 4 key_points, got 1.")
+    return " ".join(problems) or None
 
 
 def render_deck(title, user_answer, stories):
