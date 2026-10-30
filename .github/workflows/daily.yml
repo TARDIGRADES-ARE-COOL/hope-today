@@ -38,7 +38,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
         # --blind: the log never shows the answer. --desk: build Copy Desk into day.json too;
-        # site.py publishes it only once daily.LIVE_DESK is True (shadow week until then).
+        # site.py publishes it while daily.LIVE_DESK is True.
         run: python harness/daily.py --save --blind --desk
 
       - name: Save the day and history

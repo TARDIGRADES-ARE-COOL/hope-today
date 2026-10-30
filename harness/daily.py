@@ -23,10 +23,10 @@ TOPIC_COOLDOWN_DAYS = 30
 # leaned on general knowledge. The page hides it when there's no branch. True brings it back.
 BRANCH_OUT = False
 # Copy Desk (PLAN.md Part 3): the step between the word puzzle and the deck. DESK builds it
-# (--desk turns it on for one run); LIVE_DESK marks it for site.py to publish. Shadow week:
-# DESK on, LIVE_DESK off, so day.json gets a desk the site never shows.
+# (--desk turns it on for one run); LIVE_DESK marks it for site.py to publish. Set
+# LIVE_DESK = False to build desks without showing them (a shadow run).
 DESK = False
-LIVE_DESK = False
+LIVE_DESK = True
 # How common an answer must be (Zipf scale: 'nature' 5.0, 'coral' 3.9, 'otter' 3.4,
 # 'kelp' 2.9, 'wildland' 2.4). Below this, most players would never guess it.
 MIN_COMMONNESS = 3.3
