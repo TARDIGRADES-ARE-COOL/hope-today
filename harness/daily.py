@@ -9,7 +9,7 @@ from pathlib import Path
 from wordfreq import zipf_frequency
 
 from branch import make_branch
-from clues import fresh_free_hint, make_pixel_puzzle, make_puzzle, theme_hint
+from clues import ROTATION, fresh_free_hint, make_pixel_puzzle, make_puzzle, theme_hint
 from deck import env, render_deck
 from llm import client
 from tools import IMAGES, fetch_article, fetched, search_news
@@ -348,7 +348,7 @@ def write_stories(topic):
             for i, s in enumerate(topic["stories"]) if i in written]
 
 
-def choose_puzzle(topic, day=None, mode="wordplay"):
+def choose_puzzle(topic, day=None, mode="wordplay", force_type=None):
     """A verified clue for the topic's answer. Clue type alternates by day for variety."""
     if mode == "pixel":
         puzzle = make_pixel_puzzle(topic["answer"], topic["topic"], topic["stories"])
@@ -357,8 +357,13 @@ def choose_puzzle(topic, day=None, mode="wordplay"):
     puzzles, rejected = make_puzzle(topic["answer"], topic["topic"], day_number=day_number)
     if not puzzles:
         return None, rejected
-    wanted = "anagram" if day_number % 2 == 0 else "hidden"
-    puzzle = ([p for p in puzzles if p["type"] == wanted] or puzzles)[0]
+    # Rotate through the clue types day by day; if today's type didn't work, take the next one.
+    order = ROTATION[day_number % len(ROTATION):] + ROTATION[:day_number % len(ROTATION)]
+    available = {p["type"] for p in puzzles}
+    if force_type in available:                                      # testing: --type
+        order = [force_type]
+    wanted = next(t for t in order if t in available)
+    puzzle = next(p for p in puzzles if p["type"] == wanted)
     puzzle["hints"][0]["text"] = fresh_free_hint(puzzle["type"], topic["answer"]) or puzzle["hints"][0]["text"]
     puzzle["hints"][1]["text"] = theme_hint(topic["answer"], topic["topic"], puzzle["sentence"])
     return puzzle, rejected
@@ -433,6 +438,8 @@ if __name__ == "__main__":
     mode = sys.argv[sys.argv.index("--mode") + 1] if "--mode" in sys.argv else "wordplay"
     #   --days N  testing: look back N days instead of 7 (after testing has used up this week's stories)
     days = int(sys.argv[sys.argv.index("--days") + 1]) if "--days" in sys.argv else WINDOW_DAYS
+    #   --type T  testing: prefer clue type T (hidden, anagram, first, backwards, halves)
+    force_type = sys.argv[sys.argv.index("--type") + 1] if "--type" in sys.argv else None
     say = (lambda *a: None) if blind else print     # spoiler lines go through say()
 
     history = load_history()
@@ -466,7 +473,7 @@ if __name__ == "__main__":
     # The best topic whose answer gets a clue that passes the checks.
     today = puzzle = None
     for topic in topics:
-        puzzle, clue_rejects = choose_puzzle(topic, mode=mode)
+        puzzle, clue_rejects = choose_puzzle(topic, mode=mode, force_type=force_type)
         if puzzle:
             today = topic
             break
