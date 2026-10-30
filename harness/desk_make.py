@@ -24,7 +24,8 @@ CLUE_CHARS = 100
 SEEDS = 4                       # structures to try before giving up on the day
 BLIND_MAX = 4                   # a reader with no clues may place at most 4 of 6 facts
 MAX_CALLS = 16                  # hard cap on model calls for one desk (picker calls included)
-RULE = {2: "Each story gets two facts.", 3: "Each story gets three facts."}
+PER = 2                         # facts per story: always 6 facts a day (no bigger Sunday desk)
+RULE = "Each story gets two facts."
 LETTERS = "ABCDE"
 
 CURRENCY_WORDS = {"$": "dollars", "£": "pounds", "€": "euros", "¥": "yen", "%": "per cent"}
@@ -297,7 +298,7 @@ def shuffle_cards(data):
     return {**data, "cards": [{**c, "id": f"f{n}"} for n, c in enumerate(cards)]}
 
 
-def make_desk(stories, texts, per=2, live=False, log=lambda *a: None, spoilers=False):
+def make_desk(stories, texts, live=False, log=lambda *a: None, spoilers=False):
     """Build a fair desk from the day's top 3 stories (written by write_stories) and their fetched
     article texts. Returns the day.json "desk" dict, or None. Raises only DeskError/model errors;
     daily.py wraps the call so a desk problem can never cost the day.
@@ -310,12 +311,12 @@ def make_desk(stories, texts, per=2, live=False, log=lambda *a: None, spoilers=F
     avoid = []
     for pick in range(2):                                 # a second pick if the first fails or is too easy
         budget.spend(2)                                   # pick_facts makes up to 2 calls
-        picked, problems = pick_facts(stories, texts, per, avoid)
+        picked, problems = pick_facts(stories, texts, PER, avoid)
         if not picked:
             log(f"  facts failed the checks ({len(problems)} problem(s))"
                 + (f": {problems[0]}" if spoilers else ""))
             continue
-        base = {"per": per, "rule": RULE[per], "kinds": {}, "stories": picked["stories"], "cards": picked["cards"]}
+        base = {"per": PER, "rule": RULE, "kinds": {}, "stories": picked["stories"], "cards": picked["cards"]}
         score, easy = blind_guess(budget, base)
         log(f"  blind guesser placed {score} of {len(base['cards'])} facts with no clues")
         if score <= BLIND_MAX:
