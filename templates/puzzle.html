@@ -276,7 +276,8 @@
         state.guesses += 1;
         if (matches(guess)) return finish("solved", true);
         save();
-        $("feedback").textContent = ["Not quite. Try again!", "Close? Have another go.", "Nope, but you've got this."][state.guesses % 3];
+        // Encouraging but honest: never hint that a wrong guess is close.
+        $("feedback").textContent = ["Not quite. Try again!", "Not this one. Have another go.", "Nope, but you've got this."][state.guesses % 3];
         entry.classList.remove("shake");
         void entry.offsetWidth;                // restart the shake animation
         entry.classList.add("shake");
