@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-31",
+  "topic": "Medical care",
+  "answer": "HEALTH",
+  "why": "These stories are upbeat because they focus on improving wellbeing, access to care, and support for health systems and patients.",
+  "puzzle": {
+    "type": "hidden",
+    "instruction": "Today's topic is tucked into this sentence. Can you spot how?",
+    "sentence": "More patients heal through quicker visits and gentle follow-up calls.",
+    "length": 6,
+    "answer": "HEALTH",
+    "highlight": [
+      2,
+      3
+    ],
+    "hints": [
+      {
+        "level": 1,
+        "free": true,
+        "text": "Squish the sentence together\u2014today\u2019s topic pops out across neighboring words! Like STAR hiding in \u201clo<b>st ar</b>t\u201d."
+      },
+      {
+        "level": 2,
+        "free": false,
+        "text": "\ud83e\ude7a Your body\u2019s overall condition\u2014checked by physicians, wished in toasts."
+      },
+      {
+        "level": 3,
+        "free": false,
+        "text": "Peek between \u201cheal\u201d and \u201cthrough\u201d\u2026",
+        "highlight": [
+          2,
+          3
+        ]
+      }
+    ],
+    "solution": {
+      "answer": "HEALTH",
+      "steps": [
+        "The trick: the answer was hiding across the words.",
+        "Where: in \u201cheal through\u201d.",
+        "How: HEALTH \u00b7 rough \u2192 HEALTH"
+      ]
+    }
+  },
+  "branch": null,
+  "stories": [
+    {
+      "headline": "Big Study Tracks Health",
+      "summary": "Australia has launched an 18 and Up study to follow 100,000 people over their lives to better understand mental illness and early-onset cancer.",
+      "key_points": [
+        "100,000 people will be recruited for Australia\u2019s largest intergenerational study of wellbeing and ageing.",
+        "The study will follow people aged 18 to 90+ throughout their lives.",
+        "Almost two in five Australians aged 16 to 24 experienced a mental disorder in the past year.",
+        "Participants\u2019 data may be linked to cancer registries and Medicare with consent."
+      ],
+      "why_it_matters": "Long-term evidence could help improve prevention, treatments and care systems for younger generations.",
+      "url": "https://www.theguardian.com/australia-news/2026/oct/30/study-of-100000-australians-seeks-causes-of-mental-health-disorders-and-early-onset-cancer",
+      "date": "2026-10-29",
+      "image": "https://media.guim.co.uk/2d971273ff7a8ac2dc73c1074caefc96d88e39f1/499_0_5340_4271/1000.jpg"
+    },
+    {
+      "headline": "Healthwatch Gets Reprieve",
+      "summary": "Yvette Cooper has dropped plans to abolish Healthwatch England after a backlash from MPs, keeping the patient voice in the NHS.",
+      "key_points": [
+        "Healthwatch England and its 150 branches will continue.",
+        "The body collects and analyses patient feedback on NHS services.",
+        "MPs from Labour, Conservative and Liberal Democrat parties had criticised the planned abolition.",
+        "Healthwatch has reported problems such as dental access and years-long ADHD waits."
+      ],
+      "why_it_matters": "Keeping an independent patient champion helps surface problems in care and supports better NHS accountability.",
+      "url": "https://www.theguardian.com/society/2026/oct/28/yvette-cooper-drops-plans-abolish-healthwatch-england",
+      "date": "2026-10-28",
+      "image": "https://media.guim.co.uk/aa0c403b6d4c0f5fec5de4c02d771214604febbc/432_0_4320_3456/1000.jpg"
+    },
+    {
+      "headline": "More GP Care Covered",
+      "summary": "More Australians are being bulk-billed for GP care after new federal incentives for doctors and practices.",
+      "key_points": [
+        "63% of Australians are now bulk-billed for all their GP care, up from 56%.",
+        "26% of GPs reported bulk-billing all of their patients, up from 12%.",
+        "The report surveyed 2,766 GPs.",
+        "The share delaying GP care due to cost fell from 8.8% to 7.7%."
+      ],
+      "why_it_matters": "Lower costs make primary care easier to access, which can help more people get timely treatment and support.",
+      "url": "https://www.theguardian.com/australia-news/2026/oct/26/almost-two-thirds-of-australians-bulk-billed-for-all-gp-care-amid-extra-incentives-for-doctors",
+      "date": "2026-10-25",
+      "image": "https://media.guim.co.uk/8d5452110bb1fed450aef6462d459d969420f1bf/0_0_8192_5464/1000.jpg"
+    }
+  ]
+}

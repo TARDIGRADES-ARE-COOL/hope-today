@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.classList.add("js")</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hope Today · daily puzzle</title>
+  <script>
+  window.track = name => { try { window.goatcounter?.count({ path: "event/" + name, title: name, event: true }); } catch {} };
+</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #e3e2da;
+      --ink: #1c1c1c;
+      --muted: #38424a;
+      --accent: #2c3620;        /* olive: buttons, solved boxes */
+      --accent-ink: #e3e2da;
+      --field-1: #b7c8be;       /* sage */
+      --field-2: #d6c4b8;       /* blush */
+      --field-3: #b2bdc5;       /* light slate */
+      --backdrop-dim: 1;
+
+      --margin: clamp(16px, 4vw, 56px);
+      --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+      --step-body: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+      --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+      --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --paper: #d9d7cc; --backdrop-dim: 0.9; }
+    }
+
+    * { box-sizing: border-box; }
+    /* [hidden] must always win: display: flex/grid rules kept overriding it and showing
+       buttons that should be gone. One rule here instead of one fix per element. */
+    [hidden] { display: none !important; }
+    /* Scale with the screen: 16px on phones and laptops, growing on big monitors
+       (about 19px at 1920 wide, 21px at 2560). Widths below are in rem, so the whole
+       layout grows with the text and keeps its proportions. */
+    html { font-size: clamp(100%, 0.4vw + 11px, 150%); }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);   /* the card may never be wider than the screen */
+      place-items: center;
+      padding: clamp(8px, 3svh, 64px) var(--margin);
+      background: #2c3620;
+      color: var(--ink);
+      font-family: "Literata", Georgia, serif;
+      font-size: var(--step-body);
+      line-height: 1.6;
+    }
+    h1, h2 {
+      font-family: "Rokkitt", "Arial Narrow", sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    p { margin: 0; }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    /* The puzzle is one paper card, like the deck's cover. */
+    .card {
+      width: min(51rem, 100%);
+      min-width: 0;
+      container-type: inline-size;
+      background: var(--paper);
+      padding: clamp(20px, min(4vw, 4svh), 48px);
+      display: grid;
+      gap: clamp(12px, 2.2svh, 28px);
+    }
+    .card h1 { font-size: min(11cqw, 8.5svh); display: flex; justify-content: space-between; gap: 0.3em; }
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 6px 24px;
+      font-size: var(--step-lead);
+      font-weight: 600;
+    }
+    .instruction { font-size: var(--step-lead); font-weight: 600; }
+    .clue { font-size: clamp(1.4rem, min(1.1rem + 2vw, 4.6svh), 2.5rem); line-height: 1.35; }
+    .clue .word { transition: background-color 300ms ease; }
+    .clue .lit { background: var(--field-2); }
+    .clue .count { color: var(--muted); white-space: nowrap; }
+    /* Pixel reveal: the photo starts as big blocks and sharpens with each guess or hint. */
+    .picture { width: 100%; aspect-ratio: 5 / 4; display: block; background: var(--field-3); image-rendering: pixelated; }
+
+    /* Letter boxes. A real input sits on top, so phones get their keyboard. */
+    /* One row of boxes, however long the answer: they shrink to share the width. */
+    .entry { position: relative; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 3.5rem)); gap: 6px; }
+    .box {
+      width: 100%;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      background: var(--field-3);
+      font-family: "Rokkitt", sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+      transition: background-color 250ms ease, color 250ms ease, transform 250ms ease;
+    }
+    .box.next { background: var(--field-1); }
+    .solved .box { background: var(--accent); color: var(--accent-ink); }
+    .entry input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      opacity: 0;
+      font-size: 16px;                       /* stops phones zooming in */
+      text-transform: uppercase;
+    }
+    .entry.shake { animation: shake 400ms ease; }
+    @keyframes shake {
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .actions[hidden] { display: none; }    /* display: flex would otherwise beat [hidden] */
+    .button {
+      border: 0;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-family: "Rokkitt", sans-serif;
+      font-weight: 800;
+      font-size: var(--step-lead);
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 12px 24px;
+      transition: transform 120ms ease;
+    }
+    .button.soft { background: var(--field-1); color: var(--ink); }
+    .button:hover { transform: translateY(-2px); }
+    .button:active { transform: translateY(1px) scale(0.98); }
+    .give-up { border: 0; background: none; padding: 8px 0; text-decoration: underline; margin-left: auto; }
+    .feedback { min-height: 1.6em; font-weight: 600; }
+    .more { margin: 0; font-size: var(--step-small); }
+    .done .feedback, .done .hints, .done .more { display: none; }   /* finished: the result explains it all */
+    /* Short screens (small laptops, phones): tighter type so the whole card fits. */
+    @media (max-height: 920px) {
+      .facts, .instruction { font-size: 1.05rem; }
+      .clue { font-size: clamp(1.3rem, 4svh, 1.8rem); }
+      .feedback { min-height: 1.2em; }
+    }
+
+    .hints { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .hints li { padding: clamp(6px, 1.1svh, 12px) 14px; font-size: 0.95em; line-height: 1.45; }
+    .hints li:nth-child(1) { background: var(--field-3); }
+    .hints li:nth-child(2) { background: var(--field-1); }
+    .hints li:nth-child(3) { background: var(--field-2); }
+    .hints strong { font-weight: 600; }
+
+    .result[hidden] { display: none; }
+    .result { display: grid; gap: clamp(8px, 1.4svh, 14px); }
+    .result h2 { font-size: clamp(1.6rem, 5.5svh, 4rem); }
+    .steps { margin: 0; padding-left: 1.2em; display: grid; gap: 2px; font-size: 0.95em; line-height: 1.45; }
+    .steps[hidden] { display: none; }
+    /* Round two: Branch out */
+    .branch[hidden], .branch-end[hidden] { display: none; }
+    .branch { display: grid; gap: 16px; }
+    .branch h2 { font-size: var(--step-head); }
+    .branch .prompt { font-size: clamp(1.4rem, 1.1rem + 1.6vw, 2.2rem); line-height: 1.3; }
+    .branch-form { display: flex; gap: 8px; }
+    .branch-form input {
+      flex: 1;
+      min-width: 0;
+      font: inherit;
+      font-size: max(16px, var(--step-lead));
+      padding: 10px 14px;
+      border: 0;
+      background: var(--field-3);
+      color: var(--ink);
+    }
+    .scoreline { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+                 font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: var(--step-lead); text-transform: uppercase; }
+    .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips li { padding: 4px 10px; font-weight: 600; }
+    .chips .t-Common { background: var(--field-3); }
+    .chips .t-Uncommon { background: var(--field-1); }
+    .chips .t-Rare { background: var(--field-2); }
+    .chips .t-Very { background: #c9a98f; }
+    .chips .t-Gem { background: var(--accent); color: var(--accent-ink); }
+    .chips .missed { background: none; outline: 2px dotted var(--muted); font-weight: 400; }
+    .branch-end { display: grid; gap: 12px; }
+    /* How to play: three short steps that each fit the screen, no scrolling. */
+    .how { border: 0; background: none; padding: 0; font-weight: 600; text-decoration: underline; }
+    .tutorial {
+      width: min(36rem, calc(100% - 24px));
+      max-height: calc(100svh - 24px);
+      border: 0;
+      padding: 0;
+      overflow: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      /* Text follows the screen's height as well as its width, so every step fits. */
+      font-size: clamp(14px, min(2.1svh, 4.2vw), 18px);
+      line-height: 1.5;
+    }
+    .tutorial::backdrop { background: rgb(28 28 28 / 0.6); }
+    .tutorial-body { padding: clamp(16px, 3svh, 32px) clamp(16px, 4vw, 32px); display: grid; gap: clamp(10px, 1.8svh, 16px); }
+    .tutorial h2 { font-size: clamp(1.6rem, 4.5svh, 2.6rem); }
+    .tutorial h2:focus { outline: none; }        /* focused only so the step starts at the top */
+    .step { display: grid; gap: clamp(8px, 1.5svh, 14px); }
+    .tricks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .tricks li { padding: clamp(6px, 1.1svh, 10px) 12px; }
+    .tricks li:nth-child(odd) { background: var(--field-3); }
+    .tricks li:nth-child(even) { background: var(--field-1); }
+    .tricks strong { font-weight: 600; }
+    .tricks b { background: var(--paper); }     /* no padding: it split words like "th e vil lage" */
+    .tutorial-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .tutorial-nav .button { font-size: 1.1em; padding: 10px 20px; }
+    .tutorial-dots { display: flex; gap: 6px; }
+    .tutorial-dots span { width: 10px; height: 10px; background: var(--field-3); }
+    .tutorial-dots span.on { background: var(--accent); }
+    .back { border: 0; background: none; padding: 8px 0; text-decoration: underline; }
+    .streak { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: var(--step-lead); text-transform: uppercase; }
+    .result .actions .button { flex: 0 0 auto; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .entry.shake { animation: none; }
+      .box, .button, .clue .word { transition: none; }
+    }
+    @media (max-width: 700px) {
+      .card h1 { flex-direction: column; gap: 0; font-size: 20cqw; }
+    }
+  </style>
+</head>
+<body>
+  <style>
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(var(--backdrop-dim));
+      image-rendering: pixelated;   /* keep the pixels chunky when scaled up */
+    }
+</style>
+<canvas class="backdrop" id="dawn" width="320" height="180" aria-hidden="true"></canvas>
+<script>
+    // A pixel-art dawn, drawn at 320x180 and scaled up with crisp pixels.
+    // Seeded by today's date: the layout stays, but clouds, stars, birds and trees change daily.
+    // The sky and hills are drawn once into hidden layers; each frame only adds what moves.
+    (() => {
+      const canvas = document.getElementById("dawn");
+      const g = canvas.getContext("2d");
+      const W = canvas.width, H = canvas.height, HORIZON = 118;
+
+      let seed = Number("2026-10-31".replaceAll("-", "")) % 2147483647 || 7;
+      const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+      const painter = ctx => (x, y, w, h, colour) => { ctx.fillStyle = colour; ctx.fillRect(x, y, w, h); };
+      const layer = () => Object.assign(document.createElement("canvas"), { width: W, height: H });
+
+      // ---- Still layer 1: sky and stars ----
+      const skyLayer = layer(), sky = painter(skyLayer.getContext("2d"));
+      const bands = ["#1d2b45", "#2b3d5c", "#41566f", "#6b6e80", "#a3808a", "#d39a8c", "#eeb48e", "#f6cf9d"];
+      const band = HORIZON / bands.length;
+      bands.forEach((colour, i) => {
+        const top = Math.round(i * band);
+        sky(0, top, W, Math.round((i + 1) * band) - top, colour);
+        if (i === 0) return;
+        for (let x = 0; x < W; x += 2) sky(x, top, 1, 1, bands[i - 1]);       // dithered seam
+        for (let x = 1; x < W; x += 4) sky(x, top + 1, 1, 1, bands[i - 1]);
+      });
+      for (let i = 0; i < 40; i++) {
+        sky(Math.floor(rand() * W), Math.floor(rand() * 34), 1, 1, rand() < 0.3 ? "#fff4dc" : "#8f9bb3");
+      }
+
+      // ---- Still layers 2-4: far, mid and near hills (transparent above the ridges) ----
+      // Separate layers so they can move at different speeds as you scroll (parallax).
+      const farLayer = layer(), midLayer = layer(), nearLayer = layer();
+      const ridge = (paint, base, rough, colour, wave) => {
+        const tops = [];
+        let y = base;
+        for (let x = 0; x < W; x++) {
+          y += (rand() - 0.5) * rough;
+          y = Math.max(base - 14, Math.min(base + 10, y));
+          const top = Math.round(y + wave(x));
+          tops.push(top);
+          paint(x, top, 1, H - top, colour);
+        }
+        return tops;
+      };
+      const far = painter(farLayer.getContext("2d")), mid = painter(midLayer.getContext("2d"));
+      const hill = painter(nearLayer.getContext("2d"));
+      ridge(far, HORIZON - 22, 3, "#7c6f78", () => 0);                                     // far mountains
+      ridge(mid, HORIZON - 4, 0.6, "#566355", x => Math.sin(x / 23) * 6);                    // mid hills
+      const near = ridge(hill, HORIZON + 18, 0.4, "#2c3620", x => Math.sin(x / 37 + 1) * 8); // near hills
+      for (let x = 4; x < W; x += 6 + Math.floor(rand() * 10)) {                      // pine trees
+        const h = 6 + Math.floor(rand() * 10), base = near[x];
+        for (let r = 0; r < h; r++) {
+          const half = Math.floor(r / 2);
+          hill(x - half, base - h + r, half * 2 + 1, 1, "#212916");
+        }
+      }
+      hill(0, H - 14, W, 14, "#1a2012");                                               // meadow
+      for (let x = 0; x < W; x += 3 + Math.floor(rand() * 6)) hill(x, H - 15, 1, 1, "#1a2012");
+
+      // ---- Things that move ----
+      const px = painter(g);
+      const sunX = Math.round(W * 0.86);
+      let sunY = HORIZON - 30;
+
+      // How far through the deck the reader is, 0 at the cover to 1 at the closing card.
+      let progress = 0;
+      const track = () => {
+        const room = document.documentElement.scrollHeight - innerHeight;
+        progress = room > 0 ? Math.min(1, Math.max(0, scrollY / room)) : 0;
+      };
+      addEventListener("scroll", track, { passive: true });
+      track();
+
+      // Pages can raise the sun on purpose: the puzzle calls riseSun() when you solve it.
+      let lifted = null;
+      window.riseSun = (ms = 2500) => {
+        const from = progress, start = performance.now();
+        const step = now => {
+          const t = Math.min(1, (now - start) / ms);
+          lifted = from + (1 - from) * (1 - (1 - t) ** 3);     // ease out
+          if (t < 1) requestAnimationFrame(step); else if (still) draw(0);
+        };
+        requestAnimationFrame(step);
+        if (still) { lifted = 1; draw(0); }
+      };
+      const clouds = Array.from({ length: 5 }, () => ({
+        x: rand() * W, y: 40 + Math.floor(rand() * 50),
+        len: 14 + Math.floor(rand() * 26), speed: 0.6 + rand() * 1.6,   // pixels per second
+      }));
+      const birds = Array.from({ length: 4 }, () => ({
+        x: rand() * W, y: 46 + Math.floor(rand() * 30),
+        speed: 7 + rand() * 6, phase: rand() * 10,
+      }));
+      const WINGS_UP = [[0, 0], [1, 1], [2, 2], [3, 1], [4, 0]];
+      const WINGS_DOWN = [[0, 2], [1, 1], [2, 2], [3, 1], [4, 2]];
+
+      const disc = (r, colour, dither) => {
+        for (let y = -r; y <= r; y++) {
+          for (let x = -r; x <= r; x++) {
+            if (x * x + y * y > r * r) continue;
+            if (dither && (x + y) % 2) continue;                       // every other pixel: a soft glow
+            px(sunX + x, sunY + y, 1, 1, colour);
+          }
+        }
+      };
+      const wrap = (x, span) => ((x % span) + span) % span;
+
+      function draw(seconds) {
+        g.drawImage(skyLayer, 0, 0);
+
+        // The sun rises as you read: 30 pixels higher by the closing card.
+        const p = lifted ?? progress;
+        sunY = HORIZON - 30 - Math.round(p * 30);
+
+        // Sun: a dithered halo that breathes in and out by whole pixels.
+        const halo = 22 + Math.round((Math.sin(seconds * 1.3) + 1) * 2);
+        disc(halo, "#ffe2a8", true);
+        disc(20, "#ffd99a");
+        disc(15, "#fff1c8");
+
+        for (const c of clouds) {
+          const x = Math.round(wrap(c.x + seconds * c.speed, W + 50)) - 50;
+          px(x + 3, c.y, c.len - 6, 1, "#fbd9b8");
+          px(x, c.y + 1, c.len, 2, "#f6c6a2");
+          px(x + 2, c.y + 3, c.len - 4, 1, "#dfa28e");
+        }
+
+        for (const b of birds) {
+          const x = Math.round(wrap(b.x + seconds * b.speed, W + 20)) - 10;
+          const y = b.y + Math.round(Math.sin(seconds * 0.9 + b.phase) * 2);
+          const wings = Math.floor(seconds * 4 + b.phase) % 2 ? WINGS_UP : WINGS_DOWN;
+          for (const [dx, dy] of wings) px(x + dx, y + dy, 1, 1, "#3b2f38");
+        }
+
+        // Hills last, so birds pass behind them. Nearer hills sink further as you scroll.
+        g.drawImage(farLayer, 0, Math.round(p * 4));
+        g.drawImage(midLayer, 0, Math.round(p * 10));
+        g.drawImage(nearLayer, 0, Math.round(p * 18));
+      }
+
+      // About 12 frames a second, like an old game. Still image if the visitor prefers less motion.
+      const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (still) {
+        draw(0);
+        return;
+      }
+      let last = -Infinity;
+      const loop = now => {
+        if (now - last >= 83) { draw(now / 1000); last = now; }
+        requestAnimationFrame(loop);                                   // browsers pause this in hidden tabs
+      };
+      requestAnimationFrame(loop);
+    })();
+</script>
+
+  <main class="card" id="puzzle">
+    <h1><span>Hope</span> <span>Today</span></h1>
+    <div class="facts">
+      <span>31 Oct 2026</span>
+      <button class="how" type="button" id="how">How to play</button>
+      <span>6 letters</span>
+    </div>
+
+    <p class="instruction">Today&#39;s topic is tucked into this sentence. Can you spot how?</p>
+    
+    <p class="clue">
+      <span class="word" data-i="0">More</span>
+      <span class="word" data-i="1">patients</span>
+      <span class="word" data-i="2">heal</span>
+      <span class="word" data-i="3">through</span>
+      <span class="word" data-i="4">quicker</span>
+      <span class="word" data-i="5">visits</span>
+      <span class="word" data-i="6">and</span>
+      <span class="word" data-i="7">gentle</span>
+      <span class="word" data-i="8">follow-up</span>
+      <span class="word" data-i="9">calls.</span> <span class="count">(6)</span>
+    </p>
+    
+
+    <form class="entry" id="entry" autocomplete="off" style="--n: 6">
+      <span class="box" aria-hidden="true"></span><span class="box" aria-hidden="true"></span><span class="box" aria-hidden="true"></span><span class="box" aria-hidden="true"></span><span class="box" aria-hidden="true"></span><span class="box" aria-hidden="true"></span>
+      <input id="guess" name="guess" maxlength="6" aria-label="Your guess, 6 letters"
+             autocapitalize="characters" spellcheck="false" enterkeyhint="go">
+    </form>
+
+    <div class="actions" id="actions">
+      <button class="button" type="submit" form="entry">Check</button>
+      <button class="button soft" type="button" id="more-hint">Another hint</button>
+      <button class="give-up" type="button" id="give-up">Give up</button>
+    </div>
+    <p class="feedback" id="feedback" aria-live="polite"></p>
+    <p class="more"><a href="../archive/">Past puzzles</a></p>
+
+    <ul class="hints" id="hints">
+      
+      <li data-level="1" hidden>
+        <strong>Free hint:</strong> Squish the sentence together—today’s topic pops out across neighboring words! Like STAR hiding in “lo<b>st ar</b>t”.
+      </li>
+      
+      <li data-level="2" hidden>
+        <strong>Hint 2:</strong> 🩺 Your body’s overall condition—checked by physicians, wished in toasts.
+      </li>
+      
+      <li data-level="3" hidden>
+        <strong>Hint 3:</strong> Peek between “heal” and “through”…
+      </li>
+      
+    </ul>
+
+    <section class="result" id="result" hidden aria-live="polite">
+      <h2 id="result-title"></h2>
+      <p id="result-line"></p>
+      <p class="streak" id="streak"></p>
+      <ol class="steps" id="steps" hidden>
+        <li>The trick: the answer was hiding across the words.</li><li>Where: in “heal through”.</li><li>How: HEALTH · rough → HEALTH</li>
+      </ol>
+      <div class="actions">
+        
+        <a class="button " href="deck.html">Open today's good news</a>
+        <button class="button soft" type="button" id="share">Share</button>
+        <a class="button soft" href="../archive/">Past puzzles</a>
+      </div>
+    </section>
+
+    
+  </main>
+
+  <dialog class="tutorial" id="tutorial" aria-labelledby="tutorial-title">
+    <div class="tutorial-body">
+      <section class="step">
+        <h2 id="tutorial-title" tabindex="-1">How to play</h2>
+        <p>One puzzle a day. The answer is the topic of today's good news.</p>
+        <p>The clue is a sentence with the answer tucked inside it. Type your guess and press Check; wrong guesses are free.</p>
+        <p>Solve it, or give up, and today's good news is yours to read.</p>
+      </section>
+      <section class="step" hidden>
+        <h2 tabindex="-1">Five tricks</h2>
+        <p>Each day uses one. Spotting which is half the fun. The number in brackets is the answer's length.</p>
+        <ul class="tricks">
+          <li><strong>Hidden:</strong> across words. CAT is in “publi<b>c at</b>tention”.</li>
+          <li><strong>Mix it up:</strong> a word, shuffled. HEART becomes EARTH.</li>
+          <li><strong>First letters:</strong> <b>H</b>appy <b>O</b>tters <b>P</b>lay <b>E</b>verywhere: HOPE.</li>
+          <li><strong>Backwards:</strong> “th<b>e vil</b>lage” read right to left: LIVE.</li>
+          <li><strong>Two halves:</strong> a clue for each half. SUN + FLOWER.</li>
+        </ul>
+      </section>
+      <section class="step" hidden>
+        <h2 tabindex="-1">Hints and streaks</h2>
+        <p><strong>Hint 1</strong> is free: it names today's trick. <strong>Hint 2</strong> describes the word. <strong>Hint 3</strong> shows where to look.</p>
+        <p>Give up any time and we'll show you how the clue worked.</p>
+        <p>Play every day to grow your 🔥 streak, and share your result without spoiling it.</p>
+      </section>
+      <div class="tutorial-nav">
+        <button class="back" type="button" id="tutorial-back">Back</button>
+        <div class="tutorial-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        <button class="button" type="button" id="tutorial-next">Next</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      // Light obfuscation so the answer isn't plain text in the page source.
+      const ANSWER = atob("SEVBTFRI");
+      const LENGTH = ANSWER.length;
+      // Progress is saved per puzzle, not per date, so a regenerated puzzle never inherits
+      // an old one's "solved" state (that bug once showed a player the new answer).
+      const KEY = "hope-puzzle-2026-10-31-67af84b6";
+      // For testing: open the page with #reset to play today's puzzle again from the start.
+      if (location.hash === "#reset") { try { localStorage.removeItem(KEY); } catch {} history.replaceState(null, "", location.pathname); }
+      const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch { return null; } };
+      const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+      // Hints opened so far. Hint 1 is free (tap to see it) and doesn't count against you.
+      const state = load() || { guesses: 0, hints: 0, status: "playing" };
+      const extraHints = () => Math.max(0, state.hints - 1);
+
+      const $ = id => document.getElementById(id);
+      const input = $("guess"), entry = $("entry"), boxes = [...entry.querySelectorAll(".box")];
+      const hintItems = [...$("hints").children];
+
+      const paint = () => {
+        const v = input.value.toUpperCase().replace(/[^A-Z]/g, "");
+        input.value = v;
+        boxes.forEach((b, i) => {
+          b.textContent = v[i] || "";
+          b.classList.toggle("next", i === v.length && state.status === "playing");
+        });
+      };
+      const showHints = () => {
+        hintItems.forEach(li => { li.hidden = Number(li.dataset.level) > state.hints; });
+        // The last hint lights up the words where the answer is hiding.
+        if (state.hints >= hintItems.length || state.status === "gave-up") {
+          JSON.parse('[2, 3]').forEach(i =>
+            document.querySelector(`.word[data-i="${i}"]`)?.classList.add("lit"));
+        }
+        $("more-hint").hidden = state.hints >= hintItems.length || state.status !== "playing";
+        $("more-hint").textContent = state.hints === 0 ? "Free hint" : `Hint ${state.hints + 1}`;
+        if (typeof drawPicture === "function") drawPicture();
+      };
+      // Pixel reveal: how many pixels across at each step; 0 = the full photo.
+      // Every wrong guess and every extra hint moves one step sharper.
+      const picture = $("picture");
+      const STEPS = [6, 10, 16, 26, 44, 0];
+      const photo = new Image();
+      const tiny = document.createElement("canvas");
+      const drawPicture = () => {
+        if (!picture || !photo.naturalWidth) return;
+        const step = state.status === "playing"
+          ? STEPS[Math.min(STEPS.length - 1, state.guesses + extraHints())] : 0;
+        const pg = picture.getContext("2d"), cw = picture.width, ch = picture.height;
+        // Crop the photo to fill the frame, like object-fit: cover.
+        const scale = Math.max(cw / photo.naturalWidth, ch / photo.naturalHeight);
+        const sw = cw / scale, sh = ch / scale;
+        const sx = (photo.naturalWidth - sw) / 2, sy = (photo.naturalHeight - sh) / 2;
+        if (!step) {
+          pg.imageSmoothingEnabled = true;
+          pg.drawImage(photo, sx, sy, sw, sh, 0, 0, cw, ch);
+          return;
+        }
+        // Shrink to a few pixels, then blow it back up without smoothing: chunky blocks.
+        tiny.width = step;
+        tiny.height = Math.round(step * ch / cw);
+        tiny.getContext("2d").drawImage(photo, sx, sy, sw, sh, 0, 0, tiny.width, tiny.height);
+        pg.imageSmoothingEnabled = false;
+        pg.drawImage(tiny, 0, 0, tiny.width, tiny.height, 0, 0, cw, ch);
+      };
+      if (picture) {
+        photo.onload = drawPicture;
+        photo.src = "";
+      }
+
+      // Accept the answer, or a simple plural either way.
+      const matches = g => g === ANSWER || g === ANSWER + "S" || g + "S" === ANSWER;
+
+      // Streak: days in a row the player finished the puzzle (solving or giving up both count).
+      const STREAK_KEY = "hope-streak";
+      const TODAY = "2026-10-31";
+      const dayBefore = iso => new Date(Date.parse(iso + "T00:00:00Z") - 864e5).toISOString().slice(0, 10);
+      const readStreak = () => { try { return JSON.parse(localStorage.getItem(STREAK_KEY)) || {}; } catch { return {}; } };
+      // Only the newest puzzle counts: playing old days from the archive mustn't fake a streak.
+      const IS_LATEST = true;
+      const bumpStreak = () => {
+        const s = readStreak();
+        if (IS_LATEST && s.last !== TODAY) {
+          s.count = s.last === dayBefore(TODAY) ? (s.count || 0) + 1 : 1;
+          s.best = Math.max(s.best || 0, s.count);
+          s.last = TODAY;
+          try { localStorage.setItem(STREAK_KEY, JSON.stringify(s)); } catch {}
+        }
+        return s;
+      };
+      const streakText = s => s.count ? `\u{1F525} ${s.count}-day streak \u00B7 best ${s.best}` : "";
+
+      const finish = (status, celebrate) => {
+        if (celebrate) {                       // count each finish once (not when reopening a finished day)
+          track(status === "solved" ? `solved-in-${Math.min(state.guesses, 4)}${state.guesses >= 4 ? "+" : ""}` : "gave-up");
+          track(`extra-hints-${extraHints()}`);
+        }
+        state.status = status;
+        save();
+        input.value = ANSWER;
+        input.disabled = true;
+        paint();
+        $("actions").hidden = true;
+        $("puzzle").classList.add("done");
+        $("feedback").textContent = "";
+        const solved = status === "solved";
+        $("puzzle").classList.toggle("solved", solved);
+        $("result-title").textContent = solved ? "You got it!" : `It was ${ANSWER}`;
+        const g = state.guesses, h = extraHints();
+        $("result-line").textContent = solved
+          ? `${ANSWER} in ${g} ${g === 1 ? "guess" : "guesses"}, with ${h} extra ${h === 1 ? "hint" : "hints"}. Your good news is ready.`
+          : "Here is how the clue worked. Your good news is ready anyway.";
+        $("steps").hidden = solved;
+        const streak = celebrate ? bumpStreak() : readStreak();   // only count a finish once
+        $("streak").textContent = streakText(streak);
+        $("result").hidden = false;
+        showHints();
+        if (celebrate) {
+          window.riseSun?.();
+          $("puzzle").scrollIntoView({ behavior: "smooth", block: "start" });   // centring the result cut off the title
+        }
+      };
+
+      input.addEventListener("input", paint);
+      entry.addEventListener("submit", e => {
+        e.preventDefault();
+        if (state.status !== "playing") return;
+        const guess = input.value.toUpperCase().replace(/[^A-Z]/g, "");
+        if (guess.length < LENGTH - 1) {
+          $("feedback").textContent = `It's ${LENGTH} letters.`;
+          return;
+        }
+        state.guesses += 1;
+        if (state.guesses === 1) track("started");
+        if (matches(guess)) return finish("solved", true);
+        save();
+        drawPicture();                         // pixel mode: a wrong guess sharpens the photo
+        // Encouraging but honest: never hint that a wrong guess is close.
+        $("feedback").textContent = ["Not quite. Try again!", "Not this one. Have another go.", "Nope, but you've got this."][state.guesses % 3];
+        entry.classList.remove("shake");
+        void entry.offsetWidth;                // restart the shake animation
+        entry.classList.add("shake");
+        input.select();
+      });
+      $("more-hint").addEventListener("click", () => {
+        state.hints = Math.min(hintItems.length, state.hints + 1);
+        track(`hint-${state.hints}`);
+        save();
+        showHints();
+        input.focus();
+      });
+      $("give-up").addEventListener("click", () => finish("gave-up", true));
+      $("share").addEventListener("click", async () => {
+        track("share");
+        const g = state.guesses, h = extraHints();
+        const streak = readStreak().count ? ` \u00B7 \u{1F525} ${readStreak().count}` : "";
+        const extra = "";
+        const text = state.status === "solved"
+          ? `Hope Today 31 Oct 2026: solved in ${g} ${g === 1 ? "guess" : "guesses"}, ${h} extra ${h === 1 ? "hint" : "hints"}${extra}${streak} \u{1F305}`
+          : `Hope Today 31 Oct 2026: this one beat me${extra}${streak} \u{1F305}`;
+        try { await navigator.clipboard.writeText(text); $("share").textContent = "Copied!"; }
+        catch { prompt("Copy this:", text); }
+      });
+
+      // ---------- Round two: Branch out ----------
+      
+
+      // How to play: three steps with Next/Back. Opens by itself on a first visit, then on tap.
+      const tutorial = $("tutorial");
+      const steps = [...tutorial.querySelectorAll(".step")];
+      const dots = [...tutorial.querySelectorAll(".tutorial-dots span")];
+      let step = 0;
+      const showStep = n => {
+        step = n;
+        steps.forEach((s, i) => { s.hidden = i !== n; });
+        dots.forEach((d, i) => d.classList.toggle("on", i === n));
+        $("tutorial-back").style.visibility = n === 0 ? "hidden" : "visible";
+        $("tutorial-next").textContent = n === steps.length - 1 ? "Let's play" : "Next";
+        steps[n].querySelector("h2").focus();
+      };
+      const openTutorial = () => { tutorial.showModal(); showStep(0); track("tutorial"); };
+      $("how").addEventListener("click", openTutorial);
+      $("tutorial-next").addEventListener("click", () => step < steps.length - 1 ? showStep(step + 1) : tutorial.close());
+      $("tutorial-back").addEventListener("click", () => showStep(Math.max(0, step - 1)));
+      tutorial.addEventListener("close", () => { if (state.status === "playing") input.focus(); });
+      let seenTutorial = false;
+      try { seenTutorial = localStorage.getItem("hope-tutorial-seen") === "1"; localStorage.setItem("hope-tutorial-seen", "1"); } catch {}
+      if (!seenTutorial) openTutorial();
+
+      // Pick up where the player left off today.
+      paint();
+      showHints();
+      if (state.status !== "playing") finish(state.status, false);
+      else input.focus();
+    })();
+  </script>
+</body>
+</html>

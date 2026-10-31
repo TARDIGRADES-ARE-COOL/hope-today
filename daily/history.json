@@ -2,13 +2,21 @@
   "urls": [
     "https://www.theguardian.com/australia-news/2026/oct/29/worldwide-legacy-almost-20m-raised-to-protect-majestic-tract-of-land-in-far-north-queensland",
     "https://www.theguardian.com/environment/2026/oct/30/wildlife-trusts-northumberland-nature-recovery-rothbury-estate",
-    "https://www.theguardian.com/environment/2026/oct/24/norfolk-couple-who-took-on-environmental-regulators-three-times-and-won"
+    "https://www.theguardian.com/environment/2026/oct/24/norfolk-couple-who-took-on-environmental-regulators-three-times-and-won",
+    "https://www.theguardian.com/australia-news/2026/oct/30/study-of-100000-australians-seeks-causes-of-mental-health-disorders-and-early-onset-cancer",
+    "https://www.theguardian.com/society/2026/oct/28/yvette-cooper-drops-plans-abolish-healthwatch-england",
+    "https://www.theguardian.com/australia-news/2026/oct/26/almost-two-thirds-of-australians-bulk-billed-for-all-gp-care-amid-extra-incentives-for-doctors"
   ],
   "topics": [
     {
       "date": "2026-10-30",
       "topic": "Saving wild places",
       "answer": "WILDLIFE"
+    },
+    {
+      "date": "2026-10-31",
+      "topic": "Medical care",
+      "answer": "HEALTH"
     }
   ]
 }
