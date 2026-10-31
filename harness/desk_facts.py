@@ -34,6 +34,12 @@ def normalise(card):
     return base, card["value"] * factor
 
 
+def enough_numbers(headline, text, per=2):
+    """Can this article give `per` facts? Each needs a number from the text that isn't in the headline.
+    Cheap and checked in code, so a story with one number never reaches the model (31 Oct: Healthwatch)."""
+    return len(numbers(text) - numbers(headline)) >= per
+
+
 def fact_problems(cards, stories, texts, per=2):
     """Everything wrong with the picked facts. texts[i] is story i's fetched article text."""
     problems = [f"story {i} has {n} facts, needs {per}"

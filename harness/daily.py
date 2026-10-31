@@ -12,7 +12,8 @@ from branch import make_branch
 from clues import ROTATION, fresh_free_hint, make_pixel_puzzle, make_puzzle, theme_hint
 from deck import env, render_deck
 from desk import render_page
-from desk_make import make_desk
+from desk_facts import enough_numbers
+from desk_make import PER, make_desk
 from llm import client
 from tools import IMAGES, fetch_article, fetched, search_news
 
@@ -380,12 +381,40 @@ def choose_puzzle(topic, day=None, mode="wordplay", force_type=None, strict=Fals
     return puzzle, rejected
 
 
-def build_desk(stories, folder, day, theme, puzzle_id, log, spoilers):
+def desk_stories(stories, spare, theme, log):
+    """The desk's 3 stories: the deck's stories with enough numbers for PER facts, in order, then
+    other strong stories from this week if the deck runs short (they get headlines written here)."""
+    ok = [s for s in stories if enough_numbers(s["headline"], fetched[s["url"]]["text"], PER)]
+    if len(ok) < len(stories):
+        log(f"desk: {len(stories) - len(ok)} deck story(ies) have too few numbers")
+    extra = []
+    for s in spare:
+        if len(ok) + len(extra) >= 3:
+            break
+        article = fetch_article(s["url"])
+        if "error" in article:                    # article budget used up
+            break
+        if enough_numbers(article["title"], article["text"], PER):
+            extra.append(s)
+    if extra:
+        # The written headline can carry a number the article title didn't, so check again.
+        written = [w for w in write_stories({"topic": theme, "stories": extra})
+                   if enough_numbers(w["headline"], fetched[w["url"]]["text"], PER)]
+        log(f"desk: topped up with {len(written)} other strong story(ies)")
+        ok += written
+    return ok[:3]
+
+
+def build_desk(stories, spare, folder, day, theme, puzzle_id, log, spoilers):
     """The day's Copy Desk, rendered to desk.html, or None. Never raises: a desk bug must not cost the day."""
     try:
-        desk = make_desk(stories, [fetched[s["url"]]["text"] for s in stories[:3]],
+        chosen = desk_stories(stories, spare, theme, log)
+        desk = make_desk(chosen, [fetched[s["url"]]["text"] for s in chosen],
                          live=LIVE_DESK, log=log, spoilers=spoilers)
         if desk:
+            # Desk stories can be outside the deck; their urls go into history.json too.
+            for s, d in zip(chosen, desk["stories"]):
+                d["url"] = s["url"]
             render_page(desk, folder / "desk.html", today=day, theme=theme, label="",
                         word_key=f"hope-puzzle-{day}-{puzzle_id}")
             return desk
@@ -396,8 +425,9 @@ def build_desk(stories, folder, day, theme, puzzle_id, log, spoilers):
     return None
 
 
-def build_day(topic, puzzle, day=None, spoilers=True):
-    """Write the day's deck and its data file into daily/YYYY-MM-DD/."""
+def build_day(topic, puzzle, day=None, spoilers=True, spare=()):
+    """Write the day's deck and its data file into daily/YYYY-MM-DD/.
+    `spare`: other strong stories, best first, for the desk if the deck's stories run short."""
     day = (day or date.today()).isoformat()
     stories = write_stories(topic)
     # Round two, built from the articles we just read (they're cached in tools.fetched).
@@ -410,7 +440,7 @@ def build_day(topic, puzzle, day=None, spoilers=True):
     if "error" in result:
         raise SystemExit(f"Deck failed: {result['error']}")
     pid = hashlib.sha1((puzzle["sentence"] or puzzle.get("image", "")).encode()).hexdigest()[:8]
-    desk = build_desk(stories, folder, day, topic["topic"], pid, print, spoilers) if DESK else None
+    desk = build_desk(stories, spare, folder, day, topic["topic"], pid, print, spoilers) if DESK else None
     # The puzzle page comes first; solving (or giving up) leads to the desk, if there is one, then the deck.
     page = env.get_template("puzzle.html").render(
         today=day, puzzle=puzzle, has_desk=bool(desk),
@@ -428,7 +458,7 @@ def build_day(topic, puzzle, day=None, spoilers=True):
         "why": topic["why"], "puzzle": puzzle, "branch": branch, "stories": stories,
         **({"desk": desk} if desk else {}),
     }, indent=2), encoding="utf-8")
-    return folder, stories
+    return folder, stories, desk
 
 
 def load_history(path=HISTORY):
@@ -532,13 +562,14 @@ if __name__ == "__main__":
         say(f"  Level {h['level']}{' (free)' if h['free'] else ''}: {h['text']}")
     say(f"  Give up: {' / '.join(puzzle['solution']['steps'])}")
 
-    folder, stories = build_day(today, puzzle, spoilers=not blind)
+    spare = [s for s in keep if s["url"] not in {t["url"] for t in today["stories"]}]
+    folder, stories, desk = build_day(today, puzzle, spoilers=not blind, spare=spare)
     for s in stories:
         say(f"  - {s['headline']}")
     print(f"Puzzle ready ({puzzle['length']} letters, {len(stories)} stories): {folder}/index.html")
 
     if save:
-        save_day(history, today["topic"], today["answer"], [s["url"] for s in stories])
+        save_day(history, today["topic"], today["answer"], [s["url"] for s in stories + (desk["stories"] if desk else [])])
         print("Recorded in history.json")
     else:
         print("Dry run: not recorded in history (use --save)")
