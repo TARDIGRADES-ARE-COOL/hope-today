@@ -1,0 +1,1624 @@
+{
+  "date": "2026-11-02",
+  "topic": "Community protection",
+  "answer": "GUARD",
+  "why": "These stories highlight people using local knowledge, early warnings, and protected areas to keep communities and animals safer.",
+  "puzzle": {
+    "type": "first",
+    "instruction": "Today's topic is tucked into this sentence. Can you spot how?",
+    "sentence": "Parents thanked the good uniformed aide redirecting drivers beside the crosswalk.",
+    "length": 5,
+    "answer": "GUARD",
+    "highlight": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "hints": [
+      {
+        "level": 1,
+        "free": true,
+        "text": "Peek at the starts\u2014chosen word initials can secretly spell the topic. Like <b>F</b>unky <b>I</b>guanas <b>Z</b>ip <b>Z</b>oom, which spells FIZZ."
+      },
+      {
+        "level": 2,
+        "free": false,
+        "text": "\ud83d\udee1\ufe0f Watchful protector at a gate, museum, or basketball hoop."
+      },
+      {
+        "level": 3,
+        "free": false,
+        "text": "Find 5 words in a row; the first one starts with G.",
+        "highlight": [
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "solution": {
+      "answer": "GUARD",
+      "steps": [
+        "The trick: the first letters of a run of words spelled the answer.",
+        "Where: \u201cgood uniformed aide redirecting drivers\u201d.",
+        "How: G \u00b7 U \u00b7 A \u00b7 R \u00b7 D \u2192 GUARD"
+      ]
+    }
+  },
+  "branch": {
+    "prompt": "Words linked to GUARD",
+    "answers": [
+      {
+        "name": "protect",
+        "aliases": [
+          "protecting",
+          "protected"
+        ],
+        "zipf": 4.92,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "protection",
+        "aliases": [
+          "defence",
+          "defense"
+        ],
+        "zipf": 4.93,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "defend",
+        "aliases": [
+          "defending",
+          "defended"
+        ],
+        "zipf": 4.47,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "defender",
+        "aliases": [
+          "protector"
+        ],
+        "zipf": 4.11,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "security",
+        "aliases": [
+          "secure"
+        ],
+        "zipf": 5.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "safety",
+        "aliases": [
+          "safe"
+        ],
+        "zipf": 5.07,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "watch",
+        "aliases": [
+          "watching"
+        ],
+        "zipf": 5.34,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "watcher",
+        "aliases": [
+          "watchperson"
+        ],
+        "zipf": 3.03,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sentry",
+        "aliases": [
+          "sentinels"
+        ],
+        "zipf": 3.08,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sentinel",
+        "aliases": [
+          "sentries"
+        ],
+        "zipf": 3.41,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "shield",
+        "aliases": [
+          "shielding"
+        ],
+        "zipf": 4.3,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "patrol",
+        "aliases": [
+          "patrolling"
+        ],
+        "zipf": 4.14,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "police",
+        "aliases": [
+          "cops"
+        ],
+        "zipf": 5.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "officer",
+        "aliases": [
+          "policeman",
+          "policewoman"
+        ],
+        "zipf": 5.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "soldier",
+        "aliases": [
+          "trooper"
+        ],
+        "zipf": 4.46,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "bouncer",
+        "aliases": [
+          "doorstaff"
+        ],
+        "zipf": 3.12,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "doorman",
+        "aliases": [
+          "door attendant"
+        ],
+        "zipf": 3.59,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "warden",
+        "aliases": [
+          "wardens"
+        ],
+        "zipf": 3.63,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "keeper",
+        "aliases": [
+          "custodian"
+        ],
+        "zipf": 4.02,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "lookout",
+        "aliases": [
+          "spotter"
+        ],
+        "zipf": 3.61,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "custodian",
+        "aliases": [
+          "caretaker"
+        ],
+        "zipf": 3.45,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "protector",
+        "aliases": [
+          "defender"
+        ],
+        "zipf": 4.11,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "vigilance",
+        "aliases": [
+          "watchfulness"
+        ],
+        "zipf": 3.16,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "alert",
+        "aliases": [
+          "warning"
+        ],
+        "zipf": 4.59,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "alarm",
+        "aliases": [
+          "sirens"
+        ],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "gate",
+        "aliases": [
+          "gates"
+        ],
+        "zipf": 4.47,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "door",
+        "aliases": [
+          "doors"
+        ],
+        "zipf": 5.08,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "lock",
+        "aliases": [
+          "locks"
+        ],
+        "zipf": 4.51,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "key",
+        "aliases": [
+          "keys"
+        ],
+        "zipf": 5.12,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "fence",
+        "aliases": [
+          "fencing"
+        ],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "wall",
+        "aliases": [
+          "walls"
+        ],
+        "zipf": 5.04,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "barrier",
+        "aliases": [
+          "barricade"
+        ],
+        "zipf": 4.15,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "checkpoint",
+        "aliases": [],
+        "zipf": 3.39,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "prison",
+        "aliases": [
+          "penitentiary"
+        ],
+        "zipf": 4.8,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "jail",
+        "aliases": [
+          "gaol"
+        ],
+        "zipf": 4.62,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "surveillance",
+        "aliases": [
+          "monitoring"
+        ],
+        "zipf": 4.34,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "monitor",
+        "aliases": [
+          "observe"
+        ],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "watchtower",
+        "aliases": [
+          "observation tower"
+        ],
+        "zipf": 3.98,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "tower",
+        "aliases": [
+          "lookout tower"
+        ],
+        "zipf": 4.5,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "post",
+        "aliases": [
+          "station"
+        ],
+        "zipf": 5.43,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "station",
+        "aliases": [
+          "security station"
+        ],
+        "zipf": 5.01,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "duty",
+        "aliases": [
+          "shift"
+        ],
+        "zipf": 4.71,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "shift",
+        "aliases": [
+          "watch shift"
+        ],
+        "zipf": 4.57,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rounds",
+        "aliases": [
+          "patrol rounds"
+        ],
+        "zipf": 4.3,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "perimeter",
+        "aliases": [
+          "boundary"
+        ],
+        "zipf": 4.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "entrance",
+        "aliases": [
+          "entry"
+        ],
+        "zipf": 4.67,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "exit",
+        "aliases": [
+          "way out"
+        ],
+        "zipf": 5.86,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "access",
+        "aliases": [
+          "entry access"
+        ],
+        "zipf": 5.05,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "badge",
+        "aliases": [
+          "ID badge"
+        ],
+        "zipf": 4.02,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "uniform",
+        "aliases": [
+          "livery"
+        ],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "helmet",
+        "aliases": [
+          "hard hat"
+        ],
+        "zipf": 4.49,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "vest",
+        "aliases": [
+          "protective vest"
+        ],
+        "zipf": 3.73,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "armor",
+        "aliases": [
+          "armour"
+        ],
+        "zipf": 3.97,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "weapon",
+        "aliases": [
+          "arms"
+        ],
+        "zipf": 4.82,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "baton",
+        "aliases": [
+          "truncheon"
+        ],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "radio",
+        "aliases": [
+          "walkie talkie"
+        ],
+        "zipf": 5.01,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "whistle",
+        "aliases": [
+          "signal whistle"
+        ],
+        "zipf": 3.88,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "flashlight",
+        "aliases": [
+          "torch"
+        ],
+        "zipf": 3.74,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "keys",
+        "aliases": [
+          "keyring"
+        ],
+        "zipf": 4.39,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "safe",
+        "aliases": [
+          "strongbox"
+        ],
+        "zipf": 5.07,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "vault",
+        "aliases": [
+          "bank vault"
+        ],
+        "zipf": 3.9,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "property",
+        "aliases": [
+          "assets"
+        ],
+        "zipf": 5.11,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "home",
+        "aliases": [
+          "house"
+        ],
+        "zipf": 5.81,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "school",
+        "aliases": [
+          "campus"
+        ],
+        "zipf": 5.71,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "hospital",
+        "aliases": [
+          "clinic"
+        ],
+        "zipf": 5.07,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "airport",
+        "aliases": [
+          "airfield"
+        ],
+        "zipf": 4.84,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "museum",
+        "aliases": [
+          "gallery"
+        ],
+        "zipf": 4.71,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "shop",
+        "aliases": [
+          "store"
+        ],
+        "zipf": 5.02,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "nightclub",
+        "aliases": [
+          "club"
+        ],
+        "zipf": 5.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "stadium",
+        "aliases": [
+          "arena"
+        ],
+        "zipf": 4.63,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "border",
+        "aliases": [
+          "frontier"
+        ],
+        "zipf": 4.7,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "embassy",
+        "aliases": [
+          "consulate"
+        ],
+        "zipf": 4.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "prisoner",
+        "aliases": [
+          "inmate"
+        ],
+        "zipf": 4.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "convict",
+        "aliases": [
+          "felon"
+        ],
+        "zipf": 3.56,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "cell",
+        "aliases": [
+          "jail cell"
+        ],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "inmate",
+        "aliases": [
+          "prisoner"
+        ],
+        "zipf": 4.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "escort",
+        "aliases": [
+          "accompany"
+        ],
+        "zipf": 4.0,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "screening",
+        "aliases": [
+          "security screening"
+        ],
+        "zipf": 4.15,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "inspection",
+        "aliases": [
+          "check"
+        ],
+        "zipf": 5.31,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "search",
+        "aliases": [
+          "frisk"
+        ],
+        "zipf": 4.96,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "frisk",
+        "aliases": [
+          "pat down"
+        ],
+        "zipf": 4.23,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "detain",
+        "aliases": [
+          "hold"
+        ],
+        "zipf": 5.19,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "arrest",
+        "aliases": [
+          "apprehend"
+        ],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "prevent",
+        "aliases": [
+          "stop"
+        ],
+        "zipf": 5.52,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "deter",
+        "aliases": [
+          "discourage"
+        ],
+        "zipf": 3.57,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "secure",
+        "aliases": [
+          "make safe"
+        ],
+        "zipf": 5.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "lockdown",
+        "aliases": [
+          "shutdown"
+        ],
+        "zipf": 3.62,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "curfew",
+        "aliases": [
+          "night curfew"
+        ],
+        "zipf": 3.37,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "evacuation",
+        "aliases": [
+          "evacuating"
+        ],
+        "zipf": 3.74,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "emergency",
+        "aliases": [
+          "crisis"
+        ],
+        "zipf": 4.72,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "threat",
+        "aliases": [
+          "danger"
+        ],
+        "zipf": 4.6,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "intruder",
+        "aliases": [
+          "trespasser"
+        ],
+        "zipf": 3.37,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "burglar",
+        "aliases": [
+          "thief"
+        ],
+        "zipf": 3.88,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "robber",
+        "aliases": [
+          "mugger"
+        ],
+        "zipf": 3.39,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "attacker",
+        "aliases": [
+          "assailant"
+        ],
+        "zipf": 3.59,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "spy",
+        "aliases": [
+          "agent"
+        ],
+        "zipf": 4.81,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "saboteur",
+        "aliases": [
+          "wrecker"
+        ],
+        "zipf": 2.61,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "ambush",
+        "aliases": [
+          "surprise attack"
+        ],
+        "zipf": 4.59,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "decoy",
+        "aliases": [
+          "lure"
+        ],
+        "zipf": 3.67,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "trap",
+        "aliases": [
+          "snare"
+        ],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "raid",
+        "aliases": [
+          "assault"
+        ],
+        "zipf": 4.44,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "siege",
+        "aliases": [
+          "blockade"
+        ],
+        "zipf": 3.93,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "fort",
+        "aliases": [
+          "fortress"
+        ],
+        "zipf": 4.45,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "citadel",
+        "aliases": [
+          "stronghold"
+        ],
+        "zipf": 3.42,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "bastion",
+        "aliases": [
+          "bulwark"
+        ],
+        "zipf": 3.31,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "moat",
+        "aliases": [
+          "ditch"
+        ],
+        "zipf": 3.9,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rampart",
+        "aliases": [
+          "embankment"
+        ],
+        "zipf": 3.15,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "barricade",
+        "aliases": [
+          "roadblock"
+        ],
+        "zipf": 3.09,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sandbag",
+        "aliases": [
+          "sandbags"
+        ],
+        "zipf": 2.59,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "checkpoint gate",
+        "aliases": [
+          "entry barrier"
+        ],
+        "zipf": 4.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "metal detector",
+        "aliases": [
+          "security scanner"
+        ],
+        "zipf": 3.68,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "X-ray scanner",
+        "aliases": [],
+        "zipf": 3.52,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "CCTV",
+        "aliases": [
+          "closed circuit TV"
+        ],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "motion sensor",
+        "aliases": [
+          "movement sensor"
+        ],
+        "zipf": 3.88,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "burglar alarm",
+        "aliases": [
+          "intruder alarm"
+        ],
+        "zipf": 3.32,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "fire alarm",
+        "aliases": [
+          "smoke alarm"
+        ],
+        "zipf": 4.24,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "smoke detector",
+        "aliases": [
+          "fire detector"
+        ],
+        "zipf": 3.7,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sprinkler",
+        "aliases": [
+          "sprinkler system"
+        ],
+        "zipf": 3.05,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "emergency exit",
+        "aliases": [
+          "fire exit"
+        ],
+        "zipf": 4.3,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "first aid",
+        "aliases": [
+          "medical aid"
+        ],
+        "zipf": 4.73,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "firefighter",
+        "aliases": [
+          "fireman"
+        ],
+        "zipf": 3.37,
+        "tier": "Gem",
+        "points": 10,
+        "news": true
+      },
+      {
+        "name": "paramedic",
+        "aliases": [
+          "EMT"
+        ],
+        "zipf": 3.19,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "ranger",
+        "aliases": [
+          "park ranger"
+        ],
+        "zipf": 3.88,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "game warden",
+        "aliases": [
+          "wildlife officer"
+        ],
+        "zipf": 4.25,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "warden service",
+        "aliases": [
+          "ranger service"
+        ],
+        "zipf": 3.87,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "conservation",
+        "aliases": [
+          "nature protection"
+        ],
+        "zipf": 4.61,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "wildlife",
+        "aliases": [
+          "wild animals"
+        ],
+        "zipf": 4.52,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "habitat",
+        "aliases": [
+          "ecosystem"
+        ],
+        "zipf": 3.98,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "reserve",
+        "aliases": [
+          "nature reserve"
+        ],
+        "zipf": 4.6,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "sanctuary",
+        "aliases": [
+          "wildlife sanctuary"
+        ],
+        "zipf": 3.93,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "national park",
+        "aliases": [
+          "nature park"
+        ],
+        "zipf": 5.0,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "protected area",
+        "aliases": [
+          "conservation area"
+        ],
+        "zipf": 4.46,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "marine reserve",
+        "aliases": [
+          "sea reserve"
+        ],
+        "zipf": 4.47,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "watchdog",
+        "aliases": [
+          "oversight body"
+        ],
+        "zipf": 3.82,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "oversight",
+        "aliases": [
+          "supervision"
+        ],
+        "zipf": 3.94,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "supervise",
+        "aliases": [
+          "oversee"
+        ],
+        "zipf": 3.51,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "chaperone",
+        "aliases": [
+          "escort"
+        ],
+        "zipf": 4.0,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "caretaker",
+        "aliases": [
+          "custodian"
+        ],
+        "zipf": 3.45,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "steward",
+        "aliases": [
+          "custodian"
+        ],
+        "zipf": 3.45,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "gatekeeper",
+        "aliases": [
+          "doorkeeper"
+        ],
+        "zipf": 2.79,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "doorkeeper",
+        "aliases": [
+          "porter"
+        ],
+        "zipf": 3.98,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "porter",
+        "aliases": [
+          "concierge"
+        ],
+        "zipf": 3.98,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "receptionist",
+        "aliases": [
+          "front desk"
+        ],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "marshal",
+        "aliases": [
+          "marshall"
+        ],
+        "zipf": 4.24,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "constable",
+        "aliases": [
+          "peace officer"
+        ],
+        "zipf": 4.72,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "sheriff",
+        "aliases": [
+          "county officer"
+        ],
+        "zipf": 4.8,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "deputy",
+        "aliases": [
+          "assistant officer"
+        ],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "trooper",
+        "aliases": [
+          "state police"
+        ],
+        "zipf": 5.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "military police",
+        "aliases": [
+          "MP"
+        ],
+        "zipf": 4.96,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "body armor",
+        "aliases": [
+          "body armour"
+        ],
+        "zipf": 3.95,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "riot shield",
+        "aliases": [
+          "protective shield"
+        ],
+        "zipf": 3.91,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "riot police",
+        "aliases": [
+          "public order police"
+        ],
+        "zipf": 4.97,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "night watchman",
+        "aliases": [
+          "night watcher"
+        ],
+        "zipf": 3.03,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "border patrol",
+        "aliases": [
+          "frontier patrol"
+        ],
+        "zipf": 4.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "watchman",
+        "aliases": [],
+        "zipf": 3.01,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "vigil",
+        "aliases": [],
+        "zipf": 3.24,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "vigilant",
+        "aliases": [],
+        "zipf": 3.34,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "martial",
+        "aliases": [],
+        "zipf": 4.06,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "military",
+        "aliases": [],
+        "zipf": 5.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "army",
+        "aliases": [],
+        "zipf": 5.06,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "custody",
+        "aliases": [],
+        "zipf": 4.22,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "ward",
+        "aliases": [],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "safekeeping",
+        "aliases": [],
+        "zipf": 2.64,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "outpost",
+        "aliases": [],
+        "zipf": 3.39,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "night watch",
+        "aliases": [],
+        "zipf": 5.15,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "keep",
+        "aliases": [],
+        "zipf": 5.66,
+        "tier": "Common",
+        "points": 1
+      }
+    ],
+    "gem": "firefighter",
+    "gem_from_news": true,
+    "dropped": 19,
+    "added_by_players": 12
+  },
+  "stories": [
+    {
+      "headline": "Rangers Back Desert Lions",
+      "summary": "Namibian rangers are using real-time data and traditional tracking knowledge to protect farmers and help a recovering lion population.",
+      "key_points": [
+        "Namibia",
+        "real-time data",
+        "traditional knowledge",
+        "farmers"
+      ],
+      "why_it_matters": "It shows people and wildlife can coexist through smarter protection and local expertise.",
+      "url": "https://www.positive.news/society/smartphones-ancient-tracking-skills-and-a-future-for-desert-lions/",
+      "date": "2026-10-29",
+      "image": null,
+      "source": "Positive News"
+    },
+    {
+      "headline": "Bamboo Shields Village",
+      "summary": "A Philippine fishing village built a nature-based coastal defense using local materials to cut flood damage from waves and storm surges.",
+      "key_points": [
+        "Pamarawan barangay",
+        "14 hectares",
+        "bamboo poles",
+        "oyster shells and coconut husks"
+      ],
+      "why_it_matters": "It offers a low-cost, community-made way to help vulnerable places stay safer as storms intensify.",
+      "url": "https://news.mongabay.com/2026/10/philippine-village-uses-nature-to-defend-against-floods-with-bamboo-shells-and-husks/",
+      "date": "2026-10-30",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29135605/1000020683-Pamarawan-barangay-768x512.jpg",
+      "source": "Mongabay"
+    },
+    {
+      "headline": "Fire Alerts For Peatlands",
+      "summary": "In eastern Sumatra, early warning efforts aim to give peat communities time to respond before fires spread.",
+      "key_points": [
+        "Muaro Jambi district",
+        "Sumatra",
+        "peat depths up to 11 meters",
+        "strong El Ni\u00f1o"
+      ],
+      "why_it_matters": "Earlier alerts can help communities protect lives, land, and carbon-rich peat before blazes grow.",
+      "url": "https://news.mongabay.com/2026/10/early-tech-warning-hopes-to-give-sumatras-peat-community-a-head-start-on-fires/",
+      "date": "2026-10-29",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29124349/Kondisi-kanal-yang-kering-di-kawasan-HKm-Air-Merah-Sungai-Gelam-768x512.jpg",
+      "source": "Mongabay"
+    },
+    {
+      "headline": "Island Fishers Gain Ground",
+      "summary": "Fishers on Pemba Island are creating new marine protected areas after shared concern over shrinking catches.",
+      "key_points": [
+        "Tumbe village",
+        "12 elected members",
+        "Pemba Island",
+        "PECCA established in 2005"
+      ],
+      "why_it_matters": "It shows local cooperation can rebuild fish stocks and strengthen livelihoods.",
+      "url": "https://news.mongabay.com/2026/10/pembas-new-marine-protected-areas-show-the-power-of-collaboration-to-meet-30x30-goal/",
+      "date": "2026-10-29",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29063925/DSC04884_AdrianPonsardWCS-scaled-1-768x512.jpg",
+      "source": "Mongabay"
+    },
+    {
+      "headline": "Cat Returns To Wild",
+      "summary": "An injured fishing cat in Bangladesh recovered after rehabilitation and was released with a tracking collar near a wetland.",
+      "key_points": [
+        "northern Bangladesh",
+        "February 2026",
+        "5 kilograms to 12 kg",
+        "tea estate bordering a large freshwater wetland"
+      ],
+      "why_it_matters": "It proves rescue and release efforts can give threatened wildlife another chance to thrive.",
+      "url": "https://news.mongabay.com/short-article/2026/10/fishing-cat-rescue-and-release-offers-potential-model-for-conservation-in-bangladesh/",
+      "date": "2026-10-29",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29054627/61-768x512.jpg",
+      "source": "Mongabay"
+    }
+  ]
+}

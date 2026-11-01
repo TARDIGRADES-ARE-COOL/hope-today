@@ -8,7 +8,12 @@
     "https://www.theguardian.com/australia-news/2026/oct/26/almost-two-thirds-of-australians-bulk-billed-for-all-gp-care-amid-extra-incentives-for-doctors",
     "https://www.theguardian.com/environment/2026/oct/27/homes-across-uk-to-get-low--or-no-interest-loans-to-fund-solar-panels-and-heat-pumps",
     "https://news.mongabay.com/short-article/2026/10/chinas-record-breaking-exports-of-clean-tech-are-making-a-big-dent-in-emissions-report-says/",
-    "https://www.sciencedaily.com/releases/2026/10/261030002931.htm"
+    "https://www.sciencedaily.com/releases/2026/10/261030002931.htm",
+    "https://www.positive.news/society/smartphones-ancient-tracking-skills-and-a-future-for-desert-lions/",
+    "https://news.mongabay.com/2026/10/philippine-village-uses-nature-to-defend-against-floods-with-bamboo-shells-and-husks/",
+    "https://news.mongabay.com/2026/10/early-tech-warning-hopes-to-give-sumatras-peat-community-a-head-start-on-fires/",
+    "https://news.mongabay.com/2026/10/pembas-new-marine-protected-areas-show-the-power-of-collaboration-to-meet-30x30-goal/",
+    "https://news.mongabay.com/short-article/2026/10/fishing-cat-rescue-and-release-offers-potential-model-for-conservation-in-bangladesh/"
   ],
   "topics": [
     {
@@ -25,6 +30,11 @@
       "date": "2026-11-01",
       "topic": "Power shift",
       "answer": "SOLAR"
+    },
+    {
+      "date": "2026-11-02",
+      "topic": "Community protection",
+      "answer": "GUARD"
     }
   ],
   "reserve": {

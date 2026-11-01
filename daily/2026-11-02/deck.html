@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.classList.add("js")</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hope Today · Good news: Community protection</title>
+  <script>
+  window.track = name => { try { window.goatcounter?.count({ path: "event/" + name, title: name, event: true }); } catch {} };
+</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #a6b3bc;            /* slate: the table the clippings lie on */
+      --paper: #e3e2da;
+      --ink: #1c1c1c;
+      --muted: #38424a;
+      --accent: #2c3620;        /* olive: buttons and the closing card */
+      --accent-ink: #e3e2da;
+      --field-1: #b7c8be;       /* sage */
+      --field-2: #d6c4b8;       /* blush */
+      --field-3: #b2bdc5;       /* light slate */
+      --backdrop-dim: 1;
+
+      --margin: clamp(16px, 4vw, 56px);
+      --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+      --step-body: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+      --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+      --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1f2622;
+        --paper: #d9d7cc;
+        --accent: #2c3620;
+        --field-1: #b0c0b6;
+        --field-2: #cdbcb0;
+        --field-3: #aab5bd;
+        --backdrop-dim: 0.9;      /* the scene is already dusky; only a touch darker at night */
+      }
+    }
+
+    * { box-sizing: border-box; }
+    /* Scale with the screen: 16px on phones and laptops, growing on big monitors
+       (about 19px at 1920 wide, 21px at 2560). Widths below are in rem, so the whole
+       layout grows with the text and keeps its proportions. */
+    html { font-size: clamp(100%, 0.4vw + 11px, 150%); scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: #2c3620;      /* shown only if the dawn scene can't be drawn */
+      color: var(--ink);
+      font-family: "Literata", Georgia, serif;
+      font-size: var(--step-body);
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      font-family: "Rokkitt", "Arial Narrow", sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      margin: 0;
+      text-wrap: balance;
+    }
+    p { margin: 0; }
+    a { color: inherit; }
+    img { display: block; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    .slide {
+      position: relative;
+      min-height: 100svh;
+      scroll-snap-align: start;
+      display: grid;
+      align-items: center;
+      padding: clamp(32px, 6vh, 72px) var(--margin);
+      overflow: hidden;
+    }
+    .photo {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 5 / 4;
+      object-fit: cover;
+    }
+
+    .button {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-family: "Rokkitt", sans-serif;
+      font-weight: 800;
+      font-size: var(--step-lead);
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 28px;
+    }
+
+    /* ---------- Title: a paper card over the first story's photo ---------- */
+    .cover { justify-items: center; }
+    .cover-card {
+      position: relative;
+      width: min(55rem, 100%);
+      container-type: inline-size;
+      background: var(--paper);
+      padding: clamp(24px, 4vw, 48px);
+      display: grid;
+      gap: clamp(20px, 3vh, 32px);
+      min-height: min(760px, 82svh);
+      align-content: space-between;
+    }
+    .cover-card h1 {
+      font-size: 14cqw;          /* fills the card's width, whatever the screen */
+      display: flex;
+      justify-content: space-between;
+      gap: 0.3em;
+    }
+    .cover-facts {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 24px;
+      font-size: var(--step-lead);
+      font-weight: 600;
+    }
+    .cover-said { font-size: var(--step-lead); max-width: 32ch; }
+    .cover-photos {
+      display: grid;
+      gap: 8px;
+    }
+    .cover-photos img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+    .cover-said q { font-style: italic; }
+    .cover-foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: var(--step-small);
+      color: var(--muted);
+    }
+
+    /* ---------- Contents: one giant word, one filled bar per story ---------- */
+    .contents { justify-items: center; }
+    .contents-inner {
+      width: min(45rem, 100%);
+      container-type: inline-size;
+      background: var(--paper);
+      padding: clamp(24px, 4vw, 48px);
+      min-height: min(760px, 82svh);
+      display: grid;
+      align-content: center;
+    }
+    .contents h2 { font-size: 29cqw; line-height: 0.8; margin-bottom: 20px; }
+    .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .bars a {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      min-height: 56px;
+      padding: 14px 18px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .bars li:nth-child(3n+1) a { background: var(--field-1); }
+    .bars li:nth-child(3n+2) a { background: var(--field-2); }
+    .bars li:nth-child(3n+3) a { background: var(--field-3); }
+    .bars span { font-size: var(--step-small); font-weight: 400; white-space: nowrap; }
+
+    /* ---------- Story: a torn clipping over the story's own photo ---------- */
+    .story { justify-items: center; }
+    .clipping {
+      position: relative;
+      width: min(74rem, 100%);
+      background: var(--paper);
+      padding: clamp(32px, 4vw, 52px) clamp(24px, 3.5vw, 48px);
+      clip-path: polygon(0% 0px, 5% 5px, 10% 2px, 15% 7px, 20% 1px, 25% 4px, 30% 8px, 35% 3px, 40% 6px, 45% 1px, 50% 5px, 55% 2px, 60% 7px, 65% 3px, 70% 0px, 75% 6px, 80% 2px, 85% 5px, 90% 1px, 95% 7px, 100% 3px, 100% calc(100% - 3px), 95% calc(100% - 7px), 90% calc(100% - 1px), 85% calc(100% - 5px), 80% calc(100% - 2px), 75% calc(100% - 6px), 70% calc(100% - 0px), 65% calc(100% - 3px), 60% calc(100% - 7px), 55% calc(100% - 2px), 50% calc(100% - 5px), 45% calc(100% - 1px), 40% calc(100% - 6px), 35% calc(100% - 3px), 30% calc(100% - 8px), 25% calc(100% - 4px), 20% calc(100% - 1px), 15% calc(100% - 7px), 10% calc(100% - 2px), 5% calc(100% - 5px), 0% calc(100% - 0px));
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: clamp(24px, 3.5vw, 48px);
+      align-items: center;
+      transform: rotate(var(--tilt, 0deg));
+    }
+    .clipping:not(:has(.photo)) { grid-template-columns: 1fr; width: min(49rem, 100%); }
+    .clipping-text { display: grid; gap: 20px; }
+    .clipping h2 { font-size: var(--step-head); }
+    .clipping .summary { font-size: var(--step-lead); line-height: 1.45; }
+    .points { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .points li { position: relative; padding-left: 26px; }
+    .points li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+    }
+    .why { padding: 16px 20px; }
+    .why strong { font-weight: 600; }
+    .story:nth-of-type(3n+1) .why { background: var(--field-1); }
+    .story:nth-of-type(3n+2) .why { background: var(--field-2); }
+    .story:nth-of-type(3n+3) .why { background: var(--field-3); }
+    .source {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 16px;
+      font-size: var(--step-small);
+      color: var(--muted);
+    }
+    .source a { font-weight: 600; color: var(--ink); }
+
+    /* ---------- Closing: the back of a postcard on the olive table ---------- */
+    .closing { justify-items: center; }
+    .postcard { position: relative; width: min(62.5rem, 100%); }
+    .scallops { display: block; width: 100%; height: 28px; fill: var(--paper); }
+    .postcard-body {
+      background: var(--paper);
+      padding: clamp(24px, 4vw, 56px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 5vw, 72px);
+    }
+    .postcard h2 { grid-column: 1 / -1; font-size: var(--step-head); }
+    .postcard-message { font-size: var(--step-lead); line-height: 1.45; }
+    .postcard-right { display: grid; gap: 16px; align-content: start; }
+    .postcard h3 { font-size: var(--step-lead); }
+    .postcard ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .imprint {
+      grid-column: 1 / -1;
+      max-width: 70ch;
+      justify-self: center;
+      text-align: center;
+      font-size: var(--step-small);
+      color: var(--muted);
+    }
+
+    @media (max-width: 1000px) {
+      .clipping { grid-template-columns: 1fr; width: min(42.5rem, 100%); }
+      .clipping-text { display: contents; }     /* let the headline move above the photo */
+      .clipping h2 { order: -1; }
+    }
+
+    /* ---------- Phone ---------- */
+    @media (max-width: 700px) {
+      /* Phones: plain scrolling. Stories are taller than the screen, and snapping to
+         whole slides made swiping jump around mid-story. */
+      html { scroll-snap-type: none; }
+      .slide { min-height: auto; padding-block: 28px; }
+      .cover, .contents, .closing { min-height: 100svh; }
+      /* Phone-sized reading: smaller text, tighter spacing, no tilt (it slants every line). */
+      .clipping { grid-template-columns: 1fr; padding: 28px 18px; gap: 14px; transform: none; }
+      .clipping-text { gap: 14px; }
+      .clipping h2 { font-size: 1.9rem; }
+      .clipping .summary { font-size: 1.125rem; line-height: 1.5; }
+      .points, .why, .points li { font-size: 1.0625rem; line-height: 1.5; }
+      .points { gap: 6px; }
+      .why { padding: 12px 14px; }
+      .clipping .photo { aspect-ratio: 16 / 9; }
+      body .dots { display: none; }   /* they sat on top of the text; scrolling needs no dots (body: beats the later .dots rule) */
+      .cover-card h1 { flex-direction: column; gap: 0; }
+      .postcard-body { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Layer 11: feedback, entrances, slide dots, Keep this ---------- */
+    .button, .bars a, .keep, .dots button, .source a, .postcard a {
+      transition: transform 120ms ease;
+    }
+    .button:hover, .bars a:hover, .keep:hover { transform: translateY(-2px); }
+    .button:active, .bars a:active, .keep:active { transform: translateY(1px) scale(0.98); }
+    .source a:hover, .postcard a:hover { transform: translateX(3px); display: inline-block; }
+
+    /* Parts of each slide rise in one after another as the slide arrives. Only with JS on. */
+    .js .rise {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 500ms ease, transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: calc(var(--i, 0) * 75ms);
+    }
+    .js .slide.in .rise { opacity: 1; transform: none; }
+
+    .keep {
+      font: inherit;
+      font-weight: 600;
+      background: var(--field-1);
+      color: var(--ink);
+      border: 0;
+      padding: 6px 14px;
+      cursor: pointer;
+    }
+    .keep[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+    html:not(.js) .keep, html:not(.js) .dots { display: none; }
+
+    .dots {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 5;
+      display: flex;
+      gap: 6px;
+    }
+    .dots button {
+      width: 12px;
+      height: 12px;
+      padding: 0;
+      border: 0;
+      background: var(--paper);
+      opacity: 0.45;
+      cursor: pointer;
+    }
+    .dots button[aria-current="true"] { opacity: 1; transform: scale(1.25); }
+
+    .kept[hidden] { display: none; }
+    .kept { display: grid; gap: 10px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .js .rise { transform: none; transition: opacity 300ms ease; transition-delay: 0ms; }
+      .button, .bars a, .keep, .dots button, .source a, .postcard a { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <style>
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(var(--backdrop-dim));
+      image-rendering: pixelated;   /* keep the pixels chunky when scaled up */
+    }
+</style>
+<canvas class="backdrop" id="dawn" width="320" height="180" aria-hidden="true"></canvas>
+<script>
+    // A pixel-art dawn, drawn at 320x180 and scaled up with crisp pixels.
+    // Seeded by today's date: the layout stays, but clouds, stars, birds and trees change daily.
+    // The sky and hills are drawn once into hidden layers; each frame only adds what moves.
+    (() => {
+      const canvas = document.getElementById("dawn");
+      const g = canvas.getContext("2d");
+      const W = canvas.width, H = canvas.height, HORIZON = 118;
+
+      let seed = Number("2026-11-02".replaceAll("-", "")) % 2147483647 || 7;
+      const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+      const painter = ctx => (x, y, w, h, colour) => { ctx.fillStyle = colour; ctx.fillRect(x, y, w, h); };
+      const layer = () => Object.assign(document.createElement("canvas"), { width: W, height: H });
+
+      // ---- Still layer 1: sky and stars ----
+      const skyLayer = layer(), sky = painter(skyLayer.getContext("2d"));
+      const bands = ["#1d2b45", "#2b3d5c", "#41566f", "#6b6e80", "#a3808a", "#d39a8c", "#eeb48e", "#f6cf9d"];
+      const band = HORIZON / bands.length;
+      bands.forEach((colour, i) => {
+        const top = Math.round(i * band);
+        sky(0, top, W, Math.round((i + 1) * band) - top, colour);
+        if (i === 0) return;
+        for (let x = 0; x < W; x += 2) sky(x, top, 1, 1, bands[i - 1]);       // dithered seam
+        for (let x = 1; x < W; x += 4) sky(x, top + 1, 1, 1, bands[i - 1]);
+      });
+      for (let i = 0; i < 40; i++) {
+        sky(Math.floor(rand() * W), Math.floor(rand() * 34), 1, 1, rand() < 0.3 ? "#fff4dc" : "#8f9bb3");
+      }
+
+      // ---- Still layers 2-4: far, mid and near hills (transparent above the ridges) ----
+      // Separate layers so they can move at different speeds as you scroll (parallax).
+      const farLayer = layer(), midLayer = layer(), nearLayer = layer();
+      const ridge = (paint, base, rough, colour, wave) => {
+        const tops = [];
+        let y = base;
+        for (let x = 0; x < W; x++) {
+          y += (rand() - 0.5) * rough;
+          y = Math.max(base - 14, Math.min(base + 10, y));
+          const top = Math.round(y + wave(x));
+          tops.push(top);
+          paint(x, top, 1, H - top, colour);
+        }
+        return tops;
+      };
+      const far = painter(farLayer.getContext("2d")), mid = painter(midLayer.getContext("2d"));
+      const hill = painter(nearLayer.getContext("2d"));
+      ridge(far, HORIZON - 22, 3, "#7c6f78", () => 0);                                     // far mountains
+      ridge(mid, HORIZON - 4, 0.6, "#566355", x => Math.sin(x / 23) * 6);                    // mid hills
+      const near = ridge(hill, HORIZON + 18, 0.4, "#2c3620", x => Math.sin(x / 37 + 1) * 8); // near hills
+      for (let x = 4; x < W; x += 6 + Math.floor(rand() * 10)) {                      // pine trees
+        const h = 6 + Math.floor(rand() * 10), base = near[x];
+        for (let r = 0; r < h; r++) {
+          const half = Math.floor(r / 2);
+          hill(x - half, base - h + r, half * 2 + 1, 1, "#212916");
+        }
+      }
+      hill(0, H - 14, W, 14, "#1a2012");                                               // meadow
+      for (let x = 0; x < W; x += 3 + Math.floor(rand() * 6)) hill(x, H - 15, 1, 1, "#1a2012");
+
+      // ---- Things that move ----
+      const px = painter(g);
+      const sunX = Math.round(W * 0.86);
+      let sunY = HORIZON - 30;
+
+      // How far through the deck the reader is, 0 at the cover to 1 at the closing card.
+      let progress = 0;
+      const track = () => {
+        const room = document.documentElement.scrollHeight - innerHeight;
+        progress = room > 0 ? Math.min(1, Math.max(0, scrollY / room)) : 0;
+      };
+      addEventListener("scroll", track, { passive: true });
+      track();
+
+      // Pages can raise the sun on purpose: the puzzle calls riseSun() when you solve it.
+      let lifted = null;
+      window.riseSun = (ms = 2500) => {
+        const from = progress, start = performance.now();
+        const step = now => {
+          const t = Math.min(1, (now - start) / ms);
+          lifted = from + (1 - from) * (1 - (1 - t) ** 3);     // ease out
+          if (t < 1) requestAnimationFrame(step); else if (still) draw(0);
+        };
+        requestAnimationFrame(step);
+        if (still) { lifted = 1; draw(0); }
+      };
+      const clouds = Array.from({ length: 5 }, () => ({
+        x: rand() * W, y: 40 + Math.floor(rand() * 50),
+        len: 14 + Math.floor(rand() * 26), speed: 0.6 + rand() * 1.6,   // pixels per second
+      }));
+      const birds = Array.from({ length: 4 }, () => ({
+        x: rand() * W, y: 46 + Math.floor(rand() * 30),
+        speed: 7 + rand() * 6, phase: rand() * 10,
+      }));
+      const WINGS_UP = [[0, 0], [1, 1], [2, 2], [3, 1], [4, 0]];
+      const WINGS_DOWN = [[0, 2], [1, 1], [2, 2], [3, 1], [4, 2]];
+
+      const disc = (r, colour, dither) => {
+        for (let y = -r; y <= r; y++) {
+          for (let x = -r; x <= r; x++) {
+            if (x * x + y * y > r * r) continue;
+            if (dither && (x + y) % 2) continue;                       // every other pixel: a soft glow
+            px(sunX + x, sunY + y, 1, 1, colour);
+          }
+        }
+      };
+      const wrap = (x, span) => ((x % span) + span) % span;
+
+      function draw(seconds) {
+        g.drawImage(skyLayer, 0, 0);
+
+        // The sun rises as you read: 30 pixels higher by the closing card.
+        const p = lifted ?? progress;
+        sunY = HORIZON - 30 - Math.round(p * 30);
+
+        // Sun: a dithered halo that breathes in and out by whole pixels.
+        const halo = 22 + Math.round((Math.sin(seconds * 1.3) + 1) * 2);
+        disc(halo, "#ffe2a8", true);
+        disc(20, "#ffd99a");
+        disc(15, "#fff1c8");
+
+        for (const c of clouds) {
+          const x = Math.round(wrap(c.x + seconds * c.speed, W + 50)) - 50;
+          px(x + 3, c.y, c.len - 6, 1, "#fbd9b8");
+          px(x, c.y + 1, c.len, 2, "#f6c6a2");
+          px(x + 2, c.y + 3, c.len - 4, 1, "#dfa28e");
+        }
+
+        for (const b of birds) {
+          const x = Math.round(wrap(b.x + seconds * b.speed, W + 20)) - 10;
+          const y = b.y + Math.round(Math.sin(seconds * 0.9 + b.phase) * 2);
+          const wings = Math.floor(seconds * 4 + b.phase) % 2 ? WINGS_UP : WINGS_DOWN;
+          for (const [dx, dy] of wings) px(x + dx, y + dy, 1, 1, "#3b2f38");
+        }
+
+        // Hills last, so birds pass behind them. Nearer hills sink further as you scroll.
+        g.drawImage(farLayer, 0, Math.round(p * 4));
+        g.drawImage(midLayer, 0, Math.round(p * 10));
+        g.drawImage(nearLayer, 0, Math.round(p * 18));
+      }
+
+      // About 12 frames a second, like an old game. Still image if the visitor prefers less motion.
+      const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (still) {
+        draw(0);
+        return;
+      }
+      let last = -Infinity;
+      const loop = now => {
+        if (now - last >= 83) { draw(now / 1000); last = now; }
+        requestAnimationFrame(loop);                                   // browsers pause this in hidden tabs
+      };
+      requestAnimationFrame(loop);
+    })();
+</script>
+
+  <section class="slide cover" aria-label="Cover">
+    <div class="cover-card">
+      <h1><span>Hope</span> <span>Today</span></h1>
+      <div class="cover-facts">
+        <span>2 Nov 2026</span>
+        <span>5 good stories</span>
+        <span>Good news: Community protection</span>
+      </div>
+      
+      <p class="cover-said">Here is what is going right today.</p>
+      
+      
+      <div class="cover-photos" style="grid-template-columns: repeat(4, 1fr)">
+        
+        <img src="https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29135605/1000020683-Pamarawan-barangay-768x512.jpg" alt="" width="160" height="160">
+        
+        <img src="https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29124349/Kondisi-kanal-yang-kering-di-kawasan-HKm-Air-Merah-Sungai-Gelam-768x512.jpg" alt="" width="160" height="160">
+        
+        <img src="https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29063925/DSC04884_AdrianPonsardWCS-scaled-1-768x512.jpg" alt="" width="160" height="160">
+        
+        <img src="https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29054627/61-768x512.jpg" alt="" width="160" height="160">
+        
+      </div>
+      
+      <div class="cover-foot">
+        <span>Real stories from Positive News and Mongabay, all from the last month.</span>
+        <a class="button" href="#contents">Start reading</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide contents" id="contents" aria-label="Contents">
+    <div class="contents-inner">
+      <h2>Today</h2>
+      <ul class="bars">
+        
+        <li><a href="#story-1">Rangers Back Desert Lions <span>29 Oct 2026</span></a></li>
+        
+        <li><a href="#story-2">Bamboo Shields Village <span>30 Oct 2026</span></a></li>
+        
+        <li><a href="#story-3">Fire Alerts For Peatlands <span>29 Oct 2026</span></a></li>
+        
+        <li><a href="#story-4">Island Fishers Gain Ground <span>29 Oct 2026</span></a></li>
+        
+        <li><a href="#story-5">Cat Returns To Wild <span>29 Oct 2026</span></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+  
+  <section class="slide story" id="story-1" aria-label="Rangers Back Desert Lions">
+    <article class="clipping" style="--tilt: -0.8deg">
+      
+      <div class="clipping-text">
+      <h2>Rangers Back Desert Lions</h2>
+      <p class="summary">Namibian rangers are using real-time data and traditional tracking knowledge to protect farmers and help a recovering lion population.</p>
+      <ul class="points">
+        
+        <li>Namibia</li>
+        
+        <li>real-time data</li>
+        
+        <li>traditional knowledge</li>
+        
+        <li>farmers</li>
+        
+      </ul>
+      <p class="why"><strong>Why it matters:</strong> It shows people and wildlife can coexist through smarter protection and local expertise.</p>
+      <p class="source">
+        <span>Positive News · 29 Oct 2026</span>
+        <button class="keep" type="button" aria-pressed="false"
+                data-headline="Rangers Back Desert Lions" data-url="https://www.positive.news/society/smartphones-ancient-tracking-skills-and-a-future-for-desert-lions/">Keep this</button>
+        <a href="https://www.positive.news/society/smartphones-ancient-tracking-skills-and-a-future-for-desert-lions/" target="_blank" rel="noopener">Read the full story</a>
+      </p>
+      </div>
+    </article>
+  </section>
+  
+  <section class="slide story" id="story-2" aria-label="Bamboo Shields Village">
+    <article class="clipping" style="--tilt: 0.6deg">
+      
+      <img class="photo" src="https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29135605/1000020683-Pamarawan-barangay-768x512.jpg" alt="" width="1000" height="800" loading="lazy">
+      
+      <div class="clipping-text">
+      <h2>Bamboo Shields Village</h2>
+      <p class="summary">A Philippine fishing village built a nature-based coastal defense using local materials to cut flood damage from waves and storm surges.</p>
+      <ul class="points">
+        
+        <li>Pamarawan barangay</li>
+        
+        <li>14 hectares</li>
+        
+        <li>bamboo poles</li>
+        
+        <li>oyster shells and coconut husks</li>
+        
+      </ul>
+      <p class="why"><strong>Why it matters:</strong> It offers a low-cost, community-made way to help vulnerable places stay safer as storms intensify.</p>
+      <p class="source">
+        <span>Mongabay · 30 Oct 2026</span>
+        <button class="keep" type="button" aria-pressed="false"
+                data-headline="Bamboo Shields Village" data-url="https://news.mongabay.com/2026/10/philippine-village-uses-nature-to-defend-against-floods-with-bamboo-shells-and-husks/">Keep this</button>
+        <a href="https://news.mongabay.com/2026/10/philippine-village-uses-nature-to-defend-against-floods-with-bamboo-shells-and-husks/" target="_blank" rel="noopener">Read the full story</a>
+      </p>
+      </div>
+    </article>
+  </section>
+  
+  <section class="slide story" id="story-3" aria-label="Fire Alerts For Peatlands">
+    <article class="clipping" style="--tilt: -0.4deg">
+      
+      <img class="photo" src="https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29124349/Kondisi-kanal-yang-kering-di-kawasan-HKm-Air-Merah-Sungai-Gelam-768x512.jpg" alt="" width="1000" height="800" loading="lazy">
+      
+      <div class="clipping-text">
+      <h2>Fire Alerts For Peatlands</h2>
+      <p class="summary">In eastern Sumatra, early warning efforts aim to give peat communities time to respond before fires spread.</p>
+      <ul class="points">
+        
+        <li>Muaro Jambi district</li>
+        
+        <li>Sumatra</li>
+        
+        <li>peat depths up to 11 meters</li>
+        
+        <li>strong El Niño</li>
+        
+      </ul>
+      <p class="why"><strong>Why it matters:</strong> Earlier alerts can help communities protect lives, land, and carbon-rich peat before blazes grow.</p>
+      <p class="source">
+        <span>Mongabay · 29 Oct 2026</span>
+        <button class="keep" type="button" aria-pressed="false"
+                data-headline="Fire Alerts For Peatlands" data-url="https://news.mongabay.com/2026/10/early-tech-warning-hopes-to-give-sumatras-peat-community-a-head-start-on-fires/">Keep this</button>
+        <a href="https://news.mongabay.com/2026/10/early-tech-warning-hopes-to-give-sumatras-peat-community-a-head-start-on-fires/" target="_blank" rel="noopener">Read the full story</a>
+      </p>
+      </div>
+    </article>
+  </section>
+  
+  <section class="slide story" id="story-4" aria-label="Island Fishers Gain Ground">
+    <article class="clipping" style="--tilt: -0.8deg">
+      
+      <img class="photo" src="https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29063925/DSC04884_AdrianPonsardWCS-scaled-1-768x512.jpg" alt="" width="1000" height="800" loading="lazy">
+      
+      <div class="clipping-text">
+      <h2>Island Fishers Gain Ground</h2>
+      <p class="summary">Fishers on Pemba Island are creating new marine protected areas after shared concern over shrinking catches.</p>
+      <ul class="points">
+        
+        <li>Tumbe village</li>
+        
+        <li>12 elected members</li>
+        
+        <li>Pemba Island</li>
+        
+        <li>PECCA established in 2005</li>
+        
+      </ul>
+      <p class="why"><strong>Why it matters:</strong> It shows local cooperation can rebuild fish stocks and strengthen livelihoods.</p>
+      <p class="source">
+        <span>Mongabay · 29 Oct 2026</span>
+        <button class="keep" type="button" aria-pressed="false"
+                data-headline="Island Fishers Gain Ground" data-url="https://news.mongabay.com/2026/10/pembas-new-marine-protected-areas-show-the-power-of-collaboration-to-meet-30x30-goal/">Keep this</button>
+        <a href="https://news.mongabay.com/2026/10/pembas-new-marine-protected-areas-show-the-power-of-collaboration-to-meet-30x30-goal/" target="_blank" rel="noopener">Read the full story</a>
+      </p>
+      </div>
+    </article>
+  </section>
+  
+  <section class="slide story" id="story-5" aria-label="Cat Returns To Wild">
+    <article class="clipping" style="--tilt: 0.6deg">
+      
+      <img class="photo" src="https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29054627/61-768x512.jpg" alt="" width="1000" height="800" loading="lazy">
+      
+      <div class="clipping-text">
+      <h2>Cat Returns To Wild</h2>
+      <p class="summary">An injured fishing cat in Bangladesh recovered after rehabilitation and was released with a tracking collar near a wetland.</p>
+      <ul class="points">
+        
+        <li>northern Bangladesh</li>
+        
+        <li>February 2026</li>
+        
+        <li>5 kilograms to 12 kg</li>
+        
+        <li>tea estate bordering a large freshwater wetland</li>
+        
+      </ul>
+      <p class="why"><strong>Why it matters:</strong> It proves rescue and release efforts can give threatened wildlife another chance to thrive.</p>
+      <p class="source">
+        <span>Mongabay · 29 Oct 2026</span>
+        <button class="keep" type="button" aria-pressed="false"
+                data-headline="Cat Returns To Wild" data-url="https://news.mongabay.com/short-article/2026/10/fishing-cat-rescue-and-release-offers-potential-model-for-conservation-in-bangladesh/">Keep this</button>
+        <a href="https://news.mongabay.com/short-article/2026/10/fishing-cat-rescue-and-release-offers-potential-model-for-conservation-in-bangladesh/" target="_blank" rel="noopener">Read the full story</a>
+      </p>
+      </div>
+    </article>
+  </section>
+  
+
+  <section class="slide closing" aria-label="Closing">
+    <div class="postcard"><svg class="scallops" viewBox="0 0 1200 28" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 28 V14 A50 14 0 0 1 100 14 A50 14 0 0 1 200 14 A50 14 0 0 1 300 14 A50 14 0 0 1 400 14 A50 14 0 0 1 500 14 A50 14 0 0 1 600 14 A50 14 0 0 1 700 14 A50 14 0 0 1 800 14 A50 14 0 0 1 900 14 A50 14 0 0 1 1000 14 A50 14 0 0 1 1100 14 A50 14 0 0 1 1200 14 V28 Z"/>
+      </svg>
+      <div class="postcard-body">
+        <h2>There is hope today.</h2>
+        <div>
+          <p class="postcard-message">5 real stories about community protection, every one from the last week. Come back tomorrow and there will be more.</p>
+        </div>
+        <div class="postcard-right">
+          <div class="kept" id="kept" hidden>
+            <h3>Your clippings</h3>
+            <ul id="kept-list"></ul>
+          </div>
+          <h3>Read them in full</h3>
+          <ul>
+            
+            <li><a href="https://www.positive.news/society/smartphones-ancient-tracking-skills-and-a-future-for-desert-lions/" target="_blank" rel="noopener">Rangers Back Desert Lions</a></li>
+            
+            <li><a href="https://news.mongabay.com/2026/10/philippine-village-uses-nature-to-defend-against-floods-with-bamboo-shells-and-husks/" target="_blank" rel="noopener">Bamboo Shields Village</a></li>
+            
+            <li><a href="https://news.mongabay.com/2026/10/early-tech-warning-hopes-to-give-sumatras-peat-community-a-head-start-on-fires/" target="_blank" rel="noopener">Fire Alerts For Peatlands</a></li>
+            
+            <li><a href="https://news.mongabay.com/2026/10/pembas-new-marine-protected-areas-show-the-power-of-collaboration-to-meet-30x30-goal/" target="_blank" rel="noopener">Island Fishers Gain Ground</a></li>
+            
+            <li><a href="https://news.mongabay.com/short-article/2026/10/fishing-cat-rescue-and-release-offers-potential-model-for-conservation-in-bangladesh/" target="_blank" rel="noopener">Cat Returns To Wild</a></li>
+            
+          </ul>
+        </div>
+        <p class="imprint">Stories and story photographs: Positive News and Mongabay. Dawn scene drawn fresh each day. Made by Hope Today on 2 Nov 2026.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Deck behaviour: slide entrances, keyboard and dot navigation, and Keep this.
+    (() => {
+      const slides = [...document.querySelectorAll(".slide")];
+
+      // Entrances: give each part of a slide an order, then reveal it when the slide arrives.
+      const parts = ".cover-card > *, .contents-inner > h2, .bars li, .clipping .photo, " +
+                    ".clipping-text > *, .postcard-body > *";
+      for (const slide of slides) {
+        slide.querySelectorAll(parts).forEach((el, i) => {
+          el.classList.add("rise");
+          el.style.setProperty("--i", i);
+        });
+      }
+
+      // Dots: one per slide, the current one brighter. Clicking a dot jumps there.
+      const dots = document.createElement("nav");
+      dots.className = "dots";
+      dots.setAttribute("aria-label", "Slides");
+      slides.forEach((slide, i) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Go to slide ${i + 1} of ${slides.length}`);
+        dot.addEventListener("click", () => slide.scrollIntoView());
+        dots.append(dot);
+      });
+      document.body.append(dots);
+
+      let current = 0;
+      const seen = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("in");
+          current = slides.indexOf(entry.target);
+          [...dots.children].forEach((dot, i) => dot.setAttribute("aria-current", i === current));
+        }
+      }, { threshold: 0.4 });
+      slides.forEach(slide => seen.observe(slide));
+
+      // Keys: right/down/space/page down go forward, left/up/page up go back.
+      const go = step => slides[Math.min(slides.length - 1, Math.max(0, current + step))].scrollIntoView();
+      addEventListener("keydown", e => {
+        if (e.altKey || e.ctrlKey || e.metaKey || e.target.closest("input, textarea")) return;
+        const step = { ArrowRight: 1, ArrowDown: 1, PageDown: 1, " ": e.shiftKey ? -1 : 1,
+                       ArrowLeft: -1, ArrowUp: -1, PageUp: -1 }[e.key];
+        if (!step) return;
+        e.preventDefault();
+        go(step);
+      });
+
+      // Keep this: kept stories are listed on the closing postcard and remembered for today.
+      const key = "hope-kept-2026-11-02";
+      const load = () => { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } };
+      const save = urls => { try { localStorage.setItem(key, JSON.stringify(urls)); } catch {} };
+      const buttons = [...document.querySelectorAll(".keep")];
+      const render = () => {
+        const kept = buttons.filter(b => b.getAttribute("aria-pressed") === "true");
+        const list = document.getElementById("kept-list");
+        list.replaceChildren(...kept.map(b => {
+          const li = document.createElement("li"), a = document.createElement("a");
+          a.href = b.dataset.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = b.dataset.headline;
+          li.append(a);
+          return li;
+        }));
+        document.getElementById("kept").hidden = kept.length === 0;
+      };
+      const saved = load();
+      for (const b of buttons) {
+        if (saved.includes(b.dataset.url)) { b.setAttribute("aria-pressed", "true"); b.textContent = "Kept"; }
+        b.addEventListener("click", () => {
+          const on = b.getAttribute("aria-pressed") !== "true";
+          b.setAttribute("aria-pressed", on);
+          b.textContent = on ? "Kept" : "Keep this";
+          save(buttons.filter(x => x.getAttribute("aria-pressed") === "true").map(x => x.dataset.url));
+          render();
+        });
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>
