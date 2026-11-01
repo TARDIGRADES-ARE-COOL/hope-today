@@ -2,6 +2,7 @@
 import base64
 import hashlib
 import json
+import shutil
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -14,12 +15,16 @@ from deck import env, render_deck
 from desk import render_page
 from desk_facts import enough_numbers
 from desk_make import PER, make_desk
+import tools
 from llm import client
 from tools import IMAGES, fetch_article, fetched, search_news
 
 DAILY = Path(__file__).resolve().parent.parent / "daily"
 HISTORY = DAILY / "history.json"
 TOPIC_COOLDOWN_DAYS = 30
+# A spare finished day (daily/reserve/), built on a good day and published only when no topic
+# passes even at 28 days. Rebuilt once this old, so its news never goes stale.
+RESERVE_MAX_AGE = 21
 # Round two ("Branch out", harness/branch.py) is switched off: it felt like a separate game and
 # leaned on general knowledge. The page hides it when there's no branch. True brings it back.
 BRANCH_OUT = False
@@ -428,8 +433,8 @@ def build_desk(stories, spare, folder, day, theme, puzzle_id, log, spoilers):
     return None
 
 
-def build_day(topic, puzzle, day=None, spoilers=True, spare=()):
-    """Write the day's deck and its data file into daily/YYYY-MM-DD/.
+def build_day(topic, puzzle, day=None, spoilers=True, spare=(), folder=None):
+    """Write the day's deck and its data file into daily/YYYY-MM-DD/ (or `folder`).
     `spare`: other strong stories, best first, for the desk if the deck's stories run short."""
     day = (day or date.today()).isoformat()
     stories = write_stories(topic)
@@ -437,7 +442,7 @@ def build_day(topic, puzzle, day=None, spoilers=True, spare=()):
     texts = [fetched[s["url"]]["text"] for s in topic["stories"] if s["url"] in fetched]
     branch = make_branch(topic["topic"], topic["answer"], [s["title"] for s in topic["stories"]], texts) \
         if BRANCH_OUT else None
-    folder = DAILY / day
+    folder = Path(folder) if folder else DAILY / day
     result = render_deck(f"Good news: {topic['topic']}", "", stories,
                          topic=topic["topic"], path=folder / "deck.html")
     if "error" in result:
@@ -464,15 +469,17 @@ def build_day(topic, puzzle, day=None, spoilers=True, spare=()):
     return folder, stories, desk
 
 
-def load_history(path=HISTORY):
+def load_history(path=None):
     """Past days: every story url shown, and every topic with its date."""
+    path = path or HISTORY
     if not path.exists():
         return {"urls": [], "topics": []}
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def save_day(history, topic, answer, urls, day=None, path=HISTORY):
+def save_day(history, topic, answer, urls, day=None, path=None):
     """Remember today's topic and stories so they don't come back."""
+    path = path or HISTORY                       # looked up now, so tests can point HISTORY elsewhere
     history["topics"].append({"date": (day or date.today()).isoformat(), "topic": topic, "answer": answer})
     history["urls"].extend(u for u in urls if u not in history["urls"])
     path.parent.mkdir(exist_ok=True)
@@ -480,15 +487,88 @@ def save_day(history, topic, answer, urls, day=None, path=HISTORY):
 
 
 def unseen(candidates, history):
-    """Drop stories already shown on a past day. Never repeat a story."""
-    shown = set(history["urls"])
+    """Drop stories already shown on a past day, or held for the reserve. Never repeat a story."""
+    shown = set(history["urls"]) | set(history.get("reserve", {}).get("urls", []))
     return [s for s in candidates if s["url"] not in shown]
 
 
 def blocked_answers(history, today=None):
     """Answers used in the last 30 days. The topic picker must not choose these."""
     cutoff = ((today or date.today()) - timedelta(days=TOPIC_COOLDOWN_DAYS)).isoformat()
-    return {t["answer"].upper() for t in history["topics"] if t["date"] > cutoff}
+    used = {t["answer"].upper() for t in history["topics"] if t["date"] > cutoff}
+    return used | ({history["reserve"]["answer"]} if history.get("reserve") else set())
+
+
+def make_reserve(history, topics, used_urls, blocked, mode="wordplay"):
+    """On a good day, build a spare finished day from another topic into daily/reserve/.
+    Its stories and answer are held back from normal days (history.json "reserve")."""
+    old = history.get("reserve")
+    if old and old["made"] > (date.today() - timedelta(days=RESERVE_MAX_AGE)).isoformat():
+        return None                                          # the current one is still fresh
+    blocked = blocked - ({old["answer"]} if old else set())  # replacing it frees its answer
+    for topic in topics:
+        if topic["answer"] in blocked or used_urls & {s["url"] for s in topic["stories"]}:
+            continue
+        # Tomorrow's clue type, so a reserve day doesn't repeat today's trick.
+        puzzle, _ = choose_puzzle(topic, day=date.today() + timedelta(days=1), mode=mode)
+        if not puzzle:
+            continue
+        tools.MAX_ARTICLES += len(topic["stories"])          # its own article budget, on top of today's
+        folder = DAILY / "reserve"
+        shutil.rmtree(folder, ignore_errors=True)
+        _, stories, desk = build_day(topic, puzzle, spoilers=False, folder=folder)
+        history["reserve"] = {"made": date.today().isoformat(), "answer": topic["answer"],
+                              "urls": [s["url"] for s in stories + (desk["stories"] if desk else [])]}
+        HISTORY.write_text(json.dumps(history, indent=2), encoding="utf-8")
+        return topic
+    return None
+
+
+def use_reserve(history, day=None):
+    """No topic today: publish the reserve as today's puzzle. Returns its folder, or None."""
+    entry, folder = history.get("reserve"), DAILY / "reserve"
+    if not entry or not (folder / "day.json").exists():
+        return None
+    day = (day or date.today()).isoformat()
+    target = DAILY / day
+    shutil.rmtree(target, ignore_errors=True)
+    folder.rename(target)
+    d = json.loads((target / "day.json").read_text(encoding="utf-8"))
+    (target / "day.json").write_text(json.dumps({**d, "date": day}, indent=2), encoding="utf-8")
+    del history["reserve"]
+    save_day(history, d["topic"], d["answer"], entry["urls"], day=date.fromisoformat(day))
+    return target
+
+
+def find_today(history, blocked, days, mode, force_type, strict, say):
+    """Steps 1-4: the best topic with a working clue. Tries this week first, then wider windows.
+    Returns (topic, puzzle, valid topics, strong stories); topic is None if nothing passed."""
+    keep = topics = []
+    today = puzzle = None
+    scored = {}                                   # url -> judged story, so no article is judged twice
+    for window in [days] + [w for w in WIDER_WINDOWS if w > days]:
+        found = unseen(sweep(window), history)
+        print(f"{len(found)} new candidate articles from the last {window} days")
+        new = [s for s in found if s["url"] not in scored]
+        if new:
+            scored.update((s["url"], s) for s in judge(new))
+        keep = strong([scored[s["url"]] for s in found])
+        print(f"{len(keep)} strong good-news stories")
+
+        topics, rejected = pick_topics(keep, blocked) if len(keep) >= 3 else ([], ["fewer than 3 strong stories"])
+        for r in rejected:
+            say(f"  {r}")
+        # The best topic whose answer gets a clue that passes the checks.
+        for topic in topics:
+            puzzle, clue_rejects = choose_puzzle(topic, mode=mode, force_type=force_type, strict=strict)
+            if puzzle:
+                today = topic
+                break
+            say(f"  no valid clue for {topic['answer']} ({len(clue_rejects)} rejected), trying the next topic")
+        if today:
+            break
+        print(f"No topic from the last {window} days")
+    return today, puzzle, topics, keep
 
 
 if __name__ == "__main__":
@@ -536,43 +616,28 @@ if __name__ == "__main__":
         history = {**history, "urls": history["urls"] + [u for t in tested for u in t["urls"]]}
         print(f"Fresh: skipping {len(tested)} topic(s) already tested today")
 
-    # Try this week first; on a slow week widen the window, so a day is never skipped.
-    today = puzzle = None
-    scored = {}                                   # url -> judged story, so no article is judged twice
-    for window in [days] + [w for w in WIDER_WINDOWS if w > days]:
-        found = unseen(sweep(window), history)
-        print(f"{len(found)} new candidate articles from the last {window} days")
-        new = [s for s in found if s["url"] not in scored]
-        if new:
-            scored.update((s["url"], s) for s in judge(new))
-        keep = strong([scored[s["url"]] for s in found])
-        print(f"{len(keep)} strong good-news stories")
-
-        topics, rejected = pick_topics(keep, blocked) if len(keep) >= 3 else ([], ["fewer than 3 strong stories"])
-        for r in rejected:
-            say(f"  {r}")
-        # The best topic whose answer gets a clue that passes the checks.
-        for topic in topics:
-            puzzle, clue_rejects = choose_puzzle(topic, mode=mode, force_type=force_type, strict=strict)
-            if puzzle:
-                today = topic
-                break
-            say(f"  no valid clue for {topic['answer']} ({len(clue_rejects)} rejected), trying the next topic")
+    # Any failure here (no topic, Guardian down, OpenAI out of credits) falls back to the reserve.
+    try:
+        today, puzzle, topics, keep = find_today(history, blocked, days, mode, force_type, strict, say)
         if today:
-            break
-        print(f"No topic from the last {window} days")
+            say(f"\nToday: {today['answer']} ({len(today['answer'])})  {today['topic']}")
+            say(f"  {puzzle['instruction']}")
+            say(f"  \"{puzzle['sentence']}\" ({puzzle['length']})")
+            for h in puzzle["hints"]:
+                say(f"  Level {h['level']}{' (free)' if h['free'] else ''}: {h['text']}")
+            say(f"  Give up: {' / '.join(puzzle['solution']['steps'])}")
+            spare = [s for s in keep if s["url"] not in {t["url"] for t in today["stories"]}]
+            folder, stories, desk = build_day(today, puzzle, spoilers=not blind, spare=spare)
+    except (Exception, SystemExit) as e:         # noqa: BLE001 (build_day raises SystemExit on a bad deck)
+        # "::warning::" shows on the GitHub Actions run page, so a fallback day is never silent.
+        print(f"::warning::Today's run broke: {type(e).__name__}: {e}")
+        today = None
     if not today:
-        raise SystemExit("No topic today, even from the last 28 days.")
-
-    say(f"\nToday: {today['answer']} ({len(today['answer'])})  {today['topic']}")
-    say(f"  {puzzle['instruction']}")
-    say(f"  \"{puzzle['sentence']}\" ({puzzle['length']})")
-    for h in puzzle["hints"]:
-        say(f"  Level {h['level']}{' (free)' if h['free'] else ''}: {h['text']}")
-    say(f"  Give up: {' / '.join(puzzle['solution']['steps'])}")
-
-    spare = [s for s in keep if s["url"] not in {t["url"] for t in today["stories"]}]
-    folder, stories, desk = build_day(today, puzzle, spoilers=not blind, spare=spare)
+        if save and (folder := use_reserve(history)):
+            print(f"::warning::No new puzzle today: published the reserve puzzle ({folder})")
+            sys.exit(0)
+        raise SystemExit("No puzzle today" + (" and no reserve to fall back on" if save else
+                                              " (a --save run would use the reserve)"))
     for s in stories:
         say(f"  - {s['headline']}")
     print(f"Puzzle ready ({puzzle['length']} letters, {len(stories)} stories): {folder}/index.html")
@@ -580,5 +645,12 @@ if __name__ == "__main__":
     if save:
         save_day(history, today["topic"], today["answer"], [s["url"] for s in stories + (desk["stories"] if desk else [])])
         print("Recorded in history.json")
+        # A spare day for a future slow week. Today's puzzle is already saved, so a failure here costs nothing.
+        try:
+            used = {s["url"] for s in today["stories"] + stories + (desk["stories"] if desk else [])}
+            if make_reserve(history, topics, used, blocked | {today["answer"]}, mode=mode):
+                print("Made a new reserve puzzle")
+        except Exception as e:                   # noqa: BLE001
+            print(f"No reserve made: {type(e).__name__}: {e}")
     else:
         print("Dry run: not recorded in history (use --save)")
