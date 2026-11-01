@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-01",
+  "topic": "Brain clues",
+  "answer": "MIND",
+  "why": "These stories bring hope by uncovering earlier detection and new clues for dementia and other brain conditions.",
+  "puzzle": {
+    "type": "first",
+    "instruction": "Today's topic is tucked into this sentence. Can you spot how?",
+    "sentence": "New scans may identify neural differences, helping doctors spot brain conditions earlier.",
+    "length": 4,
+    "answer": "MIND",
+    "highlight": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "hints": [
+      {
+        "level": 1,
+        "free": true,
+        "text": "Peek at the first letters; they can secretly spell the topic! Like <b>F</b>uzzy <b>R</b>obots <b>O</b>ffer <b>G</b>iggles, which spells FROG."
+      },
+      {
+        "level": 2,
+        "free": false,
+        "text": "\ud83e\udde0 Where thoughts live, and daydreams rent cozy rooms."
+      },
+      {
+        "level": 3,
+        "free": false,
+        "text": "Find 4 words in a row; the first one starts with M.",
+        "highlight": [
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    ],
+    "solution": {
+      "answer": "MIND",
+      "steps": [
+        "The trick: the first letters of a run of words spelled the answer.",
+        "Where: \u201cmay identify neural differences\u201d.",
+        "How: M \u00b7 I \u00b7 N \u00b7 D \u2192 MIND"
+      ]
+    }
+  },
+  "branch": null,
+  "stories": [
+    {
+      "headline": "Blood Test Flags Risk",
+      "summary": "A major international study found a simple blood test may predict Alzheimer\u2019s-related cognitive decline years before symptoms appear.",
+      "key_points": [
+        "Highest-risk people had a 38% chance of impairment within five years.",
+        "Risk rose to an estimated 78% within 10 years.",
+        "The finding came from a major international study."
+      ],
+      "why_it_matters": "Earlier warning could help doctors intervene before memory problems begin and may open the door to future prevention.",
+      "url": "https://www.sciencedaily.com/releases/2026/10/261029072142.htm",
+      "date": "2026-10-30",
+      "image": null,
+      "source": "ScienceDaily"
+    },
+    {
+      "headline": "Brain Cells May Protect",
+      "summary": "Researchers in the Netherlands found a rare group of immature brain cells may help explain why some older people resist Alzheimer\u2019s symptoms.",
+      "key_points": [
+        "The cells were found in people over 80.",
+        "Their behavior differed between people who developed dementia and those who stayed cognitively healthy.",
+        "The study was led by scientists in the Netherlands."
+      ],
+      "why_it_matters": "This clue could help reveal natural brain defenses that keep thinking sharp in aging people.",
+      "url": "https://www.sciencedaily.com/releases/2026/10/261025222538.htm",
+      "date": "2026-10-27",
+      "image": null,
+      "source": "ScienceDaily"
+    },
+    {
+      "headline": "One Signal Links Symptoms",
+      "summary": "Scientists identified a weakened brain signal that may connect several major symptoms of schizophrenia.",
+      "key_points": [
+        "The signal may explain sensory processing difficulties.",
+        "It may also relate to disorganized speech.",
+        "The discovery could help with earlier detection and new treatments."
+      ],
+      "why_it_matters": "Finding a common biological clue could lead to better understanding and more effective care for schizophrenia.",
+      "url": "https://www.sciencedaily.com/releases/2026/10/261028232659.htm",
+      "date": "2026-10-29",
+      "image": null,
+      "source": "ScienceDaily"
+    }
+  ]
+}

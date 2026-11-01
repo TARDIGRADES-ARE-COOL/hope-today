@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>document.documentElement.classList.add("js")</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hope Today · Copy Desk</title>
+  <script>
+  window.track = name => { try { window.goatcounter?.count({ path: "event/" + name, title: name, event: true }); } catch {} };
+</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet"><style>
+    :root {
+      --paper: #e3e2da;
+      --ink: #1c1c1c;
+      --muted: #38424a;
+      --accent: #2c3620;        /* olive: buttons, filed facts */
+      --accent-ink: #e3e2da;
+      --field-1: #b7c8be;       /* sage */
+      --field-2: #d6c4b8;       /* blush */
+      --field-3: #b2bdc5;       /* light slate */
+      --warn: #8a3b2b;
+      --backdrop-dim: 1;
+
+      --margin: clamp(16px, 4vw, 56px);
+      --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+      --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
+      --step-lead: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem);
+      --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --paper: #d9d7cc; --backdrop-dim: 0.9; }
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { font-size: clamp(100%, 0.4vw + 11px, 150%); }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
+      align-content: start;
+      gap: 16px;
+      padding: clamp(8px, 3svh, 48px) var(--margin);
+      background: #2c3620;
+      color: var(--ink);
+      font-family: "Literata", Georgia, serif;
+      font-size: var(--step-body);
+      line-height: 1.55;
+    }
+    h1, h2, h3 {
+      font-family: "Rokkitt", "Arial Narrow", sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    p { margin: 0; }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    .card {
+      width: min(60rem, 100%);
+      min-width: 0;
+      container-type: inline-size;
+      background: var(--paper);
+      padding: clamp(18px, min(4vw, 4svh), 44px);
+      display: grid;
+      gap: clamp(12px, 2svh, 24px);
+    }
+
+    /* Masthead: the good news comes first. */
+    .mast { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 16px;
+            border-bottom: 3px solid var(--ink); padding-bottom: 8px; }
+    .mast h1 { font-size: clamp(2rem, 9cqw, 4rem); }
+    .mast .date { font-weight: 600; font-size: var(--step-lead); }
+    .theme { font-size: var(--step-head); }
+    .heads { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+    .heads li { background: var(--field-3); padding: 6px 12px; font-family: "Rokkitt", sans-serif; font-weight: 800;
+                text-transform: uppercase; font-size: 1rem; line-height: 1.1; }
+    .heads li:nth-child(2) { background: var(--field-1); }
+    .heads li:nth-child(3) { background: var(--field-2); }
+    .heads span { display: block; font-family: "Literata", serif; font-weight: 400; text-transform: none; font-size: var(--step-small); }
+
+    .label { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+    .label h2 { font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.6rem); }
+    .skip { font-size: var(--step-small); color: var(--muted); }
+    .how { font-size: 0.95em; max-width: 62ch; }
+
+    .status { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: baseline; background: var(--accent);
+              color: var(--accent-ink); padding: 10px 14px; font-weight: 600; }
+    .status .timer { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.6rem; font-variant-numeric: tabular-nums; min-width: 4ch; }
+
+    .desk { display: grid; gap: clamp(14px, 2svh, 22px); grid-template-columns: minmax(0, 1fr); }
+    @container (min-width: 46rem) { .desk { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); align-items: start; } }
+    .box { display: grid; gap: 10px; align-content: start; min-width: 0; }
+    .box h3 { font-size: 1.3rem; }
+    .rule { font-size: 0.95em; border-left: 4px solid var(--accent); padding-left: 10px; }
+    .clues { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: c; }
+    .clues li { counter-increment: c; position: relative; padding: 8px 12px 8px 2.4em; background: var(--field-1); font-size: 0.95em; line-height: 1.45; }
+    .clues li::before { content: counter(c); position: absolute; left: 0.7em; top: 0.45em; font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.15em; }
+    .clues li.locked { background: none; outline: 2px dotted var(--muted); outline-offset: -2px; color: var(--muted); font-style: italic; }
+    .clues li.lit { background: #f0d98d; }
+    .clues li.new { animation: arrive 700ms ease; }
+    @keyframes arrive { from { background: #f0d98d; transform: translateY(-4px); } }
+
+    .tray { display: flex; flex-wrap: wrap; gap: 8px; min-height: 2.6rem; }
+    .fact { border: 2px dashed var(--muted); background: var(--paper); padding: 6px 12px; font-family: "Rokkitt", sans-serif;
+            font-weight: 800; font-size: 1.3rem; min-width: 3.5rem; transition: transform 120ms ease; }
+    .fact:hover { transform: translateY(-2px); }
+    .fact[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-style: solid; border-color: var(--ink); }
+    .fact.lit { outline: 4px solid #e6b94f; outline-offset: 2px; }
+    .fact.shake { animation: shake 400ms ease; }
+    @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+    .tray .empty { color: var(--muted); font-style: italic; align-self: center; }
+
+    .stories { display: grid; gap: 12px; }
+    .story { display: grid; gap: 6px; padding: 12px 14px; background: #efeee8; border: 0; border-top: 4px solid var(--ink); text-align: left; width: 100%; }
+    .story.target { box-shadow: inset 0 0 0 3px var(--accent); }
+    .story .dl { font-size: var(--step-small); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .story h3 { font-size: 1.35rem; }
+    .story .blurb { font-size: 0.95em; }
+    .filed { display: grid; gap: 4px; border-top: 1px solid #c8c6bb; padding-top: 6px; }
+    .filed .slot { font-size: var(--step-small); color: var(--muted); font-style: italic; }
+    .filed .got { display: flex; gap: 10px; align-items: baseline; animation: arrive 600ms ease; }
+    .filed .got b { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.15rem; min-width: 5.5rem; }
+    .filed .got span { font-size: var(--step-small); }
+    .filed .got.helped b { text-decoration: underline dotted; }
+    .file-here { justify-self: start; border: 0; background: var(--accent); color: var(--accent-ink); font-family: "Rokkitt", sans-serif;
+                 font-weight: 800; text-transform: uppercase; padding: 10px 16px; font-size: 1rem; min-height: 44px; }
+
+    .feedback { min-height: 1.6em; font-weight: 600; }
+    .feedback.warn { color: var(--warn); }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .button { border: 0; background: var(--accent); color: var(--accent-ink); font-family: "Rokkitt", sans-serif; font-weight: 800;
+              font-size: var(--step-lead); text-transform: uppercase; text-decoration: none; padding: 12px 24px; transition: transform 120ms ease; }
+    .button.soft { background: var(--field-1); color: var(--ink); }
+    .button:hover { transform: translateY(-2px); }
+    .button:active { transform: translateY(1px) scale(0.98); }
+    .link { border: 0; background: none; padding: 8px 0; text-decoration: underline; }
+
+    .result { display: grid; gap: 12px; }
+    .result h2 { font-size: clamp(1.8rem, 5.5svh, 3.4rem); }
+    .share-text { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85em; white-space: pre-wrap; background: #efeee8; padding: 10px 12px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fact, .button, .fact.shake, .clues li.new, .filed .got { transition: none; animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <style>
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(var(--backdrop-dim));
+      image-rendering: pixelated;   /* keep the pixels chunky when scaled up */
+    }
+</style>
+<canvas class="backdrop" id="dawn" width="320" height="180" aria-hidden="true"></canvas>
+<script>
+    // A pixel-art dawn, drawn at 320x180 and scaled up with crisp pixels.
+    // Seeded by today's date: the layout stays, but clouds, stars, birds and trees change daily.
+    // The sky and hills are drawn once into hidden layers; each frame only adds what moves.
+    (() => {
+      const canvas = document.getElementById("dawn");
+      const g = canvas.getContext("2d");
+      const W = canvas.width, H = canvas.height, HORIZON = 118;
+
+      let seed = Number("2026-11-01".replaceAll("-", "")) % 2147483647 || 7;
+      const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+      const painter = ctx => (x, y, w, h, colour) => { ctx.fillStyle = colour; ctx.fillRect(x, y, w, h); };
+      const layer = () => Object.assign(document.createElement("canvas"), { width: W, height: H });
+
+      // ---- Still layer 1: sky and stars ----
+      const skyLayer = layer(), sky = painter(skyLayer.getContext("2d"));
+      const bands = ["#1d2b45", "#2b3d5c", "#41566f", "#6b6e80", "#a3808a", "#d39a8c", "#eeb48e", "#f6cf9d"];
+      const band = HORIZON / bands.length;
+      bands.forEach((colour, i) => {
+        const top = Math.round(i * band);
+        sky(0, top, W, Math.round((i + 1) * band) - top, colour);
+        if (i === 0) return;
+        for (let x = 0; x < W; x += 2) sky(x, top, 1, 1, bands[i - 1]);       // dithered seam
+        for (let x = 1; x < W; x += 4) sky(x, top + 1, 1, 1, bands[i - 1]);
+      });
+      for (let i = 0; i < 40; i++) {
+        sky(Math.floor(rand() * W), Math.floor(rand() * 34), 1, 1, rand() < 0.3 ? "#fff4dc" : "#8f9bb3");
+      }
+
+      // ---- Still layers 2-4: far, mid and near hills (transparent above the ridges) ----
+      // Separate layers so they can move at different speeds as you scroll (parallax).
+      const farLayer = layer(), midLayer = layer(), nearLayer = layer();
+      const ridge = (paint, base, rough, colour, wave) => {
+        const tops = [];
+        let y = base;
+        for (let x = 0; x < W; x++) {
+          y += (rand() - 0.5) * rough;
+          y = Math.max(base - 14, Math.min(base + 10, y));
+          const top = Math.round(y + wave(x));
+          tops.push(top);
+          paint(x, top, 1, H - top, colour);
+        }
+        return tops;
+      };
+      const far = painter(farLayer.getContext("2d")), mid = painter(midLayer.getContext("2d"));
+      const hill = painter(nearLayer.getContext("2d"));
+      ridge(far, HORIZON - 22, 3, "#7c6f78", () => 0);                                     // far mountains
+      ridge(mid, HORIZON - 4, 0.6, "#566355", x => Math.sin(x / 23) * 6);                    // mid hills
+      const near = ridge(hill, HORIZON + 18, 0.4, "#2c3620", x => Math.sin(x / 37 + 1) * 8); // near hills
+      for (let x = 4; x < W; x += 6 + Math.floor(rand() * 10)) {                      // pine trees
+        const h = 6 + Math.floor(rand() * 10), base = near[x];
+        for (let r = 0; r < h; r++) {
+          const half = Math.floor(r / 2);
+          hill(x - half, base - h + r, half * 2 + 1, 1, "#212916");
+        }
+      }
+      hill(0, H - 14, W, 14, "#1a2012");                                               // meadow
+      for (let x = 0; x < W; x += 3 + Math.floor(rand() * 6)) hill(x, H - 15, 1, 1, "#1a2012");
+
+      // ---- Things that move ----
+      const px = painter(g);
+      const sunX = Math.round(W * 0.86);
+      let sunY = HORIZON - 30;
+
+      // How far through the deck the reader is, 0 at the cover to 1 at the closing card.
+      let progress = 0;
+      const track = () => {
+        const room = document.documentElement.scrollHeight - innerHeight;
+        progress = room > 0 ? Math.min(1, Math.max(0, scrollY / room)) : 0;
+      };
+      addEventListener("scroll", track, { passive: true });
+      track();
+
+      // Pages can raise the sun on purpose: the puzzle calls riseSun() when you solve it.
+      let lifted = null;
+      window.riseSun = (ms = 2500) => {
+        const from = progress, start = performance.now();
+        const step = now => {
+          const t = Math.min(1, (now - start) / ms);
+          lifted = from + (1 - from) * (1 - (1 - t) ** 3);     // ease out
+          if (t < 1) requestAnimationFrame(step); else if (still) draw(0);
+        };
+        requestAnimationFrame(step);
+        if (still) { lifted = 1; draw(0); }
+      };
+      const clouds = Array.from({ length: 5 }, () => ({
+        x: rand() * W, y: 40 + Math.floor(rand() * 50),
+        len: 14 + Math.floor(rand() * 26), speed: 0.6 + rand() * 1.6,   // pixels per second
+      }));
+      const birds = Array.from({ length: 4 }, () => ({
+        x: rand() * W, y: 46 + Math.floor(rand() * 30),
+        speed: 7 + rand() * 6, phase: rand() * 10,
+      }));
+      const WINGS_UP = [[0, 0], [1, 1], [2, 2], [3, 1], [4, 0]];
+      const WINGS_DOWN = [[0, 2], [1, 1], [2, 2], [3, 1], [4, 2]];
+
+      const disc = (r, colour, dither) => {
+        for (let y = -r; y <= r; y++) {
+          for (let x = -r; x <= r; x++) {
+            if (x * x + y * y > r * r) continue;
+            if (dither && (x + y) % 2) continue;                       // every other pixel: a soft glow
+            px(sunX + x, sunY + y, 1, 1, colour);
+          }
+        }
+      };
+      const wrap = (x, span) => ((x % span) + span) % span;
+
+      function draw(seconds) {
+        g.drawImage(skyLayer, 0, 0);
+
+        // The sun rises as you read: 30 pixels higher by the closing card.
+        const p = lifted ?? progress;
+        sunY = HORIZON - 30 - Math.round(p * 30);
+
+        // Sun: a dithered halo that breathes in and out by whole pixels.
+        const halo = 22 + Math.round((Math.sin(seconds * 1.3) + 1) * 2);
+        disc(halo, "#ffe2a8", true);
+        disc(20, "#ffd99a");
+        disc(15, "#fff1c8");
+
+        for (const c of clouds) {
+          const x = Math.round(wrap(c.x + seconds * c.speed, W + 50)) - 50;
+          px(x + 3, c.y, c.len - 6, 1, "#fbd9b8");
+          px(x, c.y + 1, c.len, 2, "#f6c6a2");
+          px(x + 2, c.y + 3, c.len - 4, 1, "#dfa28e");
+        }
+
+        for (const b of birds) {
+          const x = Math.round(wrap(b.x + seconds * b.speed, W + 20)) - 10;
+          const y = b.y + Math.round(Math.sin(seconds * 0.9 + b.phase) * 2);
+          const wings = Math.floor(seconds * 4 + b.phase) % 2 ? WINGS_UP : WINGS_DOWN;
+          for (const [dx, dy] of wings) px(x + dx, y + dy, 1, 1, "#3b2f38");
+        }
+
+        // Hills last, so birds pass behind them. Nearer hills sink further as you scroll.
+        g.drawImage(farLayer, 0, Math.round(p * 4));
+        g.drawImage(midLayer, 0, Math.round(p * 10));
+        g.drawImage(nearLayer, 0, Math.round(p * 18));
+      }
+
+      // About 12 frames a second, like an old game. Still image if the visitor prefers less motion.
+      const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (still) {
+        draw(0);
+        return;
+      }
+      let last = -Infinity;
+      const loop = now => {
+        if (now - last >= 83) { draw(now / 1000); last = now; }
+        requestAnimationFrame(loop);                                   // browsers pause this in hidden tabs
+      };
+      requestAnimationFrame(loop);
+    })();
+</script>
+
+  <header class="card" aria-labelledby="theme">
+    <div class="mast"><h1>Hope Today</h1><span class="date">1 Nov 2026</span></div>
+    <h2 class="theme" id="theme">Power shift</h2>
+    <ul class="heads">
+      <li>Cheap Green Home Loans<span>United Kingdom</span></li><li>China Clean Tech Cuts CO2<span>Bangkok, Thailand</span></li><li>ISS Gets Power Boost<span>International Space Station, Space</span></li>
+    </ul>
+  </header>
+
+  <main class="card" id="desk-card">
+    <div class="label">
+      <h2>Copy Desk</h2>
+      <a class="skip" id="skip" href="deck.html">Skip to the good news →</a>
+    </div>
+    <p class="how">The night desk dropped 6 facts from these stories. Tap a fact, then “File it here” on the story it came from.
+      The desk only takes a fact once the clues <em>prove</em> where it goes. Filing one where the clues already rule it out is a mistake.</p>
+
+    <div class="status" aria-live="off">
+      <span class="timer" id="timer" role="timer">0:00</span>
+      <span id="count"></span><span id="mistakes"></span><span id="hints-used"></span>
+    </div>
+
+    <div class="desk">
+      <section class="box" aria-labelledby="clues-title">
+        <h3 id="clues-title">Clues</h3>
+        <p class="rule">Each story gets two facts.</p>
+        <ol class="clues" id="clues"></ol>
+      </section>
+      <section class="box" aria-labelledby="facts-title">
+        <h3 id="facts-title">Loose facts</h3>
+        <div class="tray" id="tray"></div>
+        <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+        <div class="stories" id="stories"></div>
+        <div class="actions" id="actions">
+          <button class="button soft" type="button" id="hint">Hint</button>
+        </div>
+      </section>
+    </div>
+
+    <section class="result" id="result" hidden aria-labelledby="result-title">
+      <h2 id="result-title">First light</h2>
+      <p id="result-line"></p>
+      <p class="share-text" id="share-text"></p>
+      <div class="actions">
+        <a class="button" href="deck.html" id="open-deck">Open today's good news</a>
+        <button class="button soft" type="button" id="share">Share</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const DESK = {"cards": [{"id": "f0", "t": "450m"}, {"id": "f1", "t": "7h 11m"}, {"id": "f2", "t": "\u00a37,500"}, {"id": "f3", "t": "2026"}, {"id": "f4", "t": "30%"}, {"id": "f5", "t": "\u00a32.7bn"}], "clues": [{"id": "c1", "t": "The 7h 11m is not in the United Kingdom story."}, {"id": "c2", "t": "The 30% shares a story with the 450m or the 7h 11m."}, {"id": "c3", "t": "The 450m is in the Bangkok, Thailand story."}, {"id": "c4", "t": ""}, {"id": "c5", "t": ""}], "per": 2, "rule": "Each story gets two facts.", "stories": [{"blurb": "Households can get interest-free or low-interest loans to pay for home energy upgrades with no upfront cost. The scheme is meant to make cleaner heating and power cheaper to run.", "dl": "United Kingdom", "head": "Cheap Green Home Loans"}, {"blurb": "China\u0027s clean energy exports are helping cut global emissions. The report says the equipment shipped abroad will avoid a large amount of carbon pollution this year.", "dl": "Bangkok, Thailand", "head": "China Clean Tech Cuts CO2"}, {"blurb": "Two astronauts finished a long spacewalk to fit a new solar array. The station is set for a major boost in available power after the last array goes in.", "dl": "International Space Station, Space", "head": "ISS Gets Power Boost"}]};
+      // Built and checked by harness/desk.py. Light obfuscation, like the word puzzle's answer.
+      // states: for every reachable state, what's visible, provable, still possible, and the best hint.
+      // means / clues: what must not be plain text in the page (a meaning names its story;
+      // a hidden clue shown early would let you skip the puzzle).
+      const DATA = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob("eyJjbHVlcyI6eyJjMSI6IlRoZSA3aCAxMW0gaXMgbm90IGluIHRoZSBVbml0ZWQgS2luZ2RvbSBzdG9yeS4iLCJjMiI6IlRoZSAzMCUgc2hhcmVzIGEgc3Rvcnkgd2l0aCB0aGUgNDUwbSBvciB0aGUgN2ggMTFtLiIsImMzIjoiVGhlIDQ1MG0gaXMgaW4gdGhlIEJhbmdrb2ssIFRoYWlsYW5kIHN0b3J5LiIsImM0IjoiVGhlIDIwMjYgaXMgbm90IGluIHRoZSBVbml0ZWQgS2luZ2RvbSBzdG9yeS4iLCJjNSI6IlRoZSA0NTBtIGFuZCB0aGUgMjAyNiBhcmUgaW4gdGhlIHNhbWUgc3RvcnkuIn0sIm1lYW5zIjp7ImYwIjoiY2FyYm9uIGRpb3hpZGUgYXZlcnRlZCIsImYxIjoic3BhY2V3YWxrIGxlbmd0aCIsImYyIjoibG9hbiBsb3dlciBsaW1pdCIsImYzIjoicGhvdG8geWVhciIsImY0IjoibW9yZSBhdmFpbGFibGUgcG93ZXIiLCJmNSI6InNjaGVtZSBidWRnZXQifSwic3RhdGVzIjp7IiI6eyJoaW50Ijp7ImNhcmQiOiJmMCIsImNsdWVzIjpbImMzIl0sInN0b3J5IjoxfSwicG9zcyI6eyJmMCI6WzFdLCJmMSI6WzJdLCJmMiI6WzAsMSwyXSwiZjMiOlswLDEsMl0sImY0IjpbMSwyXSwiZjUiOlswLDEsMl19LCJwcm92Ijp7ImYwIjoxLCJmMSI6Mn0sInZpcyI6WyJjMSIsImMyIiwiYzMiXX0sImYwIjp7ImhpbnQiOnsiY2FyZCI6ImYxIiwiY2x1ZXMiOlsiYzEiLCJjMiJdLCJzdG9yeSI6Mn0sInBvc3MiOnsiZjEiOlsyXSwiZjIiOlswXSwiZjMiOlsxLDJdLCJmNCI6WzEsMl0sImY1IjpbMF19LCJwcm92Ijp7ImYxIjoyLCJmMiI6MCwiZjUiOjB9LCJ2aXMiOlsiYzEiLCJjMiIsImMzIiwiYzQiXX0sImYwLGYxIjp7ImhpbnQiOnsiY2FyZCI6ImYyIiwiY2x1ZXMiOlsiYzIiLCJjNCJdLCJzdG9yeSI6MH0sInBvc3MiOnsiZjIiOlswXSwiZjMiOlsxLDJdLCJmNCI6WzEsMl0sImY1IjpbMF19LCJwcm92Ijp7ImYyIjowLCJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCJdfSwiZjAsZjEsZjIiOnsiaGludCI6eyJjYXJkIjoiZjMiLCJjbHVlcyI6WyJjNSJdLCJzdG9yeSI6MX0sInBvc3MiOnsiZjMiOlsxXSwiZjQiOlsyXSwiZjUiOlswXX0sInByb3YiOnsiZjMiOjEsImY0IjoyLCJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmMixmMyI6eyJoaW50Ijp7ImNhcmQiOiJmNCIsImNsdWVzIjpbImMyIl0sInN0b3J5IjoyfSwicG9zcyI6eyJmNCI6WzJdLCJmNSI6WzBdfSwicHJvdiI6eyJmNCI6MiwiZjUiOjB9LCJ2aXMiOlsiYzEiLCJjMiIsImMzIiwiYzQiLCJjNSJdfSwiZjAsZjEsZjIsZjMsZjQiOnsiaGludCI6eyJjYXJkIjoiZjUiLCJjbHVlcyI6W10sInN0b3J5IjowfSwicG9zcyI6eyJmNSI6WzBdfSwicHJvdiI6eyJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmMixmMyxmNCxmNSI6eyJoaW50IjpudWxsLCJwb3NzIjp7fSwicHJvdiI6e30sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmMixmMyxmNSI6eyJoaW50Ijp7ImNhcmQiOiJmNCIsImNsdWVzIjpbXSwic3RvcnkiOjJ9LCJwb3NzIjp7ImY0IjpbMl19LCJwcm92Ijp7ImY0IjoyfSwidmlzIjpbImMxIiwiYzIiLCJjMyIsImM0IiwiYzUiXX0sImYwLGYxLGYyLGY0Ijp7ImhpbnQiOnsiY2FyZCI6ImYzIiwiY2x1ZXMiOlsiYzQiXSwic3RvcnkiOjF9LCJwb3NzIjp7ImYzIjpbMV0sImY1IjpbMF19LCJwcm92Ijp7ImYzIjoxLCJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmMixmNCxmNSI6eyJoaW50Ijp7ImNhcmQiOiJmMyIsImNsdWVzIjpbXSwic3RvcnkiOjF9LCJwb3NzIjp7ImYzIjpbMV19LCJwcm92Ijp7ImYzIjoxfSwidmlzIjpbImMxIiwiYzIiLCJjMyIsImM0IiwiYzUiXX0sImYwLGYxLGYyLGY1Ijp7ImhpbnQiOnsiY2FyZCI6ImYzIiwiY2x1ZXMiOlsiYzUiXSwic3RvcnkiOjF9LCJwb3NzIjp7ImYzIjpbMV0sImY0IjpbMl19LCJwcm92Ijp7ImYzIjoxLCJmNCI6Mn0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmNSI6eyJoaW50Ijp7ImNhcmQiOiJmMiIsImNsdWVzIjpbImMyIiwiYzQiXSwic3RvcnkiOjB9LCJwb3NzIjp7ImYyIjpbMF0sImYzIjpbMSwyXSwiZjQiOlsxLDJdfSwicHJvdiI6eyJmMiI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCJdfSwiZjAsZjIiOnsiaGludCI6eyJjYXJkIjoiZjMiLCJjbHVlcyI6WyJjNSJdLCJzdG9yeSI6MX0sInBvc3MiOnsiZjEiOlsyXSwiZjMiOlsxXSwiZjQiOlsyXSwiZjUiOlswXX0sInByb3YiOnsiZjEiOjIsImYzIjoxLCJmNCI6MiwiZjUiOjB9LCJ2aXMiOlsiYzEiLCJjMiIsImMzIiwiYzQiLCJjNSJdfSwiZjAsZjIsZjMiOnsiaGludCI6eyJjYXJkIjoiZjEiLCJjbHVlcyI6WyJjMSJdLCJzdG9yeSI6Mn0sInBvc3MiOnsiZjEiOlsyXSwiZjQiOlsyXSwiZjUiOlswXX0sInByb3YiOnsiZjEiOjIsImY0IjoyLCJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMixmMyxmNCI6eyJoaW50Ijp7ImNhcmQiOiJmMSIsImNsdWVzIjpbImMxIl0sInN0b3J5IjoyfSwicG9zcyI6eyJmMSI6WzJdLCJmNSI6WzBdfSwicHJvdiI6eyJmMSI6MiwiZjUiOjB9LCJ2aXMiOlsiYzEiLCJjMiIsImMzIiwiYzQiLCJjNSJdfSwiZjAsZjIsZjMsZjQsZjUiOnsiaGludCI6eyJjYXJkIjoiZjEiLCJjbHVlcyI6W10sInN0b3J5IjoyfSwicG9zcyI6eyJmMSI6WzJdfSwicHJvdiI6eyJmMSI6Mn0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMixmMyxmNSI6eyJoaW50Ijp7ImNhcmQiOiJmMSIsImNsdWVzIjpbXSwic3RvcnkiOjJ9LCJwb3NzIjp7ImYxIjpbMl0sImY0IjpbMl19LCJwcm92Ijp7ImYxIjoyLCJmNCI6Mn0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMixmNCI6eyJoaW50Ijp7ImNhcmQiOiJmMSIsImNsdWVzIjpbImMyIl0sInN0b3J5IjoyfSwicG9zcyI6eyJmMSI6WzJdLCJmMyI6WzFdLCJmNSI6WzBdfSwicHJvdiI6eyJmMSI6MiwiZjMiOjEsImY1IjowfSwidmlzIjpbImMxIiwiYzIiLCJjMyIsImM0IiwiYzUiXX0sImYwLGYyLGY0LGY1Ijp7ImhpbnQiOnsiY2FyZCI6ImYxIiwiY2x1ZXMiOlsiYzIiXSwic3RvcnkiOjJ9LCJwb3NzIjp7ImYxIjpbMl0sImYzIjpbMV19LCJwcm92Ijp7ImYxIjoyLCJmMyI6MX0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMixmNSI6eyJoaW50Ijp7ImNhcmQiOiJmMSIsImNsdWVzIjpbImMyIl0sInN0b3J5IjoyfSwicG9zcyI6eyJmMSI6WzJdLCJmMyI6WzFdLCJmNCI6WzJdfSwicHJvdiI6eyJmMSI6MiwiZjMiOjEsImY0IjoyfSwidmlzIjpbImMxIiwiYzIiLCJjMyIsImM0IiwiYzUiXX0sImYwLGY1Ijp7ImhpbnQiOnsiY2FyZCI6ImYxIiwiY2x1ZXMiOlsiYzEiLCJjMiJdLCJzdG9yeSI6Mn0sInBvc3MiOnsiZjEiOlsyXSwiZjIiOlswXSwiZjMiOlsxLDJdLCJmNCI6WzEsMl19LCJwcm92Ijp7ImYxIjoyLCJmMiI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCJdfSwiZjEiOnsiaGludCI6eyJjYXJkIjoiZjAiLCJjbHVlcyI6WyJjMyJdLCJzdG9yeSI6MX0sInBvc3MiOnsiZjAiOlsxXSwiZjIiOlswLDEsMl0sImYzIjpbMCwxLDJdLCJmNCI6WzEsMl0sImY1IjpbMCwxLDJdfSwicHJvdiI6eyJmMCI6MX0sInZpcyI6WyJjMSIsImMyIiwiYzMiXX19fQ=="), c => c.charCodeAt(0))));
+      const TABLE = DATA.states;
+      const KEY = "hope-desk-2026-11-01-2efeaf34";
+      const WORD_KEY = "hope-puzzle-2026-11-01-c2d1e33b";
+      const IS_LATEST = true;
+      const ev = name => { if (IS_LATEST) window.track?.(name); };   // archive plays don't count
+
+      // ----- saved progress (merged over defaults; anything that doesn't fit the table resets) -----
+      const fresh = () => ({ filed: {}, hinted: [], helped: [], hintCard: null, hintLevel: 0,
+                             mistakes: 0, hints: 0, log: [], elapsed: 0, status: "playing" });
+      if (location.hash === "#reset") { try { localStorage.removeItem(KEY); } catch {} history.replaceState(null, "", location.pathname); }
+      let state;
+      try { state = { ...fresh(), ...(JSON.parse(localStorage.getItem(KEY)) || {}) }; } catch { state = fresh(); }
+      const keyOf = () => Object.keys(state.filed).sort().join(",");
+      const valid = () => TABLE[keyOf()] && Object.entries(state.filed).every(([c, s]) => DESK.cards.some(x => x.id === c) && Number.isInteger(s));
+      if (!valid()) state = fresh();
+      const row = () => TABLE[keyOf()];
+
+      const $ = id => document.getElementById(id);
+      const byId = Object.fromEntries(DESK.cards.map(c => [c.id, c]));
+      let sel = null, lastVis = row().vis, startedAt = null, tick = null;
+
+      // ----- timer: counts up from the first tap; saved continuously so a killed tab keeps its time -----
+      const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+      const elapsed = () => state.elapsed + (startedAt ? (Date.now() - startedAt) / 1000 : 0);
+      const save = () => { try { localStorage.setItem(KEY, JSON.stringify({ ...state, elapsed: elapsed() })); } catch {} };
+      const showTime = () => { $("timer").textContent = fmt(elapsed()); };
+      const startClock = () => {
+        if (startedAt || state.status !== "playing") return;
+        if (!state.elapsed && !state.log.length && !state.hints) ev("desk-start");
+        startedAt = Date.now();
+        tick = setInterval(() => { showTime(); save(); }, 1000);
+      };
+      const stopClock = () => { state.elapsed = elapsed(); startedAt = null; clearInterval(tick); showTime(); };
+      const pause = () => { if (startedAt) { stopClock(); save(); } };
+      addEventListener("pagehide", pause);
+      document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
+
+      // Feedback is re-announced even when the same words repeat (screen readers skip unchanged text).
+      const say = (text, warn) => {
+        const f = $("feedback");
+        f.textContent = "";
+        f.classList.toggle("warn", !!warn);
+        requestAnimationFrame(() => { f.textContent = text; });
+      };
+
+      // The dawn behind the page brightens as facts are filed.
+      const baseDim = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--backdrop-dim")) || 1;
+      const setDawn = () => {
+        const n = Object.keys(state.filed).length / DESK.cards.length;
+        document.documentElement.style.setProperty("--backdrop-dim", (baseDim * (0.55 + 0.45 * n)).toFixed(3));
+      };
+
+      const clueText = id => DATA.clues[id];
+      function paint() {
+        const focusId = document.activeElement?.id;          // rebuilding buttons must not lose keyboard focus
+        const r = row(), playing = state.status === "playing";
+        const ol = $("clues"); ol.innerHTML = "";
+        DESK.clues.forEach(c => {
+          const li = document.createElement("li"); li.id = "clue-" + c.id;
+          if (r.vis.includes(c.id)) { li.textContent = clueText(c.id); if (!lastVis.includes(c.id)) li.classList.add("new"); }
+          else { li.className = "locked"; li.textContent = "Hidden on one of the facts. File it to reveal this clue."; }
+          ol.appendChild(li);
+        });
+        lastVis = r.vis;
+        const tray = $("tray"); tray.innerHTML = "";
+        const loose = DESK.cards.filter(c => !(c.id in state.filed));
+        if (!loose.length) tray.innerHTML = '<span class="empty">Every fact is filed.</span>';
+        loose.forEach(c => {
+          const b = document.createElement("button");
+          b.type = "button"; b.className = "fact"; b.id = "fact-" + c.id; b.textContent = c.t;
+          b.setAttribute("aria-pressed", sel === c.id ? "true" : "false");
+          b.disabled = !playing;
+          b.addEventListener("click", () => {
+            startClock(); sel = sel === c.id ? null : c.id;
+            say(sel ? "Now tap “File it here” on the story you can prove it belongs to." : "");
+            paint();
+          });
+          tray.appendChild(b);
+        });
+        const box = $("stories"); box.innerHTML = "";
+        DESK.stories.forEach((s, i) => {
+          const mine = DESK.cards.filter(c => state.filed[c.id] === i);
+          const open = sel && mine.length < DESK.per;          // a full story can't take a fact
+          const el = document.createElement("article");
+          el.className = "story" + (open ? " target" : ""); el.id = "story-" + i;
+          el.innerHTML = `<p class="dl"></p><h3></h3><p class="blurb"></p>`;
+          el.querySelector(".dl").textContent = s.dl;
+          el.querySelector("h3").textContent = s.head;
+          el.querySelector(".blurb").textContent = s.blurb;
+          const filed = document.createElement("div"); filed.className = "filed";
+          mine.forEach(c => {
+            const g = document.createElement("div"); g.className = "got" + (state.helped.includes(c.id) ? " helped" : "");
+            g.innerHTML = "<b></b><span></span>";
+            g.querySelector("b").textContent = c.t; g.querySelector("span").textContent = DATA.means[c.id];
+            filed.appendChild(g);
+          });
+          for (let k = mine.length; k < DESK.per; k++) filed.insertAdjacentHTML("beforeend", '<div class="slot">Empty slot</div>');
+          el.appendChild(filed);
+          if (open) {                                          // only this button files: stray taps on the text do nothing
+            const btn = document.createElement("button"); btn.type = "button"; btn.className = "file-here"; btn.id = "file-" + i;
+            btn.textContent = "File it here";
+            btn.addEventListener("click", () => file(i));
+            el.appendChild(btn);
+          }
+          box.appendChild(el);
+        });
+        const n = Object.keys(state.filed).length;
+        $("count").textContent = `${n} of ${DESK.cards.length} filed`;
+        $("mistakes").textContent = `${state.mistakes} ${state.mistakes === 1 ? "mistake" : "mistakes"}`;
+        $("hints-used").textContent = `${state.hints} ${state.hints === 1 ? "hint" : "hints"}`;
+        $("actions").hidden = !playing;
+        setDawn();
+        const back = focusId && $(focusId);
+        if (back) back.focus({ preventScroll: true });
+        else if (focusId && focusId.startsWith("file-")) document.querySelector(".fact")?.focus({ preventScroll: true });
+      }
+
+      function file(story) {
+        if (!sel || state.status !== "playing") return;
+        startClock();
+        const r = row(), card = sel;
+        if (r.prov[card] === story) {
+          state.filed[card] = story;
+          state.log.push(state.hinted.includes(card) ? "h" : "ok");   // any hint on this fact shows yellow
+          if (state.hintCard === card) { state.hintCard = null; state.hintLevel = 0; }
+          sel = null;
+          const more = TABLE[keyOf()].vis.length > r.vis.length;
+          say((state.helped.includes(card) ? `The night editor filed ${byId[card].t}.` : "Filed.") + (more ? " A new clue has turned up." : ""));
+          save(); paint();
+          if (Object.keys(state.filed).length === DESK.cards.length) finish(true);
+          return;
+        }
+        const shake = () => { const el = $("fact-" + card); if (el) { el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); } };
+        if (!r.poss[card].includes(story)) {           // the clues already rule this out: a mistake
+          state.mistakes += 1; state.log.push("x"); save(); paint(); shake();
+          say("The clues already rule that out. That counts as a mistake.", true);
+          return;
+        }
+        paint(); shake();                              // still possible but not proven: neutral, same words either way
+        say("The clues don't prove that yet. Keep looking.");
+      }
+
+      // Hint ladder for one fact: which clues to read, then which fact, then the night editor files it.
+      // One hint per fact, however far up the ladder you go (kept across reloads).
+      $("hint").addEventListener("click", () => {
+        if (state.status !== "playing") return;
+        startClock();
+        const h = row().hint; if (!h) return;
+        if (state.hintCard !== h.card) { state.hintCard = h.card; state.hintLevel = 0; }
+        if (!state.hinted.includes(h.card)) { state.hinted.push(h.card); state.hints += 1; ev(`desk-hint-${Math.min(state.hints, 4)}`); }
+        state.hintLevel = Math.min(state.hintLevel + 1, 3);
+        save();
+        const nums = h.clues.map(id => DESK.clues.findIndex(c => c.id === id) + 1);
+        const light = () => h.clues.forEach(id => $("clue-" + id)?.classList.add("lit"));
+        const where = nums.length > 1 ? `clues ${nums.join(" and ")}` : nums.length ? `clue ${nums[0]}` : "the rule above";
+        if (state.hintLevel === 1) {
+          paint(); light();
+          say(nums.length > 1 ? `Read clues ${nums.join(" and ")} together. They prove where one fact goes.`
+            : nums.length ? `Read clue ${nums[0]} again. It proves where one fact goes.`
+            : "The rule above already proves where one fact goes. Count the empty slots.");
+        } else if (state.hintLevel === 2) {
+          paint(); light(); $("fact-" + h.card)?.classList.add("lit");
+          say(`Look at ${byId[h.card].t}. Where does ${where} send it?`);
+        } else {
+          if (!state.helped.includes(h.card)) state.helped.push(h.card);
+          sel = h.card; file(h.story);
+        }
+      });
+
+      $("skip").addEventListener("click", () => { if (state.status === "playing") ev("desk-skip"); });
+
+      function wordLine() {
+        try {
+          const w = WORD_KEY && JSON.parse(localStorage.getItem(WORD_KEY));
+          if (!w || w.status === "playing") return "";
+          const extra = Math.max(0, (w.hints || 0) - 1);          // hint 1 is free, as on the word page
+          return w.status === "solved"
+            ? `\u{1F524} solved in ${w.guesses} ${w.guesses === 1 ? "guess" : "guesses"} · ${extra} ${extra === 1 ? "hint" : "hints"}\n`
+            : "\u{1F524} the word beat me\n";
+        } catch { return ""; }
+      }
+      const shareText = () => {
+        const clean = !state.mistakes && !state.hints;
+        const squares = state.log.map(x => x === "ok" ? "\u{1F7E9}" : x === "h" ? "\u{1F7E8}" : "\u{1F7E5}").join("");
+        return `HOPE TODAY · 1 Nov 2026\n${wordLine()}\u{1F5C2} Copy Desk ${fmt(state.elapsed)} · ${state.mistakes} ${state.mistakes === 1 ? "mistake" : "mistakes"}${clean ? " ☀" : ""}\n${squares}`;
+      };
+
+      function finish(celebrate) {
+        stopClock();
+        state.status = "done";
+        save();
+        const clean = !state.mistakes && !state.hints;
+        $("result-title").textContent = clean ? "First light" : "The paper's out";
+        $("result-line").textContent = `All ${DESK.cards.length} facts filed in ${fmt(state.elapsed)}, with ${state.mistakes} ${state.mistakes === 1 ? "mistake" : "mistakes"} and ${state.hints} ${state.hints === 1 ? "hint" : "hints"}. Your good news is ready.`;
+        $("share-text").textContent = shareText();
+        $("result").hidden = false;
+        paint();
+        if (celebrate) {
+          ev("desk-solved"); ev(`desk-mistakes-${Math.min(state.mistakes, 3)}${state.mistakes >= 3 ? "+" : ""}`);
+          window.riseSun?.();
+          $("result").scrollIntoView({ behavior: "smooth", block: "center" });
+          $("open-deck").focus({ preventScroll: true });
+        }
+      }
+
+      $("share").addEventListener("click", async () => {
+        ev("desk-share");
+        const text = shareText();
+        try { await navigator.clipboard.writeText(text); $("share").textContent = "Copied!"; }
+        catch { prompt("Copy this:", text); }
+      });
+
+      paint();
+      showTime();
+      if (state.status === "done") finish(false);
+    })();
+  </script>
+</body>
+</html>

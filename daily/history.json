@@ -5,7 +5,10 @@
     "https://www.theguardian.com/environment/2026/oct/24/norfolk-couple-who-took-on-environmental-regulators-three-times-and-won",
     "https://www.theguardian.com/australia-news/2026/oct/30/study-of-100000-australians-seeks-causes-of-mental-health-disorders-and-early-onset-cancer",
     "https://www.theguardian.com/society/2026/oct/28/yvette-cooper-drops-plans-abolish-healthwatch-england",
-    "https://www.theguardian.com/australia-news/2026/oct/26/almost-two-thirds-of-australians-bulk-billed-for-all-gp-care-amid-extra-incentives-for-doctors"
+    "https://www.theguardian.com/australia-news/2026/oct/26/almost-two-thirds-of-australians-bulk-billed-for-all-gp-care-amid-extra-incentives-for-doctors",
+    "https://www.theguardian.com/environment/2026/oct/27/homes-across-uk-to-get-low--or-no-interest-loans-to-fund-solar-panels-and-heat-pumps",
+    "https://news.mongabay.com/short-article/2026/10/chinas-record-breaking-exports-of-clean-tech-are-making-a-big-dent-in-emissions-report-says/",
+    "https://www.sciencedaily.com/releases/2026/10/261030002931.htm"
   ],
   "topics": [
     {
@@ -17,6 +20,20 @@
       "date": "2026-10-31",
       "topic": "Medical care",
       "answer": "HEALTH"
+    },
+    {
+      "date": "2026-11-01",
+      "topic": "Power shift",
+      "answer": "SOLAR"
     }
-  ]
+  ],
+  "reserve": {
+    "made": "2026-11-01",
+    "answer": "MIND",
+    "urls": [
+      "https://www.sciencedaily.com/releases/2026/10/261029072142.htm",
+      "https://www.sciencedaily.com/releases/2026/10/261025222538.htm",
+      "https://www.sciencedaily.com/releases/2026/10/261028232659.htm"
+    ]
+  }
 }

@@ -1,0 +1,249 @@
+{
+  "date": "2026-11-01",
+  "topic": "Power shift",
+  "answer": "SOLAR",
+  "why": "This cluster is happy because cleaner power, smarter grids, and more efficient energy use can cut bills and emissions.",
+  "puzzle": {
+    "type": "anagram",
+    "instruction": "Today's topic is tucked into this sentence. Can you spot how?",
+    "sentence": "Once orals ended, apprentices installed efficient chargers for the new electric buses.",
+    "length": 5,
+    "answer": "SOLAR",
+    "highlight": [
+      1
+    ],
+    "hints": [
+      {
+        "level": 1,
+        "free": true,
+        "text": "Shuffle a sentence word\u2019s letters, and a hidden buddy may pop out! GLEAN is just ANGLE, mixed up."
+      },
+      {
+        "level": 2,
+        "free": false,
+        "text": "\u2600\ufe0f Of the sun\u2014powering panels and giving planets their spotlight."
+      },
+      {
+        "level": 3,
+        "free": false,
+        "text": "Try unscrambling \u201corals\u201d\u2026",
+        "highlight": [
+          1
+        ]
+      }
+    ],
+    "solution": {
+      "answer": "SOLAR",
+      "steps": [
+        "The trick: some letters in the sentence were the answer, mixed up.",
+        "Where: in \u201corals\u201d.",
+        "How: ORALS \u2192 rearranged \u2192 SOLAR"
+      ]
+    }
+  },
+  "branch": null,
+  "stories": [
+    {
+      "headline": "Cheap Green Home Loans",
+      "summary": "UK households can now get interest-free or low-interest loans to install solar panels, heat pumps and batteries with no upfront cost.",
+      "key_points": [
+        "Warm Home Loans scheme launched Tuesday across the UK",
+        "Loans range from \u00a37,500 to \u00a335,000",
+        "Heat pump grants of up to \u00a39,000 a year may also be available",
+        "Saving up to \u00a3550 a year on bills, plus \u00a3300 more with a time-of-use tariff"
+      ],
+      "why_it_matters": "Lower upfront costs can help more families switch to clean power and make homes cheaper to run.",
+      "url": "https://www.theguardian.com/environment/2026/oct/27/homes-across-uk-to-get-low--or-no-interest-loans-to-fund-solar-panels-and-heat-pumps",
+      "date": "2026-10-27",
+      "image": "https://media.guim.co.uk/17b54a4bae860244d70120676fcb8af95df60102/433_0_4624_3701/1000.jpg",
+      "source": "The Guardian"
+    },
+    {
+      "headline": "China Clean Tech Cuts CO2",
+      "summary": "China\u2019s record exports of clean energy technology are helping reduce global emissions, according to a new report.",
+      "key_points": [
+        "Exports include solar panels, wind turbines, batteries and electric vehicles",
+        "The report estimates 450 million metric tons of carbon dioxide will be averted this year",
+        "The report was released Thursday in Bangkok",
+        "UN climate talks are set to begin next month in Turkey"
+      ],
+      "why_it_matters": "Big clean-tech exports can speed the shift away from fossil fuels and cut planet-warming pollution.",
+      "url": "https://news.mongabay.com/short-article/2026/10/chinas-record-breaking-exports-of-clean-tech-are-making-a-big-dent-in-emissions-report-says/",
+      "date": "2026-10-29",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/29154834/AP26301615747100-768x512.jpg",
+      "source": "Mongabay"
+    },
+    {
+      "headline": "ISS Gets Power Boost",
+      "summary": "Two astronauts completed a spacewalk to install a new solar array on the International Space Station, moving it closer to a major power upgrade.",
+      "key_points": [
+        "The spacewalk lasted 7 hours and 11 minutes",
+        "A new solar array was installed on the ISS",
+        "The final array is due on November 5",
+        "The station could get up to 30% more available power"
+      ],
+      "why_it_matters": "More solar power gives the station greater energy capacity and supports its future safe deorbit.",
+      "url": "https://www.sciencedaily.com/releases/2026/10/261030002931.htm",
+      "date": "2026-10-30",
+      "image": null,
+      "source": "ScienceDaily"
+    }
+  ],
+  "desk": {
+    "desk_id": "d00d41d3",
+    "per": 2,
+    "rule": "Each story gets two facts.",
+    "kinds": {},
+    "stories": [
+      {
+        "head": "Cheap Green Home Loans",
+        "dl": "United Kingdom",
+        "blurb": "Households can get interest-free or low-interest loans to pay for home energy upgrades with no upfront cost. The scheme is meant to make cleaner heating and power cheaper to run.",
+        "url": "https://www.theguardian.com/environment/2026/oct/27/homes-across-uk-to-get-low--or-no-interest-loans-to-fund-solar-panels-and-heat-pumps"
+      },
+      {
+        "head": "China Clean Tech Cuts CO2",
+        "dl": "Bangkok, Thailand",
+        "blurb": "China's clean energy exports are helping cut global emissions. The report says the equipment shipped abroad will avoid a large amount of carbon pollution this year.",
+        "url": "https://news.mongabay.com/short-article/2026/10/chinas-record-breaking-exports-of-clean-tech-are-making-a-big-dent-in-emissions-report-says/"
+      },
+      {
+        "head": "ISS Gets Power Boost",
+        "dl": "International Space Station, Space",
+        "blurb": "Two astronauts finished a long spacewalk to fit a new solar array. The station is set for a major boost in available power after the last array goes in.",
+        "url": "https://www.sciencedaily.com/releases/2026/10/261030002931.htm"
+      }
+    ],
+    "cards": [
+      {
+        "t": "450m",
+        "means": "carbon dioxide averted",
+        "kind": "count",
+        "value": 450000000,
+        "unit": "metric tons",
+        "id": "f0",
+        "home": 1,
+        "clue": "c4"
+      },
+      {
+        "t": "7h 11m",
+        "means": "spacewalk length",
+        "kind": "time",
+        "value": 7.183333333333334,
+        "unit": "hours",
+        "id": "f1",
+        "home": 2
+      },
+      {
+        "t": "\u00a37,500",
+        "means": "loan lower limit",
+        "kind": "money",
+        "value": 7500,
+        "unit": "GBP",
+        "id": "f2",
+        "home": 0,
+        "clue": "c5"
+      },
+      {
+        "t": "2026",
+        "means": "photo year",
+        "kind": "year",
+        "value": 2026,
+        "unit": "year",
+        "id": "f3",
+        "home": 1
+      },
+      {
+        "t": "30%",
+        "means": "more available power",
+        "kind": "count",
+        "value": 30,
+        "unit": "percent",
+        "id": "f4",
+        "home": 2
+      },
+      {
+        "t": "\u00a32.7bn",
+        "means": "scheme budget",
+        "kind": "money",
+        "value": 2700000000,
+        "unit": "GBP",
+        "id": "f5",
+        "home": 0
+      }
+    ],
+    "clues": [
+      {
+        "id": "c1",
+        "rule": {
+          "op": "not_in",
+          "card": "f1",
+          "story": 0
+        },
+        "start": true,
+        "t": "The 7h 11m is not in the United Kingdom story."
+      },
+      {
+        "id": "c2",
+        "rule": {
+          "op": "same_as_any",
+          "card": "f4",
+          "others": [
+            "f0",
+            "f1"
+          ],
+          "group": [
+            "unit",
+            "m"
+          ]
+        },
+        "start": true,
+        "t": "The 30% shares a story with the 450m or the 7h 11m."
+      },
+      {
+        "id": "c3",
+        "rule": {
+          "op": "in",
+          "card": "f0",
+          "story": 1
+        },
+        "start": true,
+        "t": "The 450m is in the Bangkok, Thailand story."
+      },
+      {
+        "id": "c4",
+        "rule": {
+          "op": "not_in",
+          "card": "f3",
+          "story": 0
+        },
+        "t": "The 2026 is not in the United Kingdom story."
+      },
+      {
+        "id": "c5",
+        "rule": {
+          "op": "same",
+          "a": "f0",
+          "b": "f3"
+        },
+        "t": "The 450m and the 2026 are in the same story."
+      }
+    ],
+    "table": "eyJjbHVlcyI6eyJjMSI6IlRoZSA3aCAxMW0gaXMgbm90IGluIHRoZSBVbml0ZWQgS2luZ2RvbSBzdG9yeS4iLCJjMiI6IlRoZSAzMCUgc2hhcmVzIGEgc3Rvcnkgd2l0aCB0aGUgNDUwbSBvciB0aGUgN2ggMTFtLiIsImMzIjoiVGhlIDQ1MG0gaXMgaW4gdGhlIEJhbmdrb2ssIFRoYWlsYW5kIHN0b3J5LiIsImM0IjoiVGhlIDIwMjYgaXMgbm90IGluIHRoZSBVbml0ZWQgS2luZ2RvbSBzdG9yeS4iLCJjNSI6IlRoZSA0NTBtIGFuZCB0aGUgMjAyNiBhcmUgaW4gdGhlIHNhbWUgc3RvcnkuIn0sIm1lYW5zIjp7ImYwIjoiY2FyYm9uIGRpb3hpZGUgYXZlcnRlZCIsImYxIjoic3BhY2V3YWxrIGxlbmd0aCIsImYyIjoibG9hbiBsb3dlciBsaW1pdCIsImYzIjoicGhvdG8geWVhciIsImY0IjoibW9yZSBhdmFpbGFibGUgcG93ZXIiLCJmNSI6InNjaGVtZSBidWRnZXQifSwic3RhdGVzIjp7IiI6eyJoaW50Ijp7ImNhcmQiOiJmMCIsImNsdWVzIjpbImMzIl0sInN0b3J5IjoxfSwicG9zcyI6eyJmMCI6WzFdLCJmMSI6WzJdLCJmMiI6WzAsMSwyXSwiZjMiOlswLDEsMl0sImY0IjpbMSwyXSwiZjUiOlswLDEsMl19LCJwcm92Ijp7ImYwIjoxLCJmMSI6Mn0sInZpcyI6WyJjMSIsImMyIiwiYzMiXX0sImYwIjp7ImhpbnQiOnsiY2FyZCI6ImYxIiwiY2x1ZXMiOlsiYzEiLCJjMiJdLCJzdG9yeSI6Mn0sInBvc3MiOnsiZjEiOlsyXSwiZjIiOlswXSwiZjMiOlsxLDJdLCJmNCI6WzEsMl0sImY1IjpbMF19LCJwcm92Ijp7ImYxIjoyLCJmMiI6MCwiZjUiOjB9LCJ2aXMiOlsiYzEiLCJjMiIsImMzIiwiYzQiXX0sImYwLGYxIjp7ImhpbnQiOnsiY2FyZCI6ImYyIiwiY2x1ZXMiOlsiYzIiLCJjNCJdLCJzdG9yeSI6MH0sInBvc3MiOnsiZjIiOlswXSwiZjMiOlsxLDJdLCJmNCI6WzEsMl0sImY1IjpbMF19LCJwcm92Ijp7ImYyIjowLCJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCJdfSwiZjAsZjEsZjIiOnsiaGludCI6eyJjYXJkIjoiZjMiLCJjbHVlcyI6WyJjNSJdLCJzdG9yeSI6MX0sInBvc3MiOnsiZjMiOlsxXSwiZjQiOlsyXSwiZjUiOlswXX0sInByb3YiOnsiZjMiOjEsImY0IjoyLCJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmMixmMyI6eyJoaW50Ijp7ImNhcmQiOiJmNCIsImNsdWVzIjpbImMyIl0sInN0b3J5IjoyfSwicG9zcyI6eyJmNCI6WzJdLCJmNSI6WzBdfSwicHJvdiI6eyJmNCI6MiwiZjUiOjB9LCJ2aXMiOlsiYzEiLCJjMiIsImMzIiwiYzQiLCJjNSJdfSwiZjAsZjEsZjIsZjMsZjQiOnsiaGludCI6eyJjYXJkIjoiZjUiLCJjbHVlcyI6W10sInN0b3J5IjowfSwicG9zcyI6eyJmNSI6WzBdfSwicHJvdiI6eyJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmMixmMyxmNCxmNSI6eyJoaW50IjpudWxsLCJwb3NzIjp7fSwicHJvdiI6e30sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmMixmMyxmNSI6eyJoaW50Ijp7ImNhcmQiOiJmNCIsImNsdWVzIjpbXSwic3RvcnkiOjJ9LCJwb3NzIjp7ImY0IjpbMl19LCJwcm92Ijp7ImY0IjoyfSwidmlzIjpbImMxIiwiYzIiLCJjMyIsImM0IiwiYzUiXX0sImYwLGYxLGYyLGY0Ijp7ImhpbnQiOnsiY2FyZCI6ImYzIiwiY2x1ZXMiOlsiYzQiXSwic3RvcnkiOjF9LCJwb3NzIjp7ImYzIjpbMV0sImY1IjpbMF19LCJwcm92Ijp7ImYzIjoxLCJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmMixmNCxmNSI6eyJoaW50Ijp7ImNhcmQiOiJmMyIsImNsdWVzIjpbXSwic3RvcnkiOjF9LCJwb3NzIjp7ImYzIjpbMV19LCJwcm92Ijp7ImYzIjoxfSwidmlzIjpbImMxIiwiYzIiLCJjMyIsImM0IiwiYzUiXX0sImYwLGYxLGYyLGY1Ijp7ImhpbnQiOnsiY2FyZCI6ImYzIiwiY2x1ZXMiOlsiYzUiXSwic3RvcnkiOjF9LCJwb3NzIjp7ImYzIjpbMV0sImY0IjpbMl19LCJwcm92Ijp7ImYzIjoxLCJmNCI6Mn0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMSxmNSI6eyJoaW50Ijp7ImNhcmQiOiJmMiIsImNsdWVzIjpbImMyIiwiYzQiXSwic3RvcnkiOjB9LCJwb3NzIjp7ImYyIjpbMF0sImYzIjpbMSwyXSwiZjQiOlsxLDJdfSwicHJvdiI6eyJmMiI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCJdfSwiZjAsZjIiOnsiaGludCI6eyJjYXJkIjoiZjMiLCJjbHVlcyI6WyJjNSJdLCJzdG9yeSI6MX0sInBvc3MiOnsiZjEiOlsyXSwiZjMiOlsxXSwiZjQiOlsyXSwiZjUiOlswXX0sInByb3YiOnsiZjEiOjIsImYzIjoxLCJmNCI6MiwiZjUiOjB9LCJ2aXMiOlsiYzEiLCJjMiIsImMzIiwiYzQiLCJjNSJdfSwiZjAsZjIsZjMiOnsiaGludCI6eyJjYXJkIjoiZjEiLCJjbHVlcyI6WyJjMSJdLCJzdG9yeSI6Mn0sInBvc3MiOnsiZjEiOlsyXSwiZjQiOlsyXSwiZjUiOlswXX0sInByb3YiOnsiZjEiOjIsImY0IjoyLCJmNSI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMixmMyxmNCI6eyJoaW50Ijp7ImNhcmQiOiJmMSIsImNsdWVzIjpbImMxIl0sInN0b3J5IjoyfSwicG9zcyI6eyJmMSI6WzJdLCJmNSI6WzBdfSwicHJvdiI6eyJmMSI6MiwiZjUiOjB9LCJ2aXMiOlsiYzEiLCJjMiIsImMzIiwiYzQiLCJjNSJdfSwiZjAsZjIsZjMsZjQsZjUiOnsiaGludCI6eyJjYXJkIjoiZjEiLCJjbHVlcyI6W10sInN0b3J5IjoyfSwicG9zcyI6eyJmMSI6WzJdfSwicHJvdiI6eyJmMSI6Mn0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMixmMyxmNSI6eyJoaW50Ijp7ImNhcmQiOiJmMSIsImNsdWVzIjpbXSwic3RvcnkiOjJ9LCJwb3NzIjp7ImYxIjpbMl0sImY0IjpbMl19LCJwcm92Ijp7ImYxIjoyLCJmNCI6Mn0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMixmNCI6eyJoaW50Ijp7ImNhcmQiOiJmMSIsImNsdWVzIjpbImMyIl0sInN0b3J5IjoyfSwicG9zcyI6eyJmMSI6WzJdLCJmMyI6WzFdLCJmNSI6WzBdfSwicHJvdiI6eyJmMSI6MiwiZjMiOjEsImY1IjowfSwidmlzIjpbImMxIiwiYzIiLCJjMyIsImM0IiwiYzUiXX0sImYwLGYyLGY0LGY1Ijp7ImhpbnQiOnsiY2FyZCI6ImYxIiwiY2x1ZXMiOlsiYzIiXSwic3RvcnkiOjJ9LCJwb3NzIjp7ImYxIjpbMl0sImYzIjpbMV19LCJwcm92Ijp7ImYxIjoyLCJmMyI6MX0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCIsImM1Il19LCJmMCxmMixmNSI6eyJoaW50Ijp7ImNhcmQiOiJmMSIsImNsdWVzIjpbImMyIl0sInN0b3J5IjoyfSwicG9zcyI6eyJmMSI6WzJdLCJmMyI6WzFdLCJmNCI6WzJdfSwicHJvdiI6eyJmMSI6MiwiZjMiOjEsImY0IjoyfSwidmlzIjpbImMxIiwiYzIiLCJjMyIsImM0IiwiYzUiXX0sImYwLGY1Ijp7ImhpbnQiOnsiY2FyZCI6ImYxIiwiY2x1ZXMiOlsiYzEiLCJjMiJdLCJzdG9yeSI6Mn0sInBvc3MiOnsiZjEiOlsyXSwiZjIiOlswXSwiZjMiOlsxLDJdLCJmNCI6WzEsMl19LCJwcm92Ijp7ImYxIjoyLCJmMiI6MH0sInZpcyI6WyJjMSIsImMyIiwiYzMiLCJjNCJdfSwiZjEiOnsiaGludCI6eyJjYXJkIjoiZjAiLCJjbHVlcyI6WyJjMyJdLCJzdG9yeSI6MX0sInBvc3MiOnsiZjAiOlsxXSwiZjIiOlswLDEsMl0sImYzIjpbMCwxLDJdLCJmNCI6WzEsMl0sImY1IjpbMCwxLDJdfSwicHJvdiI6eyJmMCI6MX0sInZpcyI6WyJjMSIsImMyIiwiYzMiXX19fQ==",
+    "checks": {
+      "states": 21,
+      "avg_provable": 2.05,
+      "chain": 0.17,
+      "longest_proof": 3,
+      "attempts": 614,
+      "seed": 2818767658,
+      "blind": 4,
+      "calls": 7,
+      "models": [
+        "gpt-5.5",
+        "gpt-5.4-mini"
+      ]
+    },
+    "live": true
+  }
+}
