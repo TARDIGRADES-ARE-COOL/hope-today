@@ -75,7 +75,8 @@ def propose(topic, answer, story_titles):
             f"{answer}: things, places, jobs, actions, ideas, from very common to rare (for CORAL: "
             "reef, diver, snorkel, polyp, clownfish, bleaching, atoll, Great Barrier Reef). Start "
             "with the 40 most obvious SINGLE words a player would type first, even general ones (for "
-            "CORAL: sea, ocean, fish, reef, pink, colour, island), then rarer words and short terms. "
+            "CORAL: sea, ocean, fish, reef, pink, colour, island), the bigger themes it's part of (for "
+            "CORAL: climate, warming, conservation), then rarer words and short terms. "
             f"Words that often go with {answer} count on their own (for CORAL: 'reef' from 'coral reef'). "
             f"Each with any common alternative forms or spellings as aliases. Never a term containing {answer}."
         )}],
@@ -102,6 +103,83 @@ def misfits(answer, names):
     return {normal(n) for n in json.loads(response.choices[0].message.content)["misfits"]}
 
 
+PLAYERS = 3                   # simulated players per round, each listing PLAYER_WORDS words
+PLAYER_WORDS = 40
+
+
+def scored(name, aliases):
+    """One answer with its rarity tier and points."""
+    zipf, tier, points = rarity([name, *aliases])
+    return {"name": name, "aliases": aliases, "zipf": round(zipf, 2), "tier": tier, "points": points}
+
+
+def fill_gaps(answer, answers):
+    """Simulated players type words linked to the answer; fair ones the list missed are appended
+    (at the end, so saved progress, which stores list positions, stays valid). A friend's
+    'sustainable' wasn't on the first SOLAR list, nor were climate, carbon and environment."""
+    known = {normal(n) for a in answers for n in [a["name"], *a["aliases"]]}
+    typed = {}
+    for _ in range(PLAYERS):
+        response = client.chat.completions.create(
+            model=CHECK_MODEL,
+            messages=[{"role": "user", "content": (
+                f"You're playing a word game: type as many words linked to {answer} as you can. List the "
+                f"{PLAYER_WORDS} words you would type, the way a quick player would, obvious ones first, "
+                "then the bigger themes it's part of (for CORAL: ocean, climate, conservation, warming)."
+            )}],
+            response_format={"type": "json_schema", "json_schema": {"name": "words", "strict": True, "schema": {
+                "type": "object", "properties": {"words": {"type": "array", "items": {"type": "string"}}},
+                "required": ["words"], "additionalProperties": False}}},
+        )
+        for w in json.loads(response.choices[0].message.content)["words"]:
+            key = normal(w)
+            if key and key not in known and normal(answer) not in key and key.rstrip("s") not in known:
+                typed.setdefault(key, w.strip())
+    if not typed:
+        return []
+    bad = misfits(answer, list(typed.values()))
+    added = [scored(w, []) for key, w in typed.items() if key not in bad]
+    answers += added
+    return added
+
+
+def linked(answer, words):
+    """The words clearly linked to the answer (picked, not just 'not a misfit': stricter, for
+    words pulled from articles, where most words have nothing to do with it)."""
+    response = client.chat.completions.create(
+        model=CHECK_MODEL,
+        messages=[{"role": "user", "content": (
+            f"Players type words linked to {answer}. Which of these would a player really type for "
+            f"{answer}: things, ideas and themes clearly connected to it (for CORAL: reef, bleaching, "
+            "warming)? Be strict. Ordinary news words don't count even if they appear near it (costs, "
+            "families, experts, progress, customers, talks, significant).\n"
+            f"{json.dumps(words)}"
+        )}],
+        response_format={"type": "json_schema", "json_schema": {"name": "linked", "strict": True, "schema": {
+            "type": "object", "properties": {"words": {"type": "array", "items": {"type": "string"}}},
+            "required": ["words"], "additionalProperties": False}}},
+    )
+    return {normal(w) for w in json.loads(response.choices[0].message.content)["words"]}
+
+
+def story_words(answer, answers, article_texts):
+    """Linked words that appear in today's articles but not on the list (SOLAR's stories had
+    'carbon' and 'emissions'). Appended like fill_gaps; make_branch then marks them as news words."""
+    known = {normal(n) for a in answers for n in [a["name"], *a["aliases"]]}
+    seen = {}
+    for w in re.findall(r"[a-z]{4,}", " ".join(article_texts).lower()):
+        # Everyday-to-uncommon words only: very common ones ('year', 'said') are never the link.
+        if w not in known and w.rstrip("s") not in known and normal(answer) not in w \
+                and 2.0 <= zipf_frequency(w, "en") <= 5.0:
+            seen.setdefault(w.rstrip("s") if w.endswith("s") and not w.endswith("ss") else w, w)
+    if not seen:
+        return []
+    keep = linked(answer, list(seen.values())[:250])
+    added = [scored(w, []) for w in seen.values() if normal(w) in keep]
+    answers += added
+    return added
+
+
 def make_branch(topic, answer, story_titles, article_texts):
     """Build round two: prompt, cleaned and scored answers, the news words and the gem."""
     raw = propose(topic, answer, story_titles)
@@ -118,9 +196,8 @@ def make_branch(topic, answer, story_titles, article_texts):
         plain = everyday_name(a["name"])
         if plain and normal(plain) not in {normal(x) for x in aliases}:
             aliases.append(plain)                     # typing "otter" should work too
-        zipf, tier, points = rarity([a["name"], *aliases])
-        answers.append({"name": a["name"], "aliases": aliases, "zipf": round(zipf, 2),
-                        "tier": tier, "points": points})
+        answers.append(scored(a["name"], aliases))
+    added = fill_gaps(answer, answers) + story_words(answer, answers, article_texts)
 
     # News words: answers that appear in today's articles score extra; the rarest is the gem.
     text = " " + re.sub(r"[^a-z]+", " ", " ".join(article_texts).lower()) + " "
@@ -136,7 +213,8 @@ def make_branch(topic, answer, story_titles, article_texts):
         gem.update(tier="Gem", points=GEM_POINTS)
 
     return {"prompt": f"Words linked to {answer}", "answers": answers, "gem": gem["name"] if gem else None,
-            "gem_from_news": bool(in_news), "dropped": len(raw["answers"]) - len(answers)}
+            "gem_from_news": bool(in_news), "dropped": len(raw["answers"]) - (len(answers) - len(added)),
+            "added_by_players": len(added)}
 
 
 if __name__ == "__main__":

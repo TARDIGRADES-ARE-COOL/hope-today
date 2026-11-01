@@ -580,6 +580,8 @@
         const g = norm(raw);
         for (const v of [g, g.replace(/es$/, ""), g.replace(/s$/, ""), g + "s"]) if (index.has(v)) return index.get(v);
         if (g.length >= 5) for (const [k, i] of index) if (oneEdit(g, k)) return i;
+        // Other forms of a long word: sustainable / sustainability, renewable / renewables.
+        if (g.length >= 7) for (const [k, i] of index) if (k.length >= 7 && k.slice(0, 7) === g.slice(0, 7)) return i;
         return -1;
       };
       const tierClass = t => "t-" + t.split(" ")[0];

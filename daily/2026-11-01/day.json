@@ -1370,11 +1370,286 @@
         "zipf": 3.56,
         "tier": "Uncommon",
         "points": 2
+      },
+      {
+        "name": "shine",
+        "aliases": [],
+        "zipf": 4.17,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "battery",
+        "aliases": [],
+        "zipf": 4.52,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "charge",
+        "aliases": [],
+        "zipf": 5.02,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "collector",
+        "aliases": [],
+        "zipf": 3.91,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "volt",
+        "aliases": [],
+        "zipf": 3.32,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "glare",
+        "aliases": [],
+        "zipf": 3.36,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "beam",
+        "aliases": [],
+        "zipf": 4.14,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "eco",
+        "aliases": [],
+        "zipf": 3.71,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sustainability",
+        "aliases": [],
+        "zipf": 3.77,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sunbeam",
+        "aliases": [],
+        "zipf": 2.65,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "charging",
+        "aliases": [],
+        "zipf": 4.17,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "telescope",
+        "aliases": [],
+        "zipf": 3.75,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "flare-up",
+        "aliases": [],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "brightness",
+        "aliases": [],
+        "zipf": 3.57,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sustainable",
+        "aliases": [],
+        "zipf": 4.19,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "blue-sky",
+        "aliases": [],
+        "zipf": 4.58,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "climate",
+        "aliases": [],
+        "zipf": 4.71,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "pumps",
+        "aliases": [],
+        "zipf": 3.83,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "batteries",
+        "aliases": [],
+        "zipf": 4.06,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "carbon",
+        "aliases": [],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "alternative",
+        "aliases": [],
+        "zipf": 4.71,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "technologies",
+        "aliases": [],
+        "zipf": 4.32,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "boiler",
+        "aliases": [],
+        "zipf": 3.71,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "installing",
+        "aliases": [],
+        "zipf": 3.71,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "replacements",
+        "aliases": [],
+        "zipf": 3.53,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "fossil",
+        "aliases": [],
+        "zipf": 3.99,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "fuel",
+        "aliases": [],
+        "zipf": 4.72,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "heating",
+        "aliases": [],
+        "zipf": 4.18,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "homes",
+        "aliases": [],
+        "zipf": 4.69,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "warmer",
+        "aliases": [],
+        "zipf": 3.76,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "cheaper",
+        "aliases": [],
+        "zipf": 4.22,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "emissions",
+        "aliases": [],
+        "zipf": 4.07,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "dioxide",
+        "aliases": [],
+        "zipf": 3.81,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "spacewalk",
+        "aliases": [],
+        "zipf": 2.43,
+        "tier": "Rare",
+        "points": 5,
+        "news": true
+      },
+      {
+        "name": "install",
+        "aliases": [],
+        "zipf": 4.14,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "installed",
+        "aliases": [],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 3,
+        "news": true
       }
     ],
     "gem": "installer",
     "gem_from_news": true,
-    "dropped": 6
+    "dropped": 6,
+    "added_by_players": 36
   },
   "stories": [
     {
