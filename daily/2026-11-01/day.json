@@ -4,40 +4,42 @@
   "answer": "SOLAR",
   "why": "This cluster is happy because cleaner power, smarter grids, and more efficient energy use can cut bills and emissions.",
   "puzzle": {
-    "type": "anagram",
+    "type": "hidden",
     "instruction": "Today's topic is tucked into this sentence. Can you spot how?",
-    "sentence": "Once orals ended, apprentices installed efficient chargers for the new electric buses.",
+    "sentence": "The panel canopy is so large it shades cars while charging buses.",
     "length": 5,
     "answer": "SOLAR",
     "highlight": [
-      1
+      4,
+      5
     ],
     "hints": [
       {
         "level": 1,
         "free": true,
-        "text": "Shuffle a sentence word\u2019s letters, and a hidden buddy may pop out! GLEAN is just ANGLE, mixed up."
+        "text": "Squish the spaces, and a sneaky topic may pop out. Like MINT hiding in \u201cswi<b>m int</b>o\u201d."
       },
       {
         "level": 2,
         "free": false,
-        "text": "\u2600\ufe0f Of the sun\u2014powering panels and giving planets their spotlight."
+        "text": "\u2600\ufe0f Powered by the sun, like panels soaking up rays."
       },
       {
         "level": 3,
         "free": false,
-        "text": "Try unscrambling \u201corals\u201d\u2026",
+        "text": "Peek between \u201cso\u201d and \u201clarge\u201d\u2026",
         "highlight": [
-          1
+          4,
+          5
         ]
       }
     ],
     "solution": {
       "answer": "SOLAR",
       "steps": [
-        "The trick: some letters in the sentence were the answer, mixed up.",
-        "Where: in \u201corals\u201d.",
-        "How: ORALS \u2192 rearranged \u2192 SOLAR"
+        "The trick: the answer was hiding across the words.",
+        "Where: in \u201cso large\u201d.",
+        "How: SOLAR \u00b7 ge \u2192 SOLAR"
       ]
     }
   },
