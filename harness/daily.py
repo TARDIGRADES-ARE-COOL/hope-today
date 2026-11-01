@@ -78,6 +78,8 @@ SECTIONS = {
     "global development": "global-development/global-development",
 }
 WINDOW_DAYS = 7
+# Slow news week: when no topic passes, look further back before giving up (search_news caps at 30).
+WIDER_WINDOWS = (14, 28)
 
 
 def sweep(days=WINDOW_DAYS):
@@ -85,7 +87,8 @@ def sweep(days=WINDOW_DAYS):
     since = (date.today() - timedelta(days=days)).isoformat()
     candidates = {}
     for section, tag in SECTIONS.items():
-        results = search_news(tag, since=since, page_size=50)
+        # A wider window needs more results per section, or it just repeats the newest week.
+        results = search_news(tag, since=since, page_size=min(200, 50 * days // WINDOW_DAYS))
         if isinstance(results, dict):                    # search_news error: no news this week
             continue
         for story in results:
@@ -533,27 +536,33 @@ if __name__ == "__main__":
         history = {**history, "urls": history["urls"] + [u for t in tested for u in t["urls"]]}
         print(f"Fresh: skipping {len(tested)} topic(s) already tested today")
 
-    found = unseen(sweep(days), history)
-    print(f"{len(found)} new candidate articles from the last {days} days")
-
-    keep = strong(judge(found))
-    print(f"{len(keep)} strong good-news stories")
-
-    topics, rejected = pick_topics(keep, blocked)
-    for r in rejected:
-        say(f"  {r}")
-    if not topics:
-        raise SystemExit("No topic today: no group passed the checks.")
-    # The best topic whose answer gets a clue that passes the checks.
+    # Try this week first; on a slow week widen the window, so a day is never skipped.
     today = puzzle = None
-    for topic in topics:
-        puzzle, clue_rejects = choose_puzzle(topic, mode=mode, force_type=force_type, strict=strict)
-        if puzzle:
-            today = topic
+    scored = {}                                   # url -> judged story, so no article is judged twice
+    for window in [days] + [w for w in WIDER_WINDOWS if w > days]:
+        found = unseen(sweep(window), history)
+        print(f"{len(found)} new candidate articles from the last {window} days")
+        new = [s for s in found if s["url"] not in scored]
+        if new:
+            scored.update((s["url"], s) for s in judge(new))
+        keep = strong([scored[s["url"]] for s in found])
+        print(f"{len(keep)} strong good-news stories")
+
+        topics, rejected = pick_topics(keep, blocked) if len(keep) >= 3 else ([], ["fewer than 3 strong stories"])
+        for r in rejected:
+            say(f"  {r}")
+        # The best topic whose answer gets a clue that passes the checks.
+        for topic in topics:
+            puzzle, clue_rejects = choose_puzzle(topic, mode=mode, force_type=force_type, strict=strict)
+            if puzzle:
+                today = topic
+                break
+            say(f"  no valid clue for {topic['answer']} ({len(clue_rejects)} rejected), trying the next topic")
+        if today:
             break
-        say(f"  no valid clue for {topic['answer']} ({len(clue_rejects)} rejected), trying the next topic")
+        print(f"No topic from the last {window} days")
     if not today:
-        raise SystemExit("No topic today: no answer got a valid clue.")
+        raise SystemExit("No topic today, even from the last 28 days.")
 
     say(f"\nToday: {today['answer']} ({len(today['answer'])})  {today['topic']}")
     say(f"  {puzzle['instruction']}")

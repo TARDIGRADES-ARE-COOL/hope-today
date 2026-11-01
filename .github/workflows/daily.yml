@@ -4,7 +4,10 @@ name: Daily puzzle
 
 on:
   schedule:
-    - cron: "0 22 * * *"      # 22:00 UTC = 06:00 the next morning in Singapore
+    # GitHub often starts scheduled runs hours late, so start early and try again later.
+    # The second run does nothing if the first already saved today's puzzle.
+    - cron: "0 20 * * *"      # 20:00 UTC = 04:00 the next morning in Singapore
+    - cron: "0 23 * * *"      # 23:00 UTC = 07:00, the retry
   workflow_dispatch:           # also a "Run workflow" button for doing it by hand
 
 permissions:
