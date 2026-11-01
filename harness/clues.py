@@ -12,6 +12,7 @@ CLUE_MODEL = "gpt-5.5"
 SOLVER_MODEL = "gpt-5.4-mini"     # a separate model plays the role of a player
 MAX_WORDS = 16                    # the clue has to fit on a phone
 NATURAL_MIN = 7                   # how natural a clue sentence must read (0-10)
+POINT_TOP = 5                     # the sentence's meaning must put the answer in a solver's top 5
 
 INSTRUCTIONS = {
     "anagram": "Mix up the letters of a word in this sentence.",
@@ -346,6 +347,37 @@ def natural_scores(sentences):
     return [got.get(i, 0) for i in range(len(sentences))]
 
 
+def point_rank(sentence, highlight, answer, tries=2):
+    """How clearly the sentence's MEANING points at the answer: the answer's place (1 = first) among
+    a solver's guesses, with the words hiding it blanked out so the letters can't help. None if it
+    isn't in the top 5. 'Apprentices installed efficient chargers for the new electric buses'
+    (SOLAR) only came 6th-10th: energy in general. 1 means too obvious: no wordplay needed.
+    Asked twice, as the solver varies: found by either try counts, first only if first in both."""
+    hide = set(highlight)
+    masked = " ".join("___" if i in hide else w for i, w in enumerate(sentence.split()))
+    ranks = []
+    for _ in range(tries):
+        response = client.chat.completions.create(
+            model=SOLVER_MODEL,
+            messages=[{"role": "user", "content": (
+                f"A sentence with a few words removed (shown as ___): \"{masked}\". The removed words "
+                f"are NOT the answer. What English word of exactly {len(answer)} letters is this sentence "
+                f"mainly about? Any kind of word. Give 15 guesses, best first, each exactly {len(answer)} letters."
+            )}],
+            response_format={"type": "json_schema", "json_schema": {"name": "guesses", "strict": True, "schema": {
+                "type": "object", "properties": {"guesses": {"type": "array", "items": {"type": "string"}}},
+                "required": ["guesses"], "additionalProperties": False}}},
+        )
+        # Code check: only guesses of the right length count (the model often ignores it).
+        guesses = [g.strip().upper() for g in json.loads(response.choices[0].message.content)["guesses"]]
+        guesses = [g for g in dict.fromkeys(guesses) if len(g) == len(answer)][:POINT_TOP]
+        ranks.append(guesses.index(answer) + 1 if answer in guesses else None)
+    found = [r for r in ranks if r]
+    if not found:
+        return None
+    return 1 if all(r == 1 for r in ranks) else max(2, min(found))
+
+
 def theme_hint(answer, topic, sentence):
     """Level 2: a playful definition of the word. Two checks: it never contains the answer,
     and a separate solver model gets the answer in its top 5 but not as its first guess
@@ -435,12 +467,20 @@ def make_halves(answer):
     return None
 
 
+POINTING = (
+    "Its MEANING must point at {answer} itself, not just the general topic, so a player who finds "
+    "the answer sees the sentence was about it all along (for CORAL: reefs, divers, colour returning "
+    "under the sea; not just 'the ocean' or 'nature'). Hint, don't give it away: one or two "
+    "indirect details, not a pile of giveaways (for CORAL, 'divers saw the reef's colour return' is "
+    "plenty). Never use {answer} or a word made from it."
+)
 CLUE_PROMPT = (
     "You write clues for a friendly daily word puzzle. The answer is {answer} ({n} letters); "
     "today's good news is about: {topic}.\n"
     "Write 4 clues of each type below. Each is ONE natural, grammatical, upbeat sentence of at "
-    "most 16 words that hints at the good news. It must read like something a person would "
+    "most 16 words about the good news. It must read like something a person would "
     "really write, not words forced together.\n"
+    + POINTING + "\n"
     "anagram: the sentence contains a real word (or two words side by side) whose letters are "
     "EXACTLY the letters of {answer} rearranged ({sorted_letters}). Put that word in 'fodder'.\n"
     "hidden: {answer} is spelled out by consecutive letters running across two or three words, "
@@ -482,7 +522,7 @@ CHECKERS = {
 FOCUS_PROMPT = (
     "Write 8 '{kind}' clues for a friendly daily word puzzle. The answer is {answer} ({n} letters); "
     "today's good news is about: {topic}. Each is ONE natural, grammatical, upbeat sentence of at "
-    "most 16 words that hints at the good news.\n{rule}\nLeave 'fodder' empty. Never use {answer} "
+    "most 16 words about the good news.\n" + POINTING + "\n{rule}\nLeave 'fodder' empty. Never use {answer} "
     "itself. Check every letter."
 )
 FOCUS_RULES = {
@@ -514,10 +554,14 @@ def ask_for_clues(prompt, answer):
             passed.append({**clue, "highlight": spot})
     valid = []
     for clue, score in zip(passed, natural_scores([c["sentence"] for c in passed])):
-        if score >= NATURAL_MIN:
-            valid.append(clue)
-        else:
+        if score < NATURAL_MIN:
             rejected.append(f"{clue['type']}: {clue['sentence']}  -> reads unnaturally ({score}/10)")
+            continue
+        rank = point_rank(clue["sentence"], clue["highlight"], answer)
+        if rank is None:
+            rejected.append(f"{clue['type']}: {clue['sentence']}  -> its meaning doesn't point at the answer")
+        else:
+            valid.append({**clue, "point": rank})
     return valid, rejected
 
 
@@ -547,6 +591,13 @@ def make_puzzle(answer, topic, rounds=2, day_number=0, focus=None):
     if halves:
         valid.append(halves)
 
+    # Just right: the meaning puts the answer in the solver's top 5, but not first.
+    # First place means the wordplay isn't needed; keep those only if nothing else passed.
+    good = [c for c in valid if c.get("point", 2) > 1]        # halves has no sentence to rank
+    if good != valid:
+        rejected += [f"{c['type']}: {c['sentence']}  -> too obvious (solver's first guess)"
+                     for c in valid if c not in good]
+    valid = good or valid
     puzzles = []
     for c in valid:
         hints, solution = build_hints(c["type"], c["sentence"], answer, c["highlight"], day_number,
