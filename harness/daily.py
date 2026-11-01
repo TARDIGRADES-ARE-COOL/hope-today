@@ -10,7 +10,7 @@ from pathlib import Path
 import requests
 from wordfreq import zipf_frequency
 
-from branch import make_branch
+from branch import make_branch, page_answers
 from clues import ROTATION, fresh_free_hint, make_pixel_puzzle, make_puzzle, theme_hint
 from deck import env, render_deck
 from desk import render_page
@@ -26,9 +26,9 @@ TOPIC_COOLDOWN_DAYS = 30
 # A spare finished day (daily/reserve/), built on a good day and published only when no topic
 # passes even at 28 days. Rebuilt once this old, so its news never goes stale.
 RESERVE_MAX_AGE = 21
-# Round two ("Branch out", harness/branch.py) is switched off: it felt like a separate game and
-# leaned on general knowledge. The page hides it when there's no branch. True brings it back.
-BRANCH_OUT = False
+# Round two ("Branch out", harness/branch.py): words linked to the answer, news words score extra.
+# Back on 1 Nov 2026 in place of Copy Desk. The page hides it on days without one.
+BRANCH_OUT = True
 # Copy Desk (PLAN.md Part 3): the step between the word puzzle and the deck. DESK builds it
 # (--desk turns it on for one run); LIVE_DESK marks it for site.py to publish. Set
 # LIVE_DESK = False to build desks without showing them (a shadow run).
@@ -465,9 +465,7 @@ def build_day(topic, puzzle, day=None, spoilers=True, spare=(), folder=None):
         puzzle_id=pid,
         answer_b64=base64.b64encode(topic["answer"].encode()).decode(),
         branch=branch,
-        branch_b64=base64.b64encode(json.dumps(
-            [{"n": a["name"], "a": a["aliases"], "t": a["tier"], "p": a["points"]} for a in branch["answers"]]
-        ).encode()).decode() if branch else "",
+        branch_b64=page_answers(branch) if branch else "",
     )
     (folder / "index.html").write_text(page, encoding="utf-8")
     # The puzzle page will read this file. Keep the answer out of the deck itself.

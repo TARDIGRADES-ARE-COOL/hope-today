@@ -43,7 +43,1339 @@
       ]
     }
   },
-  "branch": null,
+  "branch": {
+    "prompt": "Words linked to SOLAR",
+    "answers": [
+      {
+        "name": "sun",
+        "aliases": [
+          "the sun"
+        ],
+        "zipf": 4.97,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "energy",
+        "aliases": [
+          "energies"
+        ],
+        "zipf": 5.23,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "power",
+        "aliases": [],
+        "zipf": 5.52,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "panel",
+        "aliases": [
+          "panels"
+        ],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "electricity",
+        "aliases": [
+          "electric"
+        ],
+        "zipf": 4.72,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "roof",
+        "aliases": [
+          "roofs"
+        ],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "light",
+        "aliases": [
+          "lights"
+        ],
+        "zipf": 5.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "heat",
+        "aliases": [],
+        "zipf": 4.86,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "sunshine",
+        "aliases": [],
+        "zipf": 4.16,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "sunlight",
+        "aliases": [],
+        "zipf": 3.86,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "ray",
+        "aliases": [
+          "rays",
+          "sunray",
+          "sunrays"
+        ],
+        "zipf": 4.69,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "star",
+        "aliases": [
+          "stars"
+        ],
+        "zipf": 5.19,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "space",
+        "aliases": [],
+        "zipf": 5.23,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "planet",
+        "aliases": [
+          "planets"
+        ],
+        "zipf": 4.68,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "Earth",
+        "aliases": [
+          "the Earth",
+          "world"
+        ],
+        "zipf": 5.89,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "orbit",
+        "aliases": [
+          "orbits"
+        ],
+        "zipf": 4.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "eclipse",
+        "aliases": [
+          "eclipses"
+        ],
+        "zipf": 3.81,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "system",
+        "aliases": [
+          "systems"
+        ],
+        "zipf": 5.56,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "renewable",
+        "aliases": [
+          "renewables"
+        ],
+        "zipf": 3.91,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "green",
+        "aliases": [],
+        "zipf": 5.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "clean",
+        "aliases": [],
+        "zipf": 4.97,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "photovoltaic",
+        "aliases": [
+          "photovoltaics",
+          "PV"
+        ],
+        "zipf": 3.4,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "cell",
+        "aliases": [
+          "cells"
+        ],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "grid",
+        "aliases": [
+          "the grid"
+        ],
+        "zipf": 4.18,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "charger",
+        "aliases": [
+          "chargers"
+        ],
+        "zipf": 3.67,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "inverter",
+        "aliases": [
+          "inverters"
+        ],
+        "zipf": 2.78,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "array",
+        "aliases": [
+          "arrays"
+        ],
+        "zipf": 4.1,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "farm",
+        "aliases": [
+          "farms"
+        ],
+        "zipf": 4.75,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "generator",
+        "aliases": [
+          "generators"
+        ],
+        "zipf": 3.94,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "lamp",
+        "aliases": [
+          "lamps"
+        ],
+        "zipf": 4.05,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "day",
+        "aliases": [
+          "daytime"
+        ],
+        "zipf": 5.95,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "bright",
+        "aliases": [],
+        "zipf": 4.61,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "warm",
+        "aliases": [
+          "warmth"
+        ],
+        "zipf": 4.71,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "desert",
+        "aliases": [
+          "deserts"
+        ],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "radiation",
+        "aliases": [],
+        "zipf": 4.27,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "flare",
+        "aliases": [
+          "flares"
+        ],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "corona",
+        "aliases": [
+          "crown"
+        ],
+        "zipf": 4.56,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rooftop",
+        "aliases": [],
+        "zipf": 3.55,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "installer",
+        "aliases": [
+          "installers"
+        ],
+        "zipf": 2.94,
+        "tier": "Gem",
+        "points": 10,
+        "news": true
+      },
+      {
+        "name": "electrician",
+        "aliases": [
+          "electricians"
+        ],
+        "zipf": 3.26,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "engineer",
+        "aliases": [
+          "engineers"
+        ],
+        "zipf": 4.5,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "maintenance",
+        "aliases": [
+          "servicing"
+        ],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "module",
+        "aliases": [
+          "modules"
+        ],
+        "zipf": 3.89,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "wafer",
+        "aliases": [
+          "wafers"
+        ],
+        "zipf": 3.13,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "silicon",
+        "aliases": [],
+        "zipf": 4.0,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "crystal",
+        "aliases": [
+          "crystals"
+        ],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "monocrystalline",
+        "aliases": [
+          "mono"
+        ],
+        "zipf": 3.53,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "polycrystalline",
+        "aliases": [
+          "poly"
+        ],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "thin film",
+        "aliases": [],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "perovskite",
+        "aliases": [
+          "perovskites"
+        ],
+        "zipf": 2.2,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "semiconductor",
+        "aliases": [
+          "semiconductors"
+        ],
+        "zipf": 3.53,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "photon",
+        "aliases": [
+          "photons"
+        ],
+        "zipf": 3.32,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "electron",
+        "aliases": [
+          "electrons"
+        ],
+        "zipf": 3.82,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "voltage",
+        "aliases": [
+          "volts"
+        ],
+        "zipf": 4.02,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "current",
+        "aliases": [],
+        "zipf": 5.27,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "watt",
+        "aliases": [
+          "watts",
+          "W"
+        ],
+        "zipf": 5.21,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "kilowatt",
+        "aliases": [
+          "kilowatts",
+          "kW"
+        ],
+        "zipf": 3.43,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "megawatt",
+        "aliases": [
+          "megawatts",
+          "MW"
+        ],
+        "zipf": 3.58,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "kilowatt hour",
+        "aliases": [
+          "kWh"
+        ],
+        "zipf": 3.09,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "efficiency",
+        "aliases": [],
+        "zipf": 4.38,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "output",
+        "aliases": [],
+        "zipf": 4.43,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "generation",
+        "aliases": [
+          "generating"
+        ],
+        "zipf": 4.82,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "storage",
+        "aliases": [
+          "energy storage"
+        ],
+        "zipf": 4.57,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "backup",
+        "aliases": [],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "meter",
+        "aliases": [
+          "meters"
+        ],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "smart meter",
+        "aliases": [
+          "smart meters"
+        ],
+        "zipf": 4.12,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "net metering",
+        "aliases": [],
+        "zipf": 2.89,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "tariff",
+        "aliases": [
+          "tariffs"
+        ],
+        "zipf": 3.63,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "rebate",
+        "aliases": [
+          "rebates"
+        ],
+        "zipf": 3.31,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "subsidy",
+        "aliases": [
+          "subsidies"
+        ],
+        "zipf": 3.74,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "tax credit",
+        "aliases": [
+          "tax credits"
+        ],
+        "zipf": 4.76,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "payback",
+        "aliases": [
+          "payback period"
+        ],
+        "zipf": 3.29,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "savings",
+        "aliases": [
+          "saving money"
+        ],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "bill",
+        "aliases": [
+          "bills",
+          "electric bill"
+        ],
+        "zipf": 5.15,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "utility",
+        "aliases": [
+          "utilities"
+        ],
+        "zipf": 4.27,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "microgrid",
+        "aliases": [
+          "microgrids"
+        ],
+        "zipf": 1.71,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "off grid",
+        "aliases": [],
+        "zipf": 4.17,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "grid tie",
+        "aliases": [
+          "grid tied"
+        ],
+        "zipf": 4.01,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "power bank",
+        "aliases": [],
+        "zipf": 5.0,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "charge controller",
+        "aliases": [
+          "charge controllers"
+        ],
+        "zipf": 4.08,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "MPPT",
+        "aliases": [],
+        "zipf": 1.33,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "microinverter",
+        "aliases": [
+          "microinverters"
+        ],
+        "zipf": 0.0,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "optimizer",
+        "aliases": [
+          "optimiser",
+          "optimizers",
+          "optimisers"
+        ],
+        "zipf": 2.27,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "string",
+        "aliases": [
+          "strings"
+        ],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "combiner",
+        "aliases": [
+          "combiner box"
+        ],
+        "zipf": 2.0,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "racking",
+        "aliases": [
+          "rack",
+          "racks"
+        ],
+        "zipf": 3.9,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mount",
+        "aliases": [
+          "mounting",
+          "mounts"
+        ],
+        "zipf": 4.47,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "tracker",
+        "aliases": [
+          "trackers"
+        ],
+        "zipf": 3.63,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "tilt",
+        "aliases": [
+          "angle"
+        ],
+        "zipf": 4.38,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "azimuth",
+        "aliases": [],
+        "zipf": 2.51,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "orientation",
+        "aliases": [
+          "facing"
+        ],
+        "zipf": 4.5,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "south facing",
+        "aliases": [],
+        "zipf": 4.45,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "shade",
+        "aliases": [
+          "shadows"
+        ],
+        "zipf": 4.16,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "shading",
+        "aliases": [
+          "shadowing"
+        ],
+        "zipf": 3.3,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "clouds",
+        "aliases": [
+          "cloud cover"
+        ],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "weather",
+        "aliases": [],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "irradiance",
+        "aliases": [],
+        "zipf": 2.24,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "insolation",
+        "aliases": [],
+        "zipf": 2.04,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "UV",
+        "aliases": [],
+        "zipf": 3.63,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "ultraviolet",
+        "aliases": [],
+        "zipf": 3.33,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "infrared",
+        "aliases": [
+          "IR"
+        ],
+        "zipf": 3.71,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "spectrum",
+        "aliases": [
+          "light spectrum"
+        ],
+        "zipf": 4.26,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "thermal",
+        "aliases": [],
+        "zipf": 4.04,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "hot water",
+        "aliases": [],
+        "zipf": 5.0,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "water heater",
+        "aliases": [
+          "water heating"
+        ],
+        "zipf": 4.16,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "pool heater",
+        "aliases": [
+          "pool heating"
+        ],
+        "zipf": 4.06,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "heat pump",
+        "aliases": [
+          "heat pumps"
+        ],
+        "zipf": 4.18,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "cooker",
+        "aliases": [
+          "cookers"
+        ],
+        "zipf": 3.34,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "oven",
+        "aliases": [
+          "ovens"
+        ],
+        "zipf": 4.05,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "furnace",
+        "aliases": [
+          "furnaces"
+        ],
+        "zipf": 3.62,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "mirror",
+        "aliases": [
+          "mirrors"
+        ],
+        "zipf": 4.47,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "lens",
+        "aliases": [
+          "lenses"
+        ],
+        "zipf": 4.17,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "concentrator",
+        "aliases": [
+          "concentrators"
+        ],
+        "zipf": 2.31,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "heliostat",
+        "aliases": [
+          "heliostats"
+        ],
+        "zipf": 1.33,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "trough",
+        "aliases": [
+          "troughs"
+        ],
+        "zipf": 3.43,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "tower",
+        "aliases": [
+          "towers"
+        ],
+        "zipf": 4.5,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "molten salt",
+        "aliases": [
+          "salt storage"
+        ],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "steam",
+        "aliases": [],
+        "zipf": 4.52,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "turbine",
+        "aliases": [
+          "turbines"
+        ],
+        "zipf": 3.63,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "CSP",
+        "aliases": [],
+        "zipf": 2.75,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "sundial",
+        "aliases": [
+          "sundials"
+        ],
+        "zipf": 2.46,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "sunrise",
+        "aliases": [
+          "dawn"
+        ],
+        "zipf": 4.27,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "sunset",
+        "aliases": [
+          "dusk"
+        ],
+        "zipf": 4.04,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "daylight",
+        "aliases": [],
+        "zipf": 3.84,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "noon",
+        "aliases": [
+          "midday"
+        ],
+        "zipf": 4.11,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "summer",
+        "aliases": [],
+        "zipf": 5.23,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "solstice",
+        "aliases": [
+          "solstices"
+        ],
+        "zipf": 3.1,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "equinox",
+        "aliases": [
+          "equinoxes"
+        ],
+        "zipf": 3.02,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sunspot",
+        "aliases": [
+          "sunspots"
+        ],
+        "zipf": 2.55,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "prominence",
+        "aliases": [
+          "prominences"
+        ],
+        "zipf": 3.54,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "photosphere",
+        "aliases": [],
+        "zipf": 2.09,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "chromosphere",
+        "aliases": [],
+        "zipf": 1.57,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "heliosphere",
+        "aliases": [],
+        "zipf": 1.81,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "wind",
+        "aliases": [],
+        "zipf": 4.84,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "aurora",
+        "aliases": [
+          "auroras",
+          "northern lights"
+        ],
+        "zipf": 4.43,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "geomagnetic storm",
+        "aliases": [
+          "magnetic storm"
+        ],
+        "zipf": 4.05,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "magnetic field",
+        "aliases": [
+          "magnetism"
+        ],
+        "zipf": 4.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "coronal mass ejection",
+        "aliases": [
+          "CME",
+          "mass ejection"
+        ],
+        "zipf": 3.06,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "heliocentric",
+        "aliases": [
+          "sun centred",
+          "sun centered"
+        ],
+        "zipf": 3.95,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "fusion",
+        "aliases": [
+          "nuclear fusion"
+        ],
+        "zipf": 4.02,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "hydrogen",
+        "aliases": [],
+        "zipf": 3.98,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "plasma",
+        "aliases": [],
+        "zipf": 3.95,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "luminosity",
+        "aliases": [],
+        "zipf": 2.9,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "albedo",
+        "aliases": [],
+        "zipf": 2.59,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "NASA",
+        "aliases": [],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "satellite",
+        "aliases": [
+          "satellites"
+        ],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "spacecraft",
+        "aliases": [],
+        "zipf": 3.75,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "probe",
+        "aliases": [
+          "probes"
+        ],
+        "zipf": 3.99,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rover",
+        "aliases": [
+          "rovers"
+        ],
+        "zipf": 3.76,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "ISS",
+        "aliases": [],
+        "zipf": 3.45,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "space station",
+        "aliases": [
+          "station"
+        ],
+        "zipf": 5.01,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "International Space Station",
+        "aliases": [],
+        "zipf": 4.7,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "calculator",
+        "aliases": [
+          "calculators"
+        ],
+        "zipf": 3.56,
+        "tier": "Uncommon",
+        "points": 2
+      }
+    ],
+    "gem": "installer",
+    "gem_from_news": true,
+    "dropped": 6
+  },
   "stories": [
     {
       "headline": "Cheap Green Home Loans",
@@ -246,6 +1578,6 @@
         "gpt-5.4-mini"
       ]
     },
-    "live": true
+    "live": false
   }
 }

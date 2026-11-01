@@ -8,6 +8,7 @@ import json
 import shutil
 from pathlib import Path
 
+from branch import page_answers
 from deck import env
 from desk import desk_id, render_page
 
@@ -50,7 +51,8 @@ def render_day(day_dir, out_dir, is_latest=True):
             desk = None
     (out_dir / "index.html").write_text(env.get_template("puzzle.html").render(
         **previews, page_url=f"{SITE_URL}{day_dir.name}/", has_desk=bool(desk),
-        today=d["date"], puzzle=p, branch=None, branch_b64="",     # Branch out is switched off
+        today=d["date"], puzzle=p, branch=d.get("branch"),
+        branch_b64=page_answers(d["branch"]) if d.get("branch") else "",
         puzzle_id=puzzle_id(p), is_latest=is_latest,
         answer_b64=base64.b64encode(d["answer"].encode()).decode(),
     ), encoding="utf-8")

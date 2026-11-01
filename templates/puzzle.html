@@ -86,6 +86,7 @@
       background: var(--paper);
       padding: clamp(20px, min(4vw, 4svh), 48px);
       display: grid;
+      grid-template-columns: minmax(0, 1fr);   /* long content wraps instead of widening the card */
       gap: clamp(12px, 2.2svh, 28px);
     }
     .card h1 { font-size: min(11cqw, 8.5svh); display: flex; justify-content: space-between; gap: 0.3em; }
@@ -177,13 +178,36 @@
     .steps[hidden] { display: none; }
     /* Round two: Branch out */
     .branch[hidden], .branch-end[hidden] { display: none; }
-    .branch { display: grid; gap: 16px; }
-    .branch h2 { font-size: var(--step-head); }
-    .branch .prompt { font-size: clamp(1.4rem, 1.1rem + 1.6vw, 2.2rem); line-height: 1.3; }
+    .branch { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(8px, 1.6svh, 16px); }
+    /* Branch out is its own screen: the masthead stays, the solved puzzle steps aside. */
+    .card.branching > :not(h1):not(.branch) { display: none !important; }
+    .card.branching h1 { font-size: min(8cqw, 6svh); }
+    .branch.over .rules, .branch.over .scoreline { display: none; }   /* the summary says it all once it's over */
+    .branch .rules { font-size: 0.9em; }
+    .branch-end .button { font-size: clamp(0.95rem, 2.6svh, 1.3rem); padding: 0.55em 1em; }
+    @media (max-height: 500px) {                            /* landscape phones */
+      .card.branching { padding: 12px 20px; gap: 6px; }
+      .card.branching h1 { font-size: 4svh; }
+      .branch, .branch-end { gap: 6px; }
+      .branch .rules { font-size: 0.8em; }
+    }
+    /* The round never scrolls the page: the card is at most one screen tall, and the word
+       lists take the space that's left, scrolling inside themselves. */
+    .card.branching { display: flex; flex-direction: column; max-height: calc(100svh - 2 * clamp(8px, 3svh, 64px)); }
+    .card.branching > * { flex-shrink: 0; }
+    .card.branching > .branch { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+    .branch > *, .branch-end > * { flex-shrink: 0; }
+    .branch.over .branch-end { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+    .branch #branch-found, .branch #branch-missed { flex: 0 1 auto; min-height: 2.6em; max-height: none; overflow-y: auto; }
+    /* Found words scroll inside their box, so a long list never makes the page scroll. */
+    #branch-found, #branch-missed { align-content: flex-start; }
+    .branch h2 { font-size: clamp(1.6rem, min(1.3rem + 3.2vw, 5.5svh), 4rem); }
+    .branch .prompt { font-size: clamp(1.2rem, min(1.1rem + 1.6vw, 4svh), 2.2rem); line-height: 1.3; }
     .branch-form { display: flex; gap: 8px; }
     .branch-form input {
       flex: 1;
       min-width: 0;
+      width: 100%;                           /* not the browser's default 20-character width */
       font: inherit;
       font-size: max(16px, var(--step-lead));
       padding: 10px 14px;
@@ -200,7 +224,7 @@
     .chips .t-Rare { background: var(--field-2); }
     .chips .t-Very { background: #c9a98f; }
     .chips .t-Gem { background: var(--accent); color: var(--accent-ink); }
-    .chips .missed { background: none; outline: 2px dotted var(--muted); font-weight: 400; }
+    .chips .missed { background: none; color: var(--ink); outline: 2px dotted var(--muted); font-weight: 400; }
     .branch-end { display: grid; gap: 12px; }
     /* How to play: three short steps that each fit the screen, no scrolling. */
     .how { border: 0; background: none; padding: 0; font-weight: 600; text-decoration: underline; }
@@ -310,12 +334,12 @@
     <section class="branch" id="branch" hidden aria-live="polite">
       <h2>Branch out</h2>
       <p class="prompt">{{ branch.prompt }}</p>
-      <p>Rarer answers score more{% if branch.gem %}, and one rare answer from today's stories is a hidden gem{% endif %}. Three misses and the round ends.</p>
+      <p class="rules">Type any word you link with it. Rarer words score more, words from today's stories score extra 📰{% if branch.gem %}, and the rarest of those is a hidden gem{% endif %}. Five misses and the round ends.</p>
       <form class="branch-form" id="branch-form" autocomplete="off">
         <input id="branch-guess" aria-label="Your answer" spellcheck="false" enterkeyhint="send">
         <button class="button" type="submit">Add</button>
       </form>
-      <div class="scoreline"><span id="branch-score">0 points</span><span id="branch-misses">Misses: 0 of 3</span></div>
+      <div class="scoreline"><span id="branch-score">0 points</span><span id="branch-misses">Misses: 0 of 5</span></div>
       <p class="feedback" id="branch-feedback"></p>
       <ul class="chips" id="branch-found"></ul>
       <div class="actions" id="branch-actions"><button class="give-up" type="button" id="branch-done">I'm done</button></div>
@@ -323,7 +347,8 @@
         <p id="branch-summary"></p>
         <p>Some you missed:</p>
         <ul class="chips" id="branch-missed"></ul>
-        <div class="actions"><a class="button" href="deck.html">Open today's good news</a></div>
+        <div class="actions"><a class="button" href="deck.html">Open today's good news</a>
+          <button class="button soft" type="button" id="branch-back">Back to the puzzle</button></div>
       </div>
     </section>
     {% endif %}
@@ -556,14 +581,17 @@
         return -1;
       };
       const tierClass = t => "t-" + t.split(" ")[0];
-      const chip = (a, extra = "") => `<li class="${tierClass(a.t)} ${extra}">${a.t === "Gem" ? "\u{1F48E} " : ""}${a.n.replace(/</g, "&lt;")} \u00B7 ${a.p}</li>`;
+      const MAX_MISSES = 5;                          // "linked to" is fuzzier than a fixed category
+      const chip = (a, extra = "") => `<li class="${tierClass(a.t)} ${extra}">${a.t === "Gem" ? "\u{1F48E} " : a.w ? "\u{1F4F0} " : ""}${a.n.replace(/</g, "&lt;")} \u00B7 ${a.p}</li>`;
       const branchScore = () => bstate.found.reduce((sum, i) => sum + ANSWERS[i].p, 0);
 
       const paintBranch = () => {
         $("branch").hidden = !bstate.open;
+        $("puzzle").classList.toggle("branching", bstate.open);
+        $("branch").classList.toggle("over", bstate.done);
         $("branch-found").innerHTML = bstate.found.map(i => chip(ANSWERS[i])).join("");
         $("branch-score").textContent = `${branchScore()} points \u00B7 ${bstate.found.length} found`;
-        $("branch-misses").textContent = `Misses: ${bstate.misses} of 3`;
+        $("branch-misses").textContent = `Misses: ${bstate.misses} of ${MAX_MISSES}`;
         $("branch-form").hidden = bstate.done;
         $("branch-actions").hidden = bstate.done;
         $("branch-end").hidden = !bstate.done;
@@ -578,7 +606,6 @@
       };
       $("start-branch").addEventListener("click", () => {
         bstate.open = true; bsave(); paintBranch();
-        $("branch").scrollIntoView({ behavior: "smooth", block: "start" });
         $("branch-guess").focus();
       });
       $("branch-form").addEventListener("submit", e => {
@@ -591,16 +618,18 @@
         if (i >= 0) {
           bstate.found.push(i);
           const a = ANSWERS[i];
-          $("branch-feedback").textContent = a.t === "Gem" ? `\u{1F48E} ${a.n}: the hidden gem! +${a.p}` : `${a.n}: ${a.t.toLowerCase()}, +${a.p}`;
+          $("branch-feedback").textContent = a.t === "Gem" ? `\u{1F48E} ${a.n}: the hidden gem! +${a.p}`
+            : `${a.n}: ${a.t.toLowerCase()}${a.w ? ", and in today's news" : ""}, +${a.p}`;
         } else {
           bstate.misses += 1;
           $("branch-feedback").textContent = `Not on today's list.`;
-          if (bstate.misses >= 3) bstate.done = true;
+          if (bstate.misses >= MAX_MISSES) bstate.done = true;
         }
         bsave(); paintBranch();
         if (!bstate.done) box.focus();
       });
       $("branch-done").addEventListener("click", () => { bstate.done = true; bsave(); paintBranch(); });
+      $("branch-back").addEventListener("click", () => { bstate.open = false; bsave(); paintBranch(); });
       paintBranch();
       {% endif %}
 
