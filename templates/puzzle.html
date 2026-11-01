@@ -217,6 +217,8 @@
     }
     .scoreline { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
                  font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: var(--step-lead); text-transform: uppercase; }
+    .scoreline .clock { font-variant-numeric: tabular-nums; }
+    .scoreline .clock.low { color: #8a3b2b; }
     .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
     .chips li { padding: 4px 10px; font-weight: 600; }
     .chips .t-Common { background: var(--field-3); }
@@ -334,12 +336,12 @@
     <section class="branch" id="branch" hidden aria-live="polite">
       <h2>Branch out</h2>
       <p class="prompt">{{ branch.prompt }}</p>
-      <p class="rules">Type any word you link with it. Rarer words score more, words from today's stories score extra 📰{% if branch.gem %}, and the rarest of those is a hidden gem{% endif %}. Five misses and the round ends.</p>
+      <p class="rules">Type any word you link with it. Rarer words score more, words from today's stories score extra 📰{% if branch.gem %}, and the rarest of those is a hidden gem{% endif %}. You have 60 seconds from your first letter; a miss costs 3.</p>
       <form class="branch-form" id="branch-form" autocomplete="off">
         <input id="branch-guess" aria-label="Your answer" spellcheck="false" enterkeyhint="send">
         <button class="button" type="submit">Add</button>
       </form>
-      <div class="scoreline"><span id="branch-score">0 points</span><span id="branch-misses">Misses: 0 of 5</span></div>
+      <div class="scoreline"><span id="branch-score">0 points</span><span class="clock" id="branch-clock" role="timer">1:00</span></div>
       <p class="feedback" id="branch-feedback"></p>
       <ul class="chips" id="branch-found"></ul>
       <div class="actions" id="branch-actions"><button class="give-up" type="button" id="branch-done">I'm done</button></div>
@@ -558,7 +560,7 @@
       const GEM = {{ branch.gem|tojson }};
       const BKEY = KEY + "-branch";
       const bstate = (() => { try { return JSON.parse(localStorage.getItem(BKEY)); } catch { return null; } })()
-                     || { found: [], misses: 0, done: false, open: false };
+                     || { found: [], done: false, open: false };
       const bsave = () => { try { localStorage.setItem(BKEY, JSON.stringify(bstate)); } catch {} };
       const norm = s => s.toLowerCase().replace(/[^a-z]/g, "");
       const index = new Map();                       // every name and alias -> answer number
@@ -581,7 +583,23 @@
         return -1;
       };
       const tierClass = t => "t-" + t.split(" ")[0];
-      const MAX_MISSES = 5;                          // "linked to" is fuzzier than a fixed category
+      // A 60-second sprint. The clock starts on the first letter typed (reading the rules is free),
+      // a miss costs 3 seconds, and the deadline is saved so a reload doesn't restart it.
+      const ROUND_MS = 60000, MISS_MS = 3000;
+      let ticker = null;
+      const msLeft = () => bstate.deadline ? Math.max(0, bstate.deadline - Date.now()) : ROUND_MS;
+      const showClock = () => {
+        const s = Math.ceil(msLeft() / 1000), el = $("branch-clock");
+        el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+        el.classList.toggle("low", !!bstate.deadline && s <= 10);
+      };
+      const timeUp = () => { clearInterval(ticker); bstate.done = true; bsave(); paintBranch(); };
+      const runClock = () => {
+        clearInterval(ticker);
+        if (bstate.done || !bstate.deadline) return;
+        if (!msLeft()) return timeUp();
+        ticker = setInterval(() => { showClock(); if (!msLeft()) timeUp(); }, 250);
+      };
       const chip = (a, extra = "") => `<li class="${tierClass(a.t)} ${extra}">${a.t === "Gem" ? "\u{1F48E} " : a.w ? "\u{1F4F0} " : ""}${a.n.replace(/</g, "&lt;")} \u00B7 ${a.p}</li>`;
       const branchScore = () => bstate.found.reduce((sum, i) => sum + ANSWERS[i].p, 0);
 
@@ -591,7 +609,7 @@
         $("branch").classList.toggle("over", bstate.done);
         $("branch-found").innerHTML = bstate.found.map(i => chip(ANSWERS[i])).join("");
         $("branch-score").textContent = `${branchScore()} points \u00B7 ${bstate.found.length} found`;
-        $("branch-misses").textContent = `Misses: ${bstate.misses} of ${MAX_MISSES}`;
+        showClock();
         $("branch-form").hidden = bstate.done;
         $("branch-actions").hidden = bstate.done;
         $("branch-end").hidden = !bstate.done;
@@ -608,11 +626,15 @@
         bstate.open = true; bsave(); paintBranch();
         $("branch-guess").focus();
       });
+      $("branch-guess").addEventListener("input", () => {
+        if (bstate.deadline || bstate.done) return;
+        bstate.deadline = Date.now() + ROUND_MS; bsave(); runClock();
+      });
       $("branch-form").addEventListener("submit", e => {
         e.preventDefault();
         const box = $("branch-guess"), raw = box.value.trim();
         box.value = "";
-        if (!raw || bstate.done) return;
+        if (!raw || bstate.done || !msLeft()) return;
         const i = lookup(raw);
         if (i >= 0 && bstate.found.includes(i)) { $("branch-feedback").textContent = "Already got that one."; return; }
         if (i >= 0) {
@@ -621,16 +643,17 @@
           $("branch-feedback").textContent = a.t === "Gem" ? `\u{1F48E} ${a.n}: the hidden gem! +${a.p}`
             : `${a.n}: ${a.t.toLowerCase()}${a.w ? ", and in today's news" : ""}, +${a.p}`;
         } else {
-          bstate.misses += 1;
-          $("branch-feedback").textContent = `Not on today's list.`;
-          if (bstate.misses >= MAX_MISSES) bstate.done = true;
+          bstate.deadline -= MISS_MS;
+          $("branch-feedback").textContent = `Not on today's list. \u22123 seconds.`;
+          if (!msLeft()) bstate.done = true;
         }
         bsave(); paintBranch();
         if (!bstate.done) box.focus();
       });
-      $("branch-done").addEventListener("click", () => { bstate.done = true; bsave(); paintBranch(); });
+      $("branch-done").addEventListener("click", () => { clearInterval(ticker); bstate.done = true; bsave(); paintBranch(); });
       $("branch-back").addEventListener("click", () => { bstate.open = false; bsave(); paintBranch(); });
       paintBranch();
+      runClock();
       {% endif %}
 
       // How to play: three steps with Next/Back. Opens by itself on a first visit, then on tap.
