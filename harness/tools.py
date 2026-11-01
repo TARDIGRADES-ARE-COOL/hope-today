@@ -1,5 +1,9 @@
+import html
 import os
+import re
+import xml.etree.ElementTree as ET
 from datetime import date, timedelta
+from email.utils import parsedate_to_datetime
 
 import requests
 from dotenv import load_dotenv
@@ -110,6 +114,52 @@ def search_news(tag, since=None, page_size=20):
     return stories
 
 
+# Sources besides the Guardian, so a slow week (or a Guardian outage) still has stories.
+# Only the RSS feed itself is read, never the web pages: the feed's own text is the article.
+# (Reasons to be Cheerful was tried too; its feed blocks programs with a 403.)
+FEEDS = {
+    "positive news": ("Positive News", "https://www.positive.news/feed/"),
+    "sciencedaily": ("ScienceDaily", "https://www.sciencedaily.com/rss/top/science.xml"),
+    "mongabay": ("Mongabay", "https://news.mongabay.com/feed/"),
+}
+CONTENT = "{http://purl.org/rss/1.0/modules/content/}encoded"   # a feed's full text, if it has one
+MEDIA = "{http://search.yahoo.com/mrss/}content"
+FEED_TEXT = {}            # feed url → article, read by fetch_article instead of the Guardian API
+
+
+def plain(markup):
+    """Feed HTML to plain text."""
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", markup or ""))).strip()
+
+
+def search_feed(source, feed_url, since):
+    """Items from one RSS feed since an ISO date, in search_news's story format. [] if the feed is down."""
+    try:
+        response = requests.get(feed_url, timeout=20, headers={
+            "User-Agent": "HopeToday/1.0 (+https://tardigrades-are-cool.github.io/hope-today/)"})
+        response.raise_for_status()
+        root = ET.fromstring(response.content)
+    except (requests.RequestException, ET.ParseError):
+        return []
+    stories = []
+    for item in root.iter("item"):
+        url, title = (item.findtext("link") or "").strip(), plain(item.findtext("title"))
+        try:
+            day = parsedate_to_datetime(item.findtext("pubDate") or "").date().isoformat()
+        except (TypeError, ValueError):
+            continue
+        if not url or not title or day < since:
+            continue
+        summary, body = plain(item.findtext("description")), plain(item.findtext(CONTENT))
+        image = next((m.get("url") for m in item if m.tag in (MEDIA, "enclosure")
+                      and m.get("type", "image/").startswith("image/")), None)
+        stories.append({"title": title, "url": url, "snippet": summary[:300], "date": day, "source": source})
+        SEEN_URLS.add(url)
+        IMAGES[url] = image
+        FEED_TEXT[url] = {"title": title, "text": (body if len(body) > len(summary) else summary)[:ARTICLE_CHARS]}
+    return stories
+
+
 MAX_ARTICLES = 7          # budget: each article is ~750 tokens of context
 ARTICLE_CHARS = 3000
 fetched = {}              # url → article, so a repeat fetch is free
@@ -123,6 +173,9 @@ def fetch_article(url):
         return fetched[url]
     if len(fetched) >= MAX_ARTICLES:
         return {"error": f"Article budget used up ({MAX_ARTICLES}). Build the deck with what you have."}
+    if url in FEED_TEXT:                          # a feed story: its text came with the feed
+        fetched[url] = FEED_TEXT[url]
+        return fetched[url]
 
     # The content API uses the same path as the website url.
     path = url.replace("https://www.theguardian.com/", "")

@@ -362,6 +362,9 @@
       <p class="cover-said">You said <q>{{ user_answer }}</q>. Here is what is going right.</p>
       {% endif %}
       {%- set thumbs = (stories | selectattr("image") | list)[:4] %}
+      {#- Days before the RSS feeds have no "source": those stories are all from the Guardian. #}
+      {%- set sources = stories | map(attribute="source", default="The Guardian") | unique | list %}
+      {%- set credit = sources[:-1] | join(", ") ~ " and " ~ sources[-1] if sources | length > 1 else sources[0] %}
       {% if thumbs %}
       <div class="cover-photos" style="grid-template-columns: repeat({{ thumbs|length }}, 1fr)">
         {% for story in thumbs %}
@@ -370,7 +373,7 @@
       </div>
       {% endif %}
       <div class="cover-foot">
-        <span>Real stories from The Guardian, all from the last month.</span>
+        <span>Real stories from {{ credit }}, all from the last month.</span>
         <a class="button" href="#contents">Start reading</a>
       </div>
     </div>
@@ -403,7 +406,7 @@
       </ul>
       <p class="why"><strong>Why it matters{{ "" if topic else " to you" }}:</strong> {{ story.why_it_matters }}</p>
       <p class="source">
-        <span>The Guardian · {{ story.date|nice_date }}</span>
+        <span>{{ story.source or "The Guardian" }} · {{ story.date|nice_date }}</span>
         <button class="keep" type="button" aria-pressed="false"
                 data-headline="{{ story.headline }}" data-url="{{ story.url }}">Keep this</button>
         <a href="{{ story.url }}" target="_blank" rel="noopener">Read the full story</a>
@@ -436,7 +439,7 @@
             {% endfor %}
           </ul>
         </div>
-        <p class="imprint">Stories and story photographs: The Guardian. Dawn scene drawn fresh each day. Made by Hope Today on {{ today|nice_date }}.</p>
+        <p class="imprint">Stories and story photographs: {{ credit }}. Dawn scene drawn fresh each day. Made by Hope Today on {{ today|nice_date }}.</p>
       </div>
     </div>
   </section>

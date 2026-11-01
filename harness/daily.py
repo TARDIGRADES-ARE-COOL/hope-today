@@ -7,6 +7,7 @@ import sys
 from datetime import date, timedelta
 from pathlib import Path
 
+import requests
 from wordfreq import zipf_frequency
 
 from branch import make_branch
@@ -17,7 +18,7 @@ from desk_facts import enough_numbers
 from desk_make import PER, make_desk
 import tools
 from llm import client
-from tools import IMAGES, fetch_article, fetched, search_news
+from tools import FEEDS, IMAGES, fetch_article, fetched, search_feed, search_news
 
 DAILY = Path(__file__).resolve().parent.parent / "daily"
 HISTORY = DAILY / "history.json"
@@ -88,18 +89,26 @@ WIDER_WINDOWS = (14, 28)
 
 
 def sweep(days=WINDOW_DAYS):
-    """Step 1: every recent news article from the sections above, each url once."""
+    """Step 1: every recent news article from the sections above and the RSS feeds, each url once."""
     since = (date.today() - timedelta(days=days)).isoformat()
     candidates = {}
     for section, tag in SECTIONS.items():
-        # A wider window needs more results per section, or it just repeats the newest week.
-        results = search_news(tag, since=since, page_size=min(200, 50 * days // WINDOW_DAYS))
+        try:
+            # A wider window needs more results per section, or it just repeats the newest week.
+            results = search_news(tag, since=since, page_size=min(200, 50 * days // WINDOW_DAYS))
+        except (requests.RequestException, KeyError, ValueError) as e:   # Guardian down: the feeds carry on
+            print(f"Guardian {section} unavailable ({type(e).__name__})")
+            continue
         if isinstance(results, dict):                    # search_news error: no news this week
             continue
         for story in results:
             # The same article can sit in two sections; keep the first.
             if story["url"] not in candidates:
-                candidates[story["url"]] = {**story, "section": section, "image": IMAGES.get(story["url"])}
+                candidates[story["url"]] = {**story, "section": section, "source": "The Guardian",
+                                            "image": IMAGES.get(story["url"])}
+    for section, (source, feed_url) in FEEDS.items():
+        for story in search_feed(source, feed_url, since):
+            candidates.setdefault(story["url"], {**story, "section": section, "image": IMAGES.get(story["url"])})
     return list(candidates.values())
 
 
@@ -145,7 +154,8 @@ GROUP_PROMPT = (
     "SOLAR over ENERGY, CANCER over HEALTH).\n"
     "story_ids: the 3-5 stories that clearly belong to this topic (use their ids).\n"
     "why: one sentence on why this topic is a happy one for today.\n"
-    "A story may appear in more than one topic. Prefer topics whose stories are clearly happy."
+    "A story may appear in more than one topic. Prefer topics whose stories are clearly happy.\n"
+    "Stories come from several outlets: never put two stories about the same event in one topic."
 )
 GROUP_SCHEMA = {
     "type": "object",
@@ -361,7 +371,7 @@ def write_stories(topic):
 
     # Url, date and image come from the search results, never from the model.
     return [{**{k: written[i][k] for k in ("headline", "summary", "key_points", "why_it_matters")},
-             "url": s["url"], "date": s["date"], "image": s["image"]}
+             "url": s["url"], "date": s["date"], "image": s["image"], "source": s.get("source", "The Guardian")}
             for i, s in enumerate(topic["stories"]) if i in written]
 
 
