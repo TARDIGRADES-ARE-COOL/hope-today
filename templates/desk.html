@@ -24,33 +24,27 @@
       --field-3: #b2bdc5;       /* light slate */
       --warn: #8a3b2b;
       --backdrop-dim: 1;
-
-      --margin: clamp(16px, 4vw, 56px);
-      --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
-      --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
-      --step-lead: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem);
-      --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
     }
     @media (prefers-color-scheme: dark) {
       :root { --paper: #d9d7cc; --backdrop-dim: 0.9; }
     }
     * { box-sizing: border-box; }
     [hidden] { display: none !important; }
-    html { font-size: clamp(100%, 0.4vw + 11px, 150%); }
+    /* The whole desk fits one screen: every size below is in rem/em, and fit() (in the script)
+       sets this base size to the largest that needs no scrolling. 16px is the no-script fallback. */
+    html { font-size: 16px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     body {
       margin: 0;
       min-height: 100svh;
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      justify-items: center;
-      align-content: start;
-      gap: 16px;
-      padding: clamp(8px, 3svh, 48px) var(--margin);
+      place-items: center;
+      padding: 0.75rem;
       background: #2c3620;
       color: var(--ink);
       font-family: "Literata", Georgia, serif;
-      font-size: var(--step-body);
-      line-height: 1.55;
+      font-size: 1rem;
+      line-height: 1.4;
     }
     h1, h2, h3 {
       font-family: "Rokkitt", "Arial Narrow", sans-serif;
@@ -65,144 +59,150 @@
     :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
     .card {
-      width: min(60rem, 100%);
+      width: min(66rem, 100%);
       min-width: 0;
       container-type: inline-size;
       background: var(--paper);
-      padding: clamp(18px, min(4vw, 4svh), 44px);
+      padding: 1.1rem 1.4rem 1.25rem;
       display: grid;
-      gap: clamp(12px, 2svh, 24px);
+      gap: 0.7rem;
     }
 
-    /* Masthead: the good news comes first. */
-    .mast { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 16px;
-            border-bottom: 3px solid var(--ink); padding-bottom: 8px; }
-    .mast h1 { font-size: clamp(2rem, 9cqw, 4rem); }
-    .mast .date { font-weight: 600; font-size: var(--step-lead); }
-    .theme { font-size: var(--step-head); }
-    .heads { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-    .heads li { background: var(--field-3); padding: 6px 12px; font-family: "Rokkitt", sans-serif; font-weight: 800;
-                text-transform: uppercase; font-size: 1rem; line-height: 1.1; }
-    .heads li:nth-child(2) { background: var(--field-1); }
-    .heads li:nth-child(3) { background: var(--field-2); }
-    .heads span { display: block; font-family: "Literata", serif; font-weight: 400; text-transform: none; font-size: var(--step-small); }
+    /* Masthead: the good news comes first, "Copy Desk" is just the puzzle's label. */
+    .top { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 0.3rem 1rem;
+           border-bottom: 3px solid var(--ink); padding-bottom: 0.5rem; }
+    .kicker { font-family: "Rokkitt", sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.95rem; }
+    .theme { font-size: 2.6rem; margin-top: 0.15rem; }
+    .label { display: grid; justify-items: end; gap: 0.2rem; text-align: right; }
+    .label h2 { font-size: 1.5rem; }
+    .skip { font-size: 0.8rem; color: var(--muted); }
+    .how { font-size: 0.9rem; }
 
-    .label { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
-    .label h2 { font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.6rem); }
-    .skip { font-size: var(--step-small); color: var(--muted); }
-    .how { font-size: 0.95em; max-width: 62ch; }
+    .status { display: flex; flex-wrap: wrap; gap: 0.3rem 1.1rem; align-items: center; background: var(--accent);
+              color: var(--accent-ink); padding: 0.35rem 0.4rem 0.35rem 0.8rem; font-weight: 600; font-size: 0.9rem; }
+    .status .timer { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.35rem; font-variant-numeric: tabular-nums; min-width: 4ch; }
+    .status .actions { margin-left: auto; }
 
-    .status { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: baseline; background: var(--accent);
-              color: var(--accent-ink); padding: 10px 14px; font-weight: 600; }
-    .status .timer { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.6rem; font-variant-numeric: tabular-nums; min-width: 4ch; }
-
-    .desk { display: grid; gap: clamp(14px, 2svh, 22px); grid-template-columns: minmax(0, 1fr); }
-    @container (min-width: 46rem) { .desk { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); align-items: start; } }
-    .box { display: grid; gap: 10px; align-content: start; min-width: 0; }
-    .box h3 { font-size: 1.3rem; }
-    .rule { font-size: 0.95em; border-left: 4px solid var(--accent); padding-left: 10px; }
-    .clues { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: c; }
-    .clues li { counter-increment: c; position: relative; padding: 8px 12px 8px 2.4em; background: var(--field-1); font-size: 0.95em; line-height: 1.45; }
-    .clues li::before { content: counter(c); position: absolute; left: 0.7em; top: 0.45em; font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.15em; }
+    .desk { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+    @container (min-width: 44rem) { .desk { grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); align-items: start; } }
+    .box { display: grid; gap: 0.5rem; align-content: start; min-width: 0; container-type: inline-size; }
+    .box h3 { font-size: 1.1rem; }
+    .rule { font-size: 0.9rem; border-left: 4px solid var(--accent); padding-left: 0.6rem; }
+    .clues { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; counter-reset: c; }
+    .clues li { counter-increment: c; position: relative; padding: 0.35rem 0.6rem 0.35rem 2em; background: var(--field-1); font-size: 0.9rem; line-height: 1.35; }
+    .clues li::before { content: counter(c); position: absolute; left: 0.65em; top: 0.3em; font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.15em; }
     .clues li.locked { background: none; outline: 2px dotted var(--muted); outline-offset: -2px; color: var(--muted); font-style: italic; }
     .clues li.lit { background: #f0d98d; }
     .clues li.new { animation: arrive 700ms ease; }
     @keyframes arrive { from { background: #f0d98d; transform: translateY(-4px); } }
 
-    .tray { display: flex; flex-wrap: wrap; gap: 8px; min-height: 2.6rem; }
-    .fact { border: 2px dashed var(--muted); background: var(--paper); padding: 6px 12px; font-family: "Rokkitt", sans-serif;
-            font-weight: 800; font-size: 1.3rem; min-width: 3.5rem; transition: transform 120ms ease; }
+    .tray { display: flex; flex-wrap: wrap; gap: 0.4rem; min-height: 2.5rem; }
+    .fact { border: 2px dashed var(--muted); background: var(--paper); padding: 0.2rem 0.6rem; font-family: "Rokkitt", sans-serif;
+            font-weight: 800; font-size: 1.15rem; min-width: 3rem; min-height: 2.5rem; transition: transform 120ms ease; }
     .fact:hover { transform: translateY(-2px); }
     .fact[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-style: solid; border-color: var(--ink); }
     .fact.lit { outline: 4px solid #e6b94f; outline-offset: 2px; }
     .fact.shake { animation: shake 400ms ease; }
     @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
-    .tray .empty { color: var(--muted); font-style: italic; align-self: center; }
-
-    .stories { display: grid; gap: 12px; }
-    .story { display: grid; gap: 6px; padding: 12px 14px; background: #efeee8; border: 0; border-top: 4px solid var(--ink); text-align: left; width: 100%; }
-    .story.target { box-shadow: inset 0 0 0 3px var(--accent); }
-    .story .dl { font-size: var(--step-small); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-    .story h3 { font-size: 1.35rem; }
-    .story .blurb { font-size: 0.95em; }
-    .filed { display: grid; gap: 4px; border-top: 1px solid #c8c6bb; padding-top: 6px; }
-    .filed .slot { font-size: var(--step-small); color: var(--muted); font-style: italic; }
-    .filed .got { display: flex; gap: 10px; align-items: baseline; animation: arrive 600ms ease; }
-    .filed .got b { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.15rem; min-width: 5.5rem; }
-    .filed .got span { font-size: var(--step-small); }
-    .filed .got.helped b { text-decoration: underline dotted; }
-    .file-here { justify-self: start; border: 0; background: var(--accent); color: var(--accent-ink); font-family: "Rokkitt", sans-serif;
-                 font-weight: 800; text-transform: uppercase; padding: 10px 16px; font-size: 1rem; min-height: 44px; }
-
-    .feedback { min-height: 1.6em; font-weight: 600; }
+    .tray .empty { color: var(--muted); font-style: italic; align-self: center; font-size: 0.9rem; }
+    .feedback { min-height: 1.4em; font-weight: 600; font-size: 0.9rem; }
     .feedback.warn { color: var(--warn); }
-    .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+    /* Stories side by side when there's room; slots line up along the bottom. */
+    .stories { display: grid; gap: 0.6rem; grid-template-columns: minmax(0, 1fr); }
+    @container (min-width: 30rem) { .stories { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .story { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.5rem 0.6rem 0.6rem; background: #efeee8; border-top: 4px solid var(--ink); min-width: 0; }
+    .story.target { box-shadow: inset 0 0 0 3px var(--accent); }
+    .story .dl { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); line-height: 1.25; }
+    .story h3 { font-size: 1.05rem; }
+    .story .blurb { font-size: 0.8rem; line-height: 1.35; }
+    /* Phones: no room for the story summaries at a readable size. The clues only name places
+       and facts, filed facts say what they mean, and the full stories come next in the deck. */
+    @media (max-width: 640px), (max-height: 500px) { .story .blurb { display: none; } }
+    @media (max-width: 640px) {
+      .label { justify-items: start; text-align: left; }
+      /* Narrow screens: one short row per story (place and headline | its slots), at any text size. */
+      .box .stories { grid-template-columns: minmax(0, 1fr); }
+      .story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); column-gap: 0.6rem; align-content: center; }
+      .story .dl { grid-column: 1; }
+      .story h3 { grid-column: 1; }
+      .filed { grid-column: 2; grid-row: 1 / span 2; border-top: 0; padding-top: 0; margin-top: 0; }
+    }
+    .filed { display: grid; gap: 0.3rem; border-top: 1px solid #c8c6bb; padding-top: 0.4rem; margin-top: auto; }
+    /* An empty slot, a filed fact and "File it here" are the same height, so tapping a fact
+       never makes the page jump. */
+    .slot, .got, .file-here { min-height: 2.5rem; }
+    .slot { display: flex; align-items: center; padding: 0 0.5rem; border: 1.5px dashed #b9b7ac; font-size: 0.75rem; color: var(--muted); font-style: italic; }
+    .got { display: grid; align-content: center; animation: arrive 600ms ease; line-height: 1.2; }
+    .got b { font-family: "Rokkitt", sans-serif; font-weight: 800; font-size: 1.05rem; }
+    .got span { font-size: 0.75rem; }
+    .got.helped b { text-decoration: underline dotted; }
+    .file-here { border: 0; background: var(--accent); color: var(--accent-ink); font-family: "Rokkitt", sans-serif;
+                 font-weight: 800; text-transform: uppercase; padding: 0.3rem 0.6rem; font-size: 0.95rem; width: 100%; }
+
     .button { border: 0; background: var(--accent); color: var(--accent-ink); font-family: "Rokkitt", sans-serif; font-weight: 800;
-              font-size: var(--step-lead); text-transform: uppercase; text-decoration: none; padding: 12px 24px; transition: transform 120ms ease; }
+              font-size: 1.15rem; text-transform: uppercase; text-decoration: none; padding: 0.6rem 1.2rem; transition: transform 120ms ease;
+              display: inline-block; }
     .button.soft { background: var(--field-1); color: var(--ink); }
+    .status .button { font-size: 0.95rem; padding: 0.35rem 1rem; }
     .button:hover { transform: translateY(-2px); }
     .button:active { transform: translateY(1px) scale(0.98); }
-    .link { border: 0; background: none; padding: 8px 0; text-decoration: underline; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
 
-    .result { display: grid; gap: 12px; }
-    .result h2 { font-size: clamp(1.8rem, 5.5svh, 3.4rem); }
-    .share-text { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85em; white-space: pre-wrap; background: #efeee8; padding: 10px 12px; }
+    /* Once solved, the result takes the clues' place, so the page doesn't grow. */
+    .result h2 { font-size: 2.2rem; }
+    .share-text { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.8em; white-space: pre-wrap; background: #efeee8; padding: 0.5rem 0.7rem; }
 
     @media (prefers-reduced-motion: reduce) {
-      .fact, .button, .fact.shake, .clues li.new, .filed .got { transition: none; animation: none; }
+      .fact, .button, .fact.shake, .clues li.new, .got { transition: none; animation: none; }
     }
   </style>
 </head>
 <body>
   {% include "_dawn.html" %}
 
-  <header class="card" aria-labelledby="theme">
-    <div class="mast"><h1>Hope Today</h1><span class="date">{{ today|nice_date }}</span></div>
-    <h2 class="theme" id="theme">{{ theme }}</h2>
-    <ul class="heads">
-      {% for s in desk.stories %}<li>{{ s.head }}<span>{{ s.dl }}</span></li>{% endfor %}
-    </ul>
-  </header>
-
-  <main class="card" id="desk-card">
-    <div class="label">
-      <h2>Copy Desk{% if label %} <span class="skip">· {{ label }}</span>{% endif %}</h2>
-      <a class="skip" id="skip" href="{{ deck_href }}">Skip to the good news →</a>
-    </div>
-    <p class="how">The night desk dropped {{ desk.cards|length }} facts from these stories. Tap a fact, then “File it here” on the story it came from.
-      The desk only takes a fact once the clues <em>prove</em> where it goes. Filing one where the clues already rule it out is a mistake.</p>
+  <main class="card" id="desk-card" aria-labelledby="theme">
+    <header class="top">
+      <div>
+        <p class="kicker">Hope Today · {{ today|nice_date }}</p>
+        <h1 class="theme" id="theme">{{ theme }}</h1>
+      </div>
+      <div class="label">
+        <h2>Copy Desk{% if label %} <span class="skip">· {{ label }}</span>{% endif %}</h2>
+        <a class="skip" id="skip" href="{{ deck_href }}">Skip to the good news →</a>
+      </div>
+    </header>
+    <p class="how" id="how">The night desk dropped {{ desk.cards|length }} facts from these stories. Tap a fact, then “File it here” on its story.
+      Only file what the clues <em>prove</em>: a fact the clues already rule out counts as a mistake.</p>
 
     <div class="status" aria-live="off">
       <span class="timer" id="timer" role="timer">0:00</span>
       <span id="count"></span><span id="mistakes"></span><span id="hints-used"></span>
+      <span class="actions" id="actions"><button class="button soft" type="button" id="hint">Hint</button></span>
     </div>
 
     <div class="desk">
-      <section class="box" aria-labelledby="clues-title">
+      <section class="box" id="clues-box" aria-labelledby="clues-title">
         <h3 id="clues-title">Clues</h3>
         <p class="rule">{{ desk.rule }}</p>
         <ol class="clues" id="clues"></ol>
+      </section>
+      <section class="box result" id="result" hidden aria-labelledby="result-title">
+        <h2 id="result-title">First light</h2>
+        <p id="result-line"></p>
+        <p class="share-text" id="share-text"></p>
+        <div class="actions">
+          <a class="button" href="{{ deck_href }}" id="open-deck">Open today's good news</a>
+          <button class="button soft" type="button" id="share">Share</button>
+        </div>
       </section>
       <section class="box" aria-labelledby="facts-title">
         <h3 id="facts-title">Loose facts</h3>
         <div class="tray" id="tray"></div>
         <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
         <div class="stories" id="stories"></div>
-        <div class="actions" id="actions">
-          <button class="button soft" type="button" id="hint">Hint</button>
-        </div>
       </section>
     </div>
-
-    <section class="result" id="result" hidden aria-labelledby="result-title">
-      <h2 id="result-title">First light</h2>
-      <p id="result-line"></p>
-      <p class="share-text" id="share-text"></p>
-      <div class="actions">
-        <a class="button" href="{{ deck_href }}" id="open-deck">Open today's good news</a>
-        <button class="button soft" type="button" id="share">Share</button>
-      </div>
-    </section>
   </main>
 
   <script>
@@ -265,6 +265,30 @@
         document.documentElement.style.setProperty("--backdrop-dim", (baseDim * (0.55 + 0.45 * n)).toFixed(3));
       };
 
+      // ----- one screen, any size: the largest base text size at which nothing scrolls -----
+      // After a repaint it only shrinks (no jumping mid-game); a resize starts again from the top.
+      const root = document.documentElement;
+      const natural = () => Math.min(26, Math.max(16, innerWidth / 70));   // grows on big screens, never too wide
+      const fits = () => root.scrollHeight <= innerHeight && root.scrollWidth <= innerWidth;
+      let size = 0;
+      function fit(again) {
+        let hi = again || !size ? natural() : size, lo = 9;  // 9px floor: below that, scroll instead
+        root.style.fontSize = hi + "px";
+        if (!fits()) {
+          for (let i = 0; i < 8; i++) {
+            const mid = (lo + hi) / 2;
+            root.style.fontSize = mid + "px";
+            if (fits()) lo = mid; else hi = mid;
+          }
+          hi = lo;
+        }
+        size = hi;
+        root.style.fontSize = size + "px";
+      }
+      let pending = 0;
+      addEventListener("resize", () => { cancelAnimationFrame(pending); pending = requestAnimationFrame(() => fit(true)); });
+      document.fonts?.ready.then(() => fit(true));        // the real fonts change line breaks
+
       const clueText = id => DATA.clues[id];
       function paint() {
         const focusId = document.activeElement?.id;          // rebuilding buttons must not lose keyboard focus
@@ -309,14 +333,14 @@
             g.querySelector("b").textContent = c.t; g.querySelector("span").textContent = DATA.means[c.id];
             filed.appendChild(g);
           });
-          for (let k = mine.length; k < DESK.per; k++) filed.insertAdjacentHTML("beforeend", '<div class="slot">Empty slot</div>');
-          el.appendChild(filed);
           if (open) {                                          // only this button files: stray taps on the text do nothing
             const btn = document.createElement("button"); btn.type = "button"; btn.className = "file-here"; btn.id = "file-" + i;
-            btn.textContent = "File it here";
+            btn.textContent = "File it here";                // it takes the first empty slot's place
             btn.addEventListener("click", () => file(i));
-            el.appendChild(btn);
+            filed.appendChild(btn);
           }
+          for (let k = mine.length + (open ? 1 : 0); k < DESK.per; k++) filed.insertAdjacentHTML("beforeend", '<div class="slot">Empty slot</div>');
+          el.appendChild(filed);
           box.appendChild(el);
         });
         const n = Object.keys(state.filed).length;
@@ -325,6 +349,7 @@
         $("hints-used").textContent = `${state.hints} ${state.hints === 1 ? "hint" : "hints"}`;
         $("actions").hidden = !playing;
         setDawn();
+        fit();
         const back = focusId && $(focusId);
         if (back) back.focus({ preventScroll: true });
         else if (focusId && focusId.startsWith("file-")) document.querySelector(".fact")?.focus({ preventScroll: true });
@@ -409,11 +434,12 @@
         $("result-line").textContent = `All ${DESK.cards.length} facts filed in ${fmt(state.elapsed)}, with ${state.mistakes} ${state.mistakes === 1 ? "mistake" : "mistakes"} and ${state.hints} ${state.hints === 1 ? "hint" : "hints"}. Your good news is ready.`;
         $("share-text").textContent = shareText();
         $("result").hidden = false;
+        $("clues-box").hidden = true;                 // the result takes the clues' place
+        $("how").hidden = true;
         paint();
         if (celebrate) {
           ev("desk-solved"); ev(`desk-mistakes-${Math.min(state.mistakes, 3)}${state.mistakes >= 3 ? "+" : ""}`);
           window.riseSun?.();
-          $("result").scrollIntoView({ behavior: "smooth", block: "center" });
           $("open-deck").focus({ preventScroll: true });
         }
       }
