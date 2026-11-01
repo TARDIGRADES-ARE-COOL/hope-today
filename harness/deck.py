@@ -1,3 +1,5 @@
+import base64
+import json
 import webbrowser
 from datetime import date
 from pathlib import Path
@@ -44,6 +46,14 @@ def check_stories(stories):
         elif len(points) == 1:
             problems.append(f"Story {n} needs 2 to 4 key_points, got 1.")
     return " ".join(problems) or None
+
+
+def page_answers(branch):
+    """Branch out's answer list as the puzzle page reads it: short keys, base64 so the answers
+    aren't plain text in the page. Lives here, not in branch.py, so site.py needs no API key."""
+    return base64.b64encode(json.dumps(
+        [{"n": a["name"], "a": a["aliases"], "t": a["tier"], "p": a["points"], "w": bool(a.get("news"))}
+         for a in branch["answers"]]).encode()).decode()
 
 
 def render_deck(title, user_answer, stories, topic=None, path=None):

@@ -2,7 +2,6 @@
 rarer words score more, and words from today's stories score extra. The AI lists the words; a second
 pass removes bad ones; code scores rarity, marks the news words and picks the gem.
 (The first version asked to 'name' things in a category, like moons; that leaned on general knowledge.)"""
-import base64
 import json
 import re
 
@@ -138,13 +137,6 @@ def make_branch(topic, answer, story_titles, article_texts):
 
     return {"prompt": f"Words linked to {answer}", "answers": answers, "gem": gem["name"] if gem else None,
             "gem_from_news": bool(in_news), "dropped": len(raw["answers"]) - len(answers)}
-
-
-def page_answers(branch):
-    """The answer list as the puzzle page reads it: short keys, base64 so answers aren't plain text."""
-    return base64.b64encode(json.dumps(
-        [{"n": a["name"], "a": a["aliases"], "t": a["tier"], "p": a["points"], "w": bool(a.get("news"))}
-         for a in branch["answers"]]).encode()).decode()
 
 
 if __name__ == "__main__":

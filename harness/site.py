@@ -8,8 +8,7 @@ import json
 import shutil
 from pathlib import Path
 
-from branch import page_answers
-from deck import env
+from deck import env, page_answers
 from desk import desk_id, render_page
 
 ROOT = Path(__file__).resolve().parent.parent

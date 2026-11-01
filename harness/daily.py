@@ -10,9 +10,9 @@ from pathlib import Path
 import requests
 from wordfreq import zipf_frequency
 
-from branch import make_branch, page_answers
+from branch import make_branch
 from clues import ROTATION, fresh_free_hint, make_pixel_puzzle, make_puzzle, theme_hint
-from deck import env, render_deck
+from deck import env, page_answers, render_deck
 from desk import render_page
 from desk_facts import enough_numbers
 from desk_make import PER, make_desk
