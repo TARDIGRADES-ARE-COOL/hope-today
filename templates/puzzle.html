@@ -562,7 +562,16 @@
       const bstate = (() => { try { return JSON.parse(localStorage.getItem(BKEY)); } catch { return null; } })()
                      || { found: [], done: false, open: false };
       const bsave = () => { try { localStorage.setItem(BKEY, JSON.stringify(bstate)); } catch {} };
-      const norm = s => s.toLowerCase().replace(/[^a-z]/g, "");
+      // Letters only, UK spellings folded into US ones: the same rules as normal() in harness/branch.py.
+      const SPELLINGS = { grey: "gray", tyre: "tire", tyres: "tires", aluminium: "aluminum", plough: "plow",
+                          mould: "mold", programme: "program", jewellery: "jewelry", pyjamas: "pajamas" };
+      const norm = s => {
+        let w = s.toLowerCase().replace(/[^a-z]/g, "");
+        if (w.length >= 6) w = w.replace(/isation(s?)$/, "ization$1").replace(/is(e|es|ed|ing)$/, "iz$1")
+          .replace(/ys(e|es|ed|ing)$/, "yz$1").replace(/our(s|ed|ing|ful|ite|ites)?$/, "or$1");
+        if (w.length >= 5) w = w.replace(/([bct])re(s?)$/, "$1er$2");
+        return SPELLINGS[w] || w;
+      };
       const index = new Map();                       // every name and alias -> answer number
       ANSWERS.forEach((a, i) => [a.n, ...a.a].forEach(n => index.set(norm(n), i)));
       const oneEdit = (a, b) => {                    // true if a and b differ by at most one letter
@@ -575,13 +584,18 @@
         }
         return edits + (a.length - i) + (b.length - j) <= 1;
       };
-      // Forgiving: exact names and aliases, plurals, then one-letter typos on longer words.
+      // Forgiving: exact names and aliases, plurals, one-letter typos on long words, other forms of long words.
       const lookup = raw => {
         const g = norm(raw);
         for (const v of [g, g.replace(/es$/, ""), g.replace(/s$/, ""), g + "s"]) if (index.has(v)) return index.get(v);
-        if (g.length >= 5) for (const [k, i] of index) if (oneEdit(g, k)) return i;
+        // Typos only on long words: on short ones a typo is often another real word (swore/shore, heard/heart).
+        if (g.length >= 7) for (const [k, i] of index) if (oneEdit(g, k)) return i;
         // Other forms of a long word: sustainable / sustainability, renewable / renewables.
-        if (g.length >= 7) for (const [k, i] of index) if (k.length >= 7 && k.slice(0, 7) === g.slice(0, 7)) return i;
+        // Both 8+ letters, sharing all but the shorter one's last 3 (content / contentious don't match).
+        for (const [k, i] of index) {
+          const short = Math.min(g.length, k.length), need = Math.max(7, short - 3);
+          if (short >= 8 && g.slice(0, need) === k.slice(0, need)) return i;
+        }
         return -1;
       };
       const tierClass = t => "t-" + t.split(" ")[0];
@@ -646,6 +660,9 @@
             : `${a.n}: ${a.t.toLowerCase()}${a.w ? ", and in today's news" : ""}, +${a.p}`;
         } else {
           bstate.deadline -= MISS_MS;
+          // Which fair words does the list miss? Anonymous, letters only, today's puzzle only.
+          const miss = raw.toLowerCase().replace(/[^a-z]/g, "");
+          if (IS_LATEST && miss.length >= 3 && miss.length <= 20) track(`branch-miss-${TODAY}-${miss}`);
           $("branch-feedback").textContent = `Not on today's list. \u22123 seconds.`;
           if (!msLeft()) bstate.done = true;
         }
