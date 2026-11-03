@@ -13,7 +13,11 @@
     "https://news.mongabay.com/2026/10/philippine-village-uses-nature-to-defend-against-floods-with-bamboo-shells-and-husks/",
     "https://news.mongabay.com/2026/10/early-tech-warning-hopes-to-give-sumatras-peat-community-a-head-start-on-fires/",
     "https://news.mongabay.com/2026/10/pembas-new-marine-protected-areas-show-the-power-of-collaboration-to-meet-30x30-goal/",
-    "https://news.mongabay.com/short-article/2026/10/fishing-cat-rescue-and-release-offers-potential-model-for-conservation-in-bangladesh/"
+    "https://news.mongabay.com/short-article/2026/10/fishing-cat-rescue-and-release-offers-potential-model-for-conservation-in-bangladesh/",
+    "https://news.mongabay.com/2026/11/diverse-forests-can-better-withstand-extreme-weather-events-study-finds-heres-why/",
+    "https://www.sciencedaily.com/releases/2026/10/261030003006.htm",
+    "https://news.mongabay.com/2026/10/angola-designates-serra-do-pingano-as-a-protected-area-amid-rapid-forest-loss/",
+    "https://news.mongabay.com/2026/10/how-citizen-scientists-are-mapping-punes-trees-with-hopes-of-a-greener-future/"
   ],
   "topics": [
     {
@@ -35,6 +39,11 @@
       "date": "2026-11-02",
       "topic": "Community protection",
       "answer": "GUARD"
+    },
+    {
+      "date": "2026-11-03",
+      "topic": "Nature resilience",
+      "answer": "FOREST"
     }
   ],
   "reserve": {
