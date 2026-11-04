@@ -1,0 +1,2148 @@
+{
+  "date": "2026-11-04",
+  "topic": "Helping communities",
+  "answer": "COMMUNE",
+  "why": "These stories highlight people building stronger local support systems, whether through shared care, coexistence, or grassroots enterprise.",
+  "puzzle": {
+    "type": "hidden",
+    "instruction": "Today's topic is tucked into this sentence. Can you spot how?",
+    "sentence": "After the romcom, Muneera led a toast in the shared garden.",
+    "length": 7,
+    "answer": "COMMUNE",
+    "highlight": [
+      2,
+      3
+    ],
+    "hints": [
+      {
+        "level": 1,
+        "free": true,
+        "text": "Squish neighboring words together and peek across the seam for the hidden topic. Like LAMP hiding in \u201csmal<b>l amp</b>\u201d."
+      },
+      {
+        "level": 2,
+        "free": false,
+        "text": "\ud83c\udfe1 A shared-living group, or a soulful chat with nature."
+      },
+      {
+        "level": 3,
+        "free": false,
+        "text": "Peek between \u201cromcom\u201d and \u201cMuneera\u201d\u2026",
+        "highlight": [
+          2,
+          3
+        ]
+      }
+    ],
+    "solution": {
+      "answer": "COMMUNE",
+      "steps": [
+        "The trick: the answer was hiding across the words.",
+        "Where: in \u201cromcom Muneera\u201d.",
+        "How: rom \u00b7 COMMUNE \u00b7 era \u2192 COMMUNE"
+      ]
+    }
+  },
+  "branch": {
+    "prompt": "Words linked to COMMUNE",
+    "answers": [
+      {
+        "name": "community",
+        "aliases": [
+          "communities",
+          "neighborhood",
+          "neighbourhood"
+        ],
+        "zipf": 5.34,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "village",
+        "aliases": [
+          "villages",
+          "hamlet"
+        ],
+        "zipf": 4.82,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "collective",
+        "aliases": [
+          "collectives"
+        ],
+        "zipf": 4.3,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "hippie",
+        "aliases": [
+          "hippy",
+          "hippies"
+        ],
+        "zipf": 3.36,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "farm",
+        "aliases": [
+          "farms"
+        ],
+        "zipf": 4.75,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "cooperative",
+        "aliases": [
+          "co-op",
+          "coop"
+        ],
+        "zipf": 4.35,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "socialism",
+        "aliases": [
+          "socialist"
+        ],
+        "zipf": 4.22,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "communism",
+        "aliases": [
+          "communist"
+        ],
+        "zipf": 4.32,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "sharing",
+        "aliases": [
+          "share",
+          "shared"
+        ],
+        "zipf": 5.2,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "living",
+        "aliases": [
+          "live",
+          "lifestyle"
+        ],
+        "zipf": 5.54,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "people",
+        "aliases": [
+          "persons",
+          "folk"
+        ],
+        "zipf": 6.25,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "land",
+        "aliases": [
+          "lands",
+          "property"
+        ],
+        "zipf": 5.22,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "nature",
+        "aliases": [
+          "natural world"
+        ],
+        "zipf": 5.04,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "group",
+        "aliases": [
+          "groups"
+        ],
+        "zipf": 5.57,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "together",
+        "aliases": [
+          "togetherness"
+        ],
+        "zipf": 5.46,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "residents",
+        "aliases": [
+          "inhabitants",
+          "members"
+        ],
+        "zipf": 5.35,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "housing",
+        "aliases": [
+          "homes",
+          "accommodation"
+        ],
+        "zipf": 4.77,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "family",
+        "aliases": [
+          "families"
+        ],
+        "zipf": 5.66,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "equality",
+        "aliases": [
+          "equal rights"
+        ],
+        "zipf": 4.54,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "cooperation",
+        "aliases": [],
+        "zipf": 4.3,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "council",
+        "aliases": [
+          "councils"
+        ],
+        "zipf": 5.08,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "town",
+        "aliases": [
+          "towns"
+        ],
+        "zipf": 5.24,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "municipality",
+        "aliases": [
+          "municipal area"
+        ],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "kibbutz",
+        "aliases": [
+          "kibbutzim"
+        ],
+        "zipf": 2.71,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "monastery",
+        "aliases": [
+          "monasteries"
+        ],
+        "zipf": 3.65,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "retreat",
+        "aliases": [
+          "retreats"
+        ],
+        "zipf": 4.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "ecovillage",
+        "aliases": [],
+        "zipf": 1.4,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "sanctuary",
+        "aliases": [
+          "haven"
+        ],
+        "zipf": 4.13,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "settlement",
+        "aliases": [
+          "settlements"
+        ],
+        "zipf": 4.49,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "colony",
+        "aliases": [
+          "colonies"
+        ],
+        "zipf": 4.12,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "tribe",
+        "aliases": [
+          "tribal group"
+        ],
+        "zipf": 4.12,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "society",
+        "aliases": [
+          "societies"
+        ],
+        "zipf": 5.17,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "utopia",
+        "aliases": [
+          "utopian"
+        ],
+        "zipf": 3.39,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "peace",
+        "aliases": [
+          "peacefulness"
+        ],
+        "zipf": 5.02,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "gardening",
+        "aliases": [
+          "garden"
+        ],
+        "zipf": 4.77,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "farming",
+        "aliases": [
+          "agriculture"
+        ],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "meditation",
+        "aliases": [
+          "meditating"
+        ],
+        "zipf": 3.95,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "spirit",
+        "aliases": [
+          "spirituality"
+        ],
+        "zipf": 4.79,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "intentional community",
+        "aliases": [
+          "intentional communities"
+        ],
+        "zipf": 3.71,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "cooperative housing",
+        "aliases": [
+          "co-op housing",
+          "housing co-op"
+        ],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "shared living",
+        "aliases": [
+          "shared life",
+          "sharing life"
+        ],
+        "zipf": 4.65,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "shared house",
+        "aliases": [
+          "group house"
+        ],
+        "zipf": 5.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "common house",
+        "aliases": [
+          "common building",
+          "house"
+        ],
+        "zipf": 5.71,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "common land",
+        "aliases": [
+          "shared land",
+          "land"
+        ],
+        "zipf": 5.22,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "communal kitchen",
+        "aliases": [
+          "shared kitchen"
+        ],
+        "zipf": 4.36,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "communal garden",
+        "aliases": [
+          "shared garden"
+        ],
+        "zipf": 4.42,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "co-op farm",
+        "aliases": [
+          "cooperative farm"
+        ],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "community garden",
+        "aliases": [
+          "people's garden"
+        ],
+        "zipf": 4.67,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "cohousing",
+        "aliases": [],
+        "zipf": 1.48,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "sustainable living",
+        "aliases": [
+          "sustainability"
+        ],
+        "zipf": 4.16,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "off-grid",
+        "aliases": [],
+        "zipf": 4.17,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "self-sufficiency",
+        "aliases": [
+          "self sufficient",
+          "self-reliance"
+        ],
+        "zipf": 4.27,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "homestead",
+        "aliases": [
+          "homesteading"
+        ],
+        "zipf": 3.49,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "smallholding",
+        "aliases": [
+          "small farm"
+        ],
+        "zipf": 4.68,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "permaculture",
+        "aliases": [
+          "permacultural"
+        ],
+        "zipf": 2.44,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "allotment",
+        "aliases": [
+          "allotments"
+        ],
+        "zipf": 3.13,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "organic farm",
+        "aliases": [
+          "organic farming"
+        ],
+        "zipf": 4.24,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "barn",
+        "aliases": [
+          "barns"
+        ],
+        "zipf": 3.99,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "yurts",
+        "aliases": [
+          "yurt"
+        ],
+        "zipf": 2.43,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "cabins",
+        "aliases": [
+          "cabin"
+        ],
+        "zipf": 4.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "tiny homes",
+        "aliases": [
+          "tiny houses"
+        ],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "longhouse",
+        "aliases": [],
+        "zipf": 2.11,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "dormitory",
+        "aliases": [
+          "dorm",
+          "dorms"
+        ],
+        "zipf": 3.58,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "canteen",
+        "aliases": [
+          "dining hall"
+        ],
+        "zipf": 4.06,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "food co-op",
+        "aliases": [
+          "food cooperative"
+        ],
+        "zipf": 4.32,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "tool library",
+        "aliases": [
+          "tool share"
+        ],
+        "zipf": 4.47,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "childcare",
+        "aliases": [],
+        "zipf": 3.4,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "homeschooling",
+        "aliases": [],
+        "zipf": 2.74,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "workshop",
+        "aliases": [
+          "workshops"
+        ],
+        "zipf": 4.15,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "makerspace",
+        "aliases": [],
+        "zipf": 2.07,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "meeting",
+        "aliases": [
+          "meetings"
+        ],
+        "zipf": 5.15,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "assembly",
+        "aliases": [
+          "assemblies"
+        ],
+        "zipf": 4.61,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "consensus",
+        "aliases": [
+          "agreement"
+        ],
+        "zipf": 4.88,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "democracy",
+        "aliases": [
+          "direct democracy"
+        ],
+        "zipf": 4.51,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "vote",
+        "aliases": [
+          "voting"
+        ],
+        "zipf": 5.11,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "council meeting",
+        "aliases": [
+          "local meeting"
+        ],
+        "zipf": 4.97,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "town hall",
+        "aliases": [
+          "city hall"
+        ],
+        "zipf": 4.8,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mayor",
+        "aliases": [
+          "maire"
+        ],
+        "zipf": 4.62,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "local government",
+        "aliases": [
+          "municipal government"
+        ],
+        "zipf": 5.19,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "public services",
+        "aliases": [
+          "local services"
+        ],
+        "zipf": 5.12,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "mutual aid",
+        "aliases": [
+          "mutual help"
+        ],
+        "zipf": 4.25,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "solidarity",
+        "aliases": [
+          "standing together"
+        ],
+        "zipf": 4.76,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "reciprocity",
+        "aliases": [
+          "give and take"
+        ],
+        "zipf": 5.5,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "trust",
+        "aliases": [
+          "trusting"
+        ],
+        "zipf": 5.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "belonging",
+        "aliases": [
+          "sense of belonging"
+        ],
+        "zipf": 4.05,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "neighbors",
+        "aliases": [
+          "neighbours"
+        ],
+        "zipf": 4.24,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "fellowship",
+        "aliases": [
+          "companionship"
+        ],
+        "zipf": 3.86,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "kinship",
+        "aliases": [
+          "family feeling"
+        ],
+        "zipf": 5.02,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "collaboration",
+        "aliases": [
+          "collaborating"
+        ],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "teamwork",
+        "aliases": [],
+        "zipf": 3.48,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "pooling",
+        "aliases": [
+          "pooling resources"
+        ],
+        "zipf": 2.97,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "collectivity",
+        "aliases": [
+          "collectiveness"
+        ],
+        "zipf": 2.18,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "collectivism",
+        "aliases": [
+          "collectivist"
+        ],
+        "zipf": 2.48,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "communalism",
+        "aliases": [
+          "communalist"
+        ],
+        "zipf": 2.14,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "communitarianism",
+        "aliases": [
+          "communitarian"
+        ],
+        "zipf": 2.03,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "anarchism",
+        "aliases": [
+          "anarchist"
+        ],
+        "zipf": 3.36,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "Marxism",
+        "aliases": [
+          "Marxist"
+        ],
+        "zipf": 3.6,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "syndicalism",
+        "aliases": [
+          "syndicalist"
+        ],
+        "zipf": 2.26,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "revolution",
+        "aliases": [
+          "revolt"
+        ],
+        "zipf": 4.56,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "uprising",
+        "aliases": [
+          "rebellion"
+        ],
+        "zipf": 3.94,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "barricade",
+        "aliases": [
+          "barricades"
+        ],
+        "zipf": 3.09,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "workers",
+        "aliases": [
+          "working class"
+        ],
+        "zipf": 5.1,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "proletariat",
+        "aliases": [
+          "proles"
+        ],
+        "zipf": 2.98,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "counterculture",
+        "aliases": [],
+        "zipf": 2.58,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "free love",
+        "aliases": [
+          "open love"
+        ],
+        "zipf": 5.41,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "flower power",
+        "aliases": [
+          "peace and love"
+        ],
+        "zipf": 4.95,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "tie-dye",
+        "aliases": [],
+        "zipf": 3.74,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "Woodstock",
+        "aliases": [
+          "Woodstock festival"
+        ],
+        "zipf": 3.22,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "psychedelia",
+        "aliases": [
+          "psychedelic"
+        ],
+        "zipf": 3.34,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "ashram",
+        "aliases": [
+          "ashrams"
+        ],
+        "zipf": 2.92,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "convent",
+        "aliases": [
+          "convents"
+        ],
+        "zipf": 3.48,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "abbey",
+        "aliases": [
+          "abbeys"
+        ],
+        "zipf": 3.88,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "monks",
+        "aliases": [
+          "monk"
+        ],
+        "zipf": 3.93,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "nuns",
+        "aliases": [
+          "nun"
+        ],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "prayer",
+        "aliases": [
+          "pray"
+        ],
+        "zipf": 4.42,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "contemplation",
+        "aliases": [
+          "reflection"
+        ],
+        "zipf": 4.17,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "connection",
+        "aliases": [
+          "connectedness"
+        ],
+        "zipf": 4.76,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "wilderness",
+        "aliases": [
+          "wild places"
+        ],
+        "zipf": 4.6,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "forest",
+        "aliases": [
+          "woods"
+        ],
+        "zipf": 4.7,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "river",
+        "aliases": [
+          "rivers"
+        ],
+        "zipf": 5.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mountain",
+        "aliases": [
+          "mountains"
+        ],
+        "zipf": 4.73,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "conservation",
+        "aliases": [
+          "protecting nature"
+        ],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "coexistence",
+        "aliases": [
+          "living together"
+        ],
+        "zipf": 5.07,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "wildlife",
+        "aliases": [
+          "wild animals"
+        ],
+        "zipf": 4.52,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "biodiversity",
+        "aliases": [
+          "biological diversity"
+        ],
+        "zipf": 4.01,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mental health",
+        "aliases": [
+          "wellbeing",
+          "well-being"
+        ],
+        "zipf": 5.69,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "social care",
+        "aliases": [
+          "care work"
+        ],
+        "zipf": 5.41,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "care hub",
+        "aliases": [
+          "support hub"
+        ],
+        "zipf": 4.06,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "social worker",
+        "aliases": [
+          "caseworker"
+        ],
+        "zipf": 4.39,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "therapist",
+        "aliases": [
+          "counsellor",
+          "counselor"
+        ],
+        "zipf": 3.97,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "volunteer",
+        "aliases": [
+          "volunteers"
+        ],
+        "zipf": 4.29,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "organizer",
+        "aliases": [
+          "organiser"
+        ],
+        "zipf": 3.57,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "facilitator",
+        "aliases": [
+          "facilitators"
+        ],
+        "zipf": 2.9,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "caretaker",
+        "aliases": [
+          "custodian"
+        ],
+        "zipf": 3.45,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "gardener",
+        "aliases": [
+          "gardeners"
+        ],
+        "zipf": 3.49,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "farmer",
+        "aliases": [
+          "farmers"
+        ],
+        "zipf": 4.43,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "cook",
+        "aliases": [
+          "chef"
+        ],
+        "zipf": 4.65,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "builder",
+        "aliases": [
+          "builders"
+        ],
+        "zipf": 3.85,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "teacher",
+        "aliases": [
+          "educator"
+        ],
+        "zipf": 4.88,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "elder",
+        "aliases": [
+          "elders"
+        ],
+        "zipf": 4.06,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "chores",
+        "aliases": [
+          "tasks"
+        ],
+        "zipf": 4.23,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rota",
+        "aliases": [
+          "roster"
+        ],
+        "zipf": 4.09,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "workshare",
+        "aliases": [],
+        "zipf": 1.01,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "membership",
+        "aliases": [
+          "memberships"
+        ],
+        "zipf": 4.47,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "dues",
+        "aliases": [
+          "fees"
+        ],
+        "zipf": 4.53,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "bylaws",
+        "aliases": [],
+        "zipf": 3.02,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "gift economy",
+        "aliases": [
+          "gift culture"
+        ],
+        "zipf": 4.59,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "barter",
+        "aliases": [
+          "trade"
+        ],
+        "zipf": 5.12,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "land trust",
+        "aliases": [
+          "community land trust"
+        ],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "commons",
+        "aliases": [
+          "the commons"
+        ],
+        "zipf": 4.14,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "public good",
+        "aliases": [
+          "common good"
+        ],
+        "zipf": 5.46,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "social enterprise",
+        "aliases": [
+          "social business"
+        ],
+        "zipf": 5.18,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "microenterprise",
+        "aliases": [],
+        "zipf": 1.28,
+        "tier": "Gem",
+        "points": 10,
+        "news": true
+      },
+      {
+        "name": "women's group",
+        "aliases": [
+          "women-led group"
+        ],
+        "zipf": 4.88,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "villagers",
+        "aliases": [
+          "village people"
+        ],
+        "zipf": 4.8,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "Auroville",
+        "aliases": [
+          "Auroville township"
+        ],
+        "zipf": 1.48,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "Findhorn",
+        "aliases": [
+          "Findhorn Foundation"
+        ],
+        "zipf": 1.83,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "Christiania",
+        "aliases": [
+          "Freetown Christiania"
+        ],
+        "zipf": 2.22,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "Twin Oaks",
+        "aliases": [
+          "Twin Oaks Community"
+        ],
+        "zipf": 3.54,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "New Harmony",
+        "aliases": [
+          "Harmony Society"
+        ],
+        "zipf": 4.11,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "Brook Farm",
+        "aliases": [
+          "Brook Farm experiment"
+        ],
+        "zipf": 3.7,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "Shakers",
+        "aliases": [
+          "Shaker"
+        ],
+        "zipf": 3.23,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "Hutterites",
+        "aliases": [
+          "Hutterite"
+        ],
+        "zipf": 1.57,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "Bruderhof",
+        "aliases": [
+          "Bruderhof communities"
+        ],
+        "zipf": 0.0,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "Oneida",
+        "aliases": [
+          "Oneida Community"
+        ],
+        "zipf": 2.79,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "phalanstery",
+        "aliases": [
+          "phalanstere"
+        ],
+        "zipf": 0.0,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "Owenite",
+        "aliases": [
+          "Owenism"
+        ],
+        "zipf": 1.11,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "Fourierism",
+        "aliases": [
+          "Fourierist"
+        ],
+        "zipf": 1.15,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "Zapatistas",
+        "aliases": [
+          "Zapatista"
+        ],
+        "zipf": 2.01,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "communicate",
+        "aliases": [],
+        "zipf": 4.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "communication",
+        "aliases": [],
+        "zipf": 4.68,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "communal",
+        "aliases": [],
+        "zipf": 3.68,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "cooperate",
+        "aliases": [],
+        "zipf": 3.79,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "citizen",
+        "aliases": [],
+        "zipf": 4.39,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "unity",
+        "aliases": [],
+        "zipf": 4.22,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "participation",
+        "aliases": [],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "association",
+        "aliases": [],
+        "zipf": 5.01,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "organization",
+        "aliases": [],
+        "zipf": 4.92,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "committee",
+        "aliases": [],
+        "zipf": 5.01,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "grassroots",
+        "aliases": [],
+        "zipf": 3.49,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "social",
+        "aliases": [],
+        "zipf": 5.42,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "network",
+        "aliases": [],
+        "zipf": 5.02,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mutual",
+        "aliases": [],
+        "zipf": 4.26,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "support",
+        "aliases": [],
+        "zipf": 5.53,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "local",
+        "aliases": [],
+        "zipf": 5.43,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "union",
+        "aliases": [],
+        "zipf": 5.08,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "councilors",
+        "aliases": [],
+        "zipf": 2.54,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "civic",
+        "aliases": [],
+        "zipf": 4.0,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "participatory",
+        "aliases": [],
+        "zipf": 3.11,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "alliance",
+        "aliases": [],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "aid",
+        "aliases": [],
+        "zipf": 4.75,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "self-governance",
+        "aliases": [],
+        "zipf": 4.06,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "reform",
+        "aliases": [],
+        "zipf": 4.53,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "anarchy",
+        "aliases": [],
+        "zipf": 3.52,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "city",
+        "aliases": [],
+        "zipf": 5.61,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mental",
+        "aliases": [],
+        "zipf": 4.83,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "therapy",
+        "aliases": [],
+        "zipf": 4.52,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "counselling",
+        "aliases": [],
+        "zipf": 3.45,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "abused",
+        "aliases": [],
+        "zipf": 4.0,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "acquaintance",
+        "aliases": [],
+        "zipf": 3.55,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "abuser",
+        "aliases": [],
+        "zipf": 3.14,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "challenge",
+        "aliases": [],
+        "zipf": 4.88,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "dealing",
+        "aliases": [],
+        "zipf": 4.6,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "appointment",
+        "aliases": [],
+        "zipf": 4.49,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "admissions",
+        "aliases": [],
+        "zipf": 3.76,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "inpatient",
+        "aliases": [],
+        "zipf": 3.16,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "wards",
+        "aliases": [],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "centres",
+        "aliases": [],
+        "zipf": 4.1,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "evaluation",
+        "aliases": [],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "holistic",
+        "aliases": [],
+        "zipf": 3.33,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "exercise",
+        "aliases": [],
+        "zipf": 4.68,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "advice",
+        "aliases": [],
+        "zipf": 4.88,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "beds",
+        "aliases": [],
+        "zipf": 4.17,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "teams",
+        "aliases": [],
+        "zipf": 4.97,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "overnight",
+        "aliases": [],
+        "zipf": 4.19,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "quiet",
+        "aliases": [],
+        "zipf": 4.65,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "isolated",
+        "aliases": [],
+        "zipf": 4.24,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "empty",
+        "aliases": [],
+        "zipf": 4.59,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "sellafield",
+        "aliases": [],
+        "zipf": 2.04,
+        "tier": "Very rare",
+        "points": 7,
+        "news": true
+      },
+      {
+        "name": "nuclear",
+        "aliases": [],
+        "zipf": 4.73,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "decommissioning",
+        "aliases": [],
+        "zipf": 2.84,
+        "tier": "Rare",
+        "points": 5,
+        "news": true
+      },
+      {
+        "name": "environmental",
+        "aliases": [],
+        "zipf": 4.7,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "restoration",
+        "aliases": [],
+        "zipf": 4.11,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "suicide",
+        "aliases": [],
+        "zipf": 4.62,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "rates",
+        "aliases": [],
+        "zipf": 4.88,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "dying",
+        "aliases": [],
+        "zipf": 4.63,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "rural",
+        "aliases": [],
+        "zipf": 4.59,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "nonprofit",
+        "aliases": [],
+        "zipf": 3.86,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "partnership",
+        "aliases": [],
+        "zipf": 4.48,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "remote",
+        "aliases": [],
+        "zipf": 4.41,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "indigenous",
+        "aliases": [],
+        "zipf": 4.16,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "compensation",
+        "aliases": [],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "losses",
+        "aliases": [],
+        "zipf": 4.45,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "privacy",
+        "aliases": [],
+        "zipf": 4.36,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      }
+    ],
+    "gem": "microenterprise",
+    "gem_from_news": true,
+    "dropped": 11,
+    "added_by_players": 65
+  },
+  "stories": [
+    {
+      "headline": "Hope Haven helps fast",
+      "summary": "A new community mental health hub in Whitehaven is giving people fast, open-access support and early results are promising.",
+      "key_points": [
+        "Hope Haven is one of 6 pilot hubs across England.",
+        "About 3,000 people used it from March to July.",
+        "Nearly half had never used NHS mental health services before.",
+        "Inpatient ward admissions in the area fell 24% from January to September."
+      ],
+      "why_it_matters": "Early, local care can reach people sooner and ease pressure on overstretched mental health services.",
+      "url": "https://www.theguardian.com/society/2026/nov/03/early-feedback-pilot-community-mental-health-hub-cumbria-whitehaven",
+      "date": "2026-11-03",
+      "image": "https://media.guim.co.uk/afec1c7fb7b7ff154a369cb45e020609e10262bf/1209_0_6830_5464/1000.jpg",
+      "source": "The Guardian"
+    },
+    {
+      "headline": "Cash for coexistence",
+      "summary": "Two rural Botswana villages are being paid for living alongside wildlife through a new camera-based compensation scheme.",
+      "key_points": [
+        "The scheme covers Gogomoga and Tsutsubega.",
+        "Each village has fewer than 500 residents.",
+        "Residents use cameras to document elephants, lions and other animals.",
+        "The program is run by Wild Impact and &Beyond."
+      ],
+      "why_it_matters": "Paying communities for coexistence can reduce conflict and support conservation at the same time.",
+      "url": "https://news.mongabay.com/short-article/2026/11/payment-scheme-in-botswana-pays-communities-to-coexist-with-wildlife/",
+      "date": "2026-11-03",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/11/03122155/Pic-1-Harmony-with-Wildlife-story-768x512.png",
+      "source": "Mongabay"
+    },
+    {
+      "headline": "Shared care village",
+      "summary": "An English village has built a social care model based on communal living and shared responsibility.",
+      "key_points": [
+        "The story is set in a village in England.",
+        "The model is built around communal living.",
+        "It relies on shared responsibility for social care."
+      ],
+      "why_it_matters": "Community-led care can help people support one another in ways formal services often cannot.",
+      "url": "https://www.positive.news/society/what-if-we-stopped-treating-social-care-like-a-service/",
+      "date": "2026-11-03",
+      "image": null,
+      "source": "Positive News"
+    },
+    {
+      "headline": "Women grow green work",
+      "summary": "Women-led microenterprises in Nepal are helping families earn income while also easing pressure on forests.",
+      "key_points": [
+        "The story is set in Naya Padampur, Nepal.",
+        "A 2022 study in Parbat district found 96% of women felt confident supporting their families with microenterprise income.",
+        "These businesses provide an alternative to forest products such as timber."
+      ],
+      "why_it_matters": "When women earn stable income locally, families gain security and conservation can benefit too.",
+      "url": "https://news.mongabay.com/2026/10/given-a-chance-women-led-microenterprises-uplift-nepali-communities-conservation/",
+      "date": "2026-10-30",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/10/30164427/Spinning-Wool2_NadiaWhite_19May2026-768x512.jpeg",
+      "source": "Mongabay"
+    }
+  ]
+}
