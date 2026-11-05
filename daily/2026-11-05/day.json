@@ -1,0 +1,1793 @@
+{
+  "date": "2026-11-05",
+  "topic": "Cancer breakthroughs",
+  "answer": "CANCER",
+  "why": "Several hopeful stories this week point to smarter, more targeted ways to treat cancer, from ultrasound attacks to new drugs and even space-grown crystals.",
+  "puzzle": {
+    "type": "hidden",
+    "instruction": "Today's topic is tucked into this sentence. Can you spot how?",
+    "sentence": "This scan certainly spots tiny relapse sooner, giving survivors faster reassurance.",
+    "length": 6,
+    "answer": "CANCER",
+    "highlight": [
+      1,
+      2
+    ],
+    "hints": [
+      {
+        "level": 1,
+        "free": true,
+        "text": "Squish the spaces and a sneaky topic pops out inside the words! Like GEM hiding in \u201chu<b>ge m</b>ess\u201d."
+      },
+      {
+        "level": 2,
+        "free": false,
+        "text": "\ud83e\udd80 The crab\u2019s zodiac sign, or an illness from unruly cells."
+      },
+      {
+        "level": 3,
+        "free": false,
+        "text": "Peek between \u201cscan\u201d and \u201ccertainly\u201d\u2026",
+        "highlight": [
+          1,
+          2
+        ]
+      }
+    ],
+    "solution": {
+      "answer": "CANCER",
+      "steps": [
+        "The trick: the answer was hiding across the words.",
+        "Where: in \u201cscan certainly\u201d.",
+        "How: s \u00b7 CANCER \u00b7 tainly \u2192 CANCER"
+      ]
+    }
+  },
+  "branch": {
+    "prompt": "Words linked to CANCER",
+    "answers": [
+      {
+        "name": "tumor",
+        "aliases": [
+          "tumour",
+          "growth"
+        ],
+        "zipf": 5.03,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "chemotherapy",
+        "aliases": [
+          "chemo"
+        ],
+        "zipf": 3.56,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "radiation",
+        "aliases": [
+          "radiotherapy",
+          "radiation therapy"
+        ],
+        "zipf": 4.27,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "oncologist",
+        "aliases": [
+          "specialist"
+        ],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "oncology",
+        "aliases": [],
+        "zipf": 3.36,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "hospital",
+        "aliases": [
+          "medical center",
+          "medical centre"
+        ],
+        "zipf": 5.07,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "doctor",
+        "aliases": [
+          "physician"
+        ],
+        "zipf": 4.9,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "nurse",
+        "aliases": [],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "patient",
+        "aliases": [],
+        "zipf": 4.77,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "treatment",
+        "aliases": [
+          "therapy"
+        ],
+        "zipf": 5.01,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "cure",
+        "aliases": [],
+        "zipf": 4.32,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "remission",
+        "aliases": [],
+        "zipf": 3.19,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "survivor",
+        "aliases": [
+          "fighter"
+        ],
+        "zipf": 4.32,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "diagnosis",
+        "aliases": [
+          "diagnostic"
+        ],
+        "zipf": 4.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "screening",
+        "aliases": [
+          "testing"
+        ],
+        "zipf": 4.67,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "biopsy",
+        "aliases": [],
+        "zipf": 3.31,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "scan",
+        "aliases": [
+          "imaging"
+        ],
+        "zipf": 4.07,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "lump",
+        "aliases": [
+          "bump"
+        ],
+        "zipf": 3.98,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "breast",
+        "aliases": [],
+        "zipf": 4.35,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "lung",
+        "aliases": [],
+        "zipf": 4.1,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "skin",
+        "aliases": [],
+        "zipf": 4.91,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "blood",
+        "aliases": [],
+        "zipf": 5.1,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "brain",
+        "aliases": [],
+        "zipf": 4.94,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "colon",
+        "aliases": [
+          "large intestine"
+        ],
+        "zipf": 3.6,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "prostate",
+        "aliases": [],
+        "zipf": 3.67,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "pancreas",
+        "aliases": [
+          "pancreatic"
+        ],
+        "zipf": 3.34,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "cervix",
+        "aliases": [
+          "cervical"
+        ],
+        "zipf": 3.45,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "ovary",
+        "aliases": [
+          "ovarian"
+        ],
+        "zipf": 3.46,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "melanoma",
+        "aliases": [],
+        "zipf": 3.18,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "leukemia",
+        "aliases": [
+          "leukaemia"
+        ],
+        "zipf": 3.46,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "lymphoma",
+        "aliases": [],
+        "zipf": 3.27,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "carcinoma",
+        "aliases": [],
+        "zipf": 3.15,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sarcoma",
+        "aliases": [],
+        "zipf": 2.72,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "metastasis",
+        "aliases": [
+          "metastases",
+          "secondary"
+        ],
+        "zipf": 4.53,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "surgery",
+        "aliases": [
+          "operation"
+        ],
+        "zipf": 4.92,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "immunotherapy",
+        "aliases": [],
+        "zipf": 2.76,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "drugs",
+        "aliases": [
+          "medication",
+          "medications"
+        ],
+        "zipf": 4.77,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "medicine",
+        "aliases": [],
+        "zipf": 4.73,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "research",
+        "aliases": [],
+        "zipf": 5.39,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "charity",
+        "aliases": [
+          "charities"
+        ],
+        "zipf": 4.45,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "disease",
+        "aliases": [
+          "illness"
+        ],
+        "zipf": 4.9,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "cells",
+        "aliases": [
+          "cell"
+        ],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "malignant",
+        "aliases": [
+          "malignancy"
+        ],
+        "zipf": 3.33,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "benign",
+        "aliases": [],
+        "zipf": 3.51,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "terminal",
+        "aliases": [
+          "end-stage"
+        ],
+        "zipf": 5.0,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "stage",
+        "aliases": [
+          "stages"
+        ],
+        "zipf": 5.1,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "grade",
+        "aliases": [
+          "grading"
+        ],
+        "zipf": 4.8,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mutation",
+        "aliases": [
+          "mutations"
+        ],
+        "zipf": 3.65,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "genes",
+        "aliases": [
+          "gene"
+        ],
+        "zipf": 4.36,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "DNA",
+        "aliases": [],
+        "zipf": 4.49,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "risk",
+        "aliases": [
+          "risk factor"
+        ],
+        "zipf": 5.05,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "smoking",
+        "aliases": [],
+        "zipf": 4.52,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "tobacco",
+        "aliases": [
+          "cigarettes",
+          "cigarette"
+        ],
+        "zipf": 4.19,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "sunscreen",
+        "aliases": [
+          "sun cream",
+          "sunblock"
+        ],
+        "zipf": 4.46,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "sunburn",
+        "aliases": [
+          "UV damage"
+        ],
+        "zipf": 3.61,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "HPV",
+        "aliases": [
+          "human papillomavirus"
+        ],
+        "zipf": 3.14,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "asbestos",
+        "aliases": [],
+        "zipf": 3.54,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "carcinogen",
+        "aliases": [
+          "carcinogenic"
+        ],
+        "zipf": 2.79,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "prevention",
+        "aliases": [],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "vaccination",
+        "aliases": [
+          "vaccine shot"
+        ],
+        "zipf": 3.97,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "awareness",
+        "aliases": [],
+        "zipf": 4.44,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "ribbon",
+        "aliases": [
+          "pink ribbon"
+        ],
+        "zipf": 3.81,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "fundraising",
+        "aliases": [
+          "fundraiser"
+        ],
+        "zipf": 3.81,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "trial",
+        "aliases": [
+          "clinical trial"
+        ],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "breakthrough",
+        "aliases": [
+          "breakthroughs"
+        ],
+        "zipf": 3.83,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "relapse",
+        "aliases": [],
+        "zipf": 3.32,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "recurrence",
+        "aliases": [
+          "return"
+        ],
+        "zipf": 5.19,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "prognosis",
+        "aliases": [],
+        "zipf": 3.33,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "palliative",
+        "aliases": [
+          "palliative care"
+        ],
+        "zipf": 3.1,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "hospice",
+        "aliases": [],
+        "zipf": 3.39,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "ward",
+        "aliases": [],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "clinic",
+        "aliases": [],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "consultant",
+        "aliases": [],
+        "zipf": 4.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "surgeon",
+        "aliases": [],
+        "zipf": 4.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "radiologist",
+        "aliases": [],
+        "zipf": 2.64,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "pathologist",
+        "aliases": [],
+        "zipf": 3.15,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "pharmacist",
+        "aliases": [
+          "chemist"
+        ],
+        "zipf": 3.51,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "laboratory",
+        "aliases": [
+          "lab"
+        ],
+        "zipf": 4.42,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "microscope",
+        "aliases": [],
+        "zipf": 3.5,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "sample",
+        "aliases": [
+          "specimen"
+        ],
+        "zipf": 4.53,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "bloodwork",
+        "aliases": [
+          "blood test",
+          "blood tests"
+        ],
+        "zipf": 4.84,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mammogram",
+        "aliases": [
+          "mammography"
+        ],
+        "zipf": 2.64,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "colonoscopy",
+        "aliases": [],
+        "zipf": 2.74,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "endoscopy",
+        "aliases": [],
+        "zipf": 2.73,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "Pap smear",
+        "aliases": [
+          "smear test",
+          "Pap test"
+        ],
+        "zipf": 3.45,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "PSA",
+        "aliases": [
+          "PSA test"
+        ],
+        "zipf": 3.48,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "MRI",
+        "aliases": [
+          "MRI scan"
+        ],
+        "zipf": 3.56,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "CT scan",
+        "aliases": [
+          "CAT scan"
+        ],
+        "zipf": 3.99,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "PET scan",
+        "aliases": [],
+        "zipf": 3.92,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "ultrasound",
+        "aliases": [
+          "sonogram"
+        ],
+        "zipf": 3.51,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "X-ray",
+        "aliases": [],
+        "zipf": 4.57,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mastectomy",
+        "aliases": [],
+        "zipf": 2.7,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "lumpectomy",
+        "aliases": [],
+        "zipf": 1.94,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "excision",
+        "aliases": [
+          "removal"
+        ],
+        "zipf": 4.35,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "transplant",
+        "aliases": [],
+        "zipf": 3.76,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "marrow",
+        "aliases": [
+          "bone marrow"
+        ],
+        "zipf": 3.53,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "stem cells",
+        "aliases": [
+          "stem cell"
+        ],
+        "zipf": 4.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "targeted therapy",
+        "aliases": [],
+        "zipf": 4.05,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "gene therapy",
+        "aliases": [],
+        "zipf": 4.13,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "hormone therapy",
+        "aliases": [],
+        "zipf": 3.74,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "precision medicine",
+        "aliases": [
+          "personalized medicine",
+          "personalised medicine"
+        ],
+        "zipf": 3.93,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "monoclonal antibodies",
+        "aliases": [
+          "MAbs"
+        ],
+        "zipf": 2.77,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "checkpoint inhibitors",
+        "aliases": [
+          "checkpoint blockade"
+        ],
+        "zipf": 3.17,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "CAR-T",
+        "aliases": [
+          "CAR T-cell"
+        ],
+        "zipf": 5.14,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "vaccine",
+        "aliases": [
+          "jab"
+        ],
+        "zipf": 4.0,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "nausea",
+        "aliases": [
+          "sickness"
+        ],
+        "zipf": 3.83,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "fatigue",
+        "aliases": [
+          "tiredness"
+        ],
+        "zipf": 3.86,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "hair loss",
+        "aliases": [
+          "alopecia"
+        ],
+        "zipf": 4.77,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "baldness",
+        "aliases": [],
+        "zipf": 2.66,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "wig",
+        "aliases": [],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "pain",
+        "aliases": [],
+        "zipf": 5.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "morphine",
+        "aliases": [],
+        "zipf": 3.37,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "steroids",
+        "aliases": [
+          "steroid"
+        ],
+        "zipf": 3.58,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "antiemetic",
+        "aliases": [
+          "anti-nausea drug"
+        ],
+        "zipf": 3.51,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "port",
+        "aliases": [
+          "chemo port"
+        ],
+        "zipf": 4.73,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "catheter",
+        "aliases": [],
+        "zipf": 3.24,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "infusion",
+        "aliases": [],
+        "zipf": 3.29,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "drip",
+        "aliases": [
+          "IV drip"
+        ],
+        "zipf": 3.58,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "tablet",
+        "aliases": [
+          "pill"
+        ],
+        "zipf": 4.05,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "injection",
+        "aliases": [
+          "shot"
+        ],
+        "zipf": 5.22,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "dosage",
+        "aliases": [
+          "dose"
+        ],
+        "zipf": 4.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "side effects",
+        "aliases": [
+          "adverse effects"
+        ],
+        "zipf": 4.79,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "neutropenia",
+        "aliases": [
+          "low neutrophils"
+        ],
+        "zipf": 2.48,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "anemia",
+        "aliases": [
+          "anaemia"
+        ],
+        "zipf": 3.17,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "immunity",
+        "aliases": [
+          "immune system"
+        ],
+        "zipf": 4.12,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "infection",
+        "aliases": [],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "sepsis",
+        "aliases": [],
+        "zipf": 3.01,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "lymph nodes",
+        "aliases": [
+          "lymph glands"
+        ],
+        "zipf": 3.1,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "glands",
+        "aliases": [],
+        "zipf": 3.39,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "mass",
+        "aliases": [],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "lesion",
+        "aliases": [],
+        "zipf": 3.08,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "cyst",
+        "aliases": [],
+        "zipf": 3.12,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "polyp",
+        "aliases": [],
+        "zipf": 2.39,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "mole",
+        "aliases": [],
+        "zipf": 3.67,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "freckle",
+        "aliases": [],
+        "zipf": 2.36,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "stool test",
+        "aliases": [
+          "poo test",
+          "fecal test"
+        ],
+        "zipf": 3.53,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "urine test",
+        "aliases": [
+          "pee test"
+        ],
+        "zipf": 3.94,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "BRCA",
+        "aliases": [],
+        "zipf": 2.2,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "family history",
+        "aliases": [],
+        "zipf": 5.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "genetics",
+        "aliases": [],
+        "zipf": 3.84,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "inherited",
+        "aliases": [
+          "hereditary"
+        ],
+        "zipf": 3.91,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "pathology",
+        "aliases": [],
+        "zipf": 3.57,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "histology",
+        "aliases": [],
+        "zipf": 2.61,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "cytology",
+        "aliases": [],
+        "zipf": 2.22,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "staging",
+        "aliases": [],
+        "zipf": 3.65,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "invasion",
+        "aliases": [
+          "invasive"
+        ],
+        "zipf": 4.23,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "angiogenesis",
+        "aliases": [],
+        "zipf": 2.5,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "cachexia",
+        "aliases": [
+          "wasting"
+        ],
+        "zipf": 4.11,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "early detection",
+        "aliases": [
+          "early diagnosis"
+        ],
+        "zipf": 4.18,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "self-exam",
+        "aliases": [
+          "self examination",
+          "self check"
+        ],
+        "zipf": 4.98,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "screening program",
+        "aliases": [
+          "screening programme"
+        ],
+        "zipf": 4.12,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "second opinion",
+        "aliases": [],
+        "zipf": 4.86,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "bowel",
+        "aliases": [
+          "intestine"
+        ],
+        "zipf": 3.55,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "liver",
+        "aliases": [],
+        "zipf": 4.18,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "kidney",
+        "aliases": [],
+        "zipf": 4.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "throat",
+        "aliases": [],
+        "zipf": 4.3,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mouth",
+        "aliases": [
+          "oral"
+        ],
+        "zipf": 4.83,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "bladder",
+        "aliases": [],
+        "zipf": 3.62,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "testicle",
+        "aliases": [
+          "testicular"
+        ],
+        "zipf": 2.95,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "uterus",
+        "aliases": [
+          "womb",
+          "uterine"
+        ],
+        "zipf": 3.63,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "stomach",
+        "aliases": [
+          "gastric"
+        ],
+        "zipf": 4.42,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "esophagus",
+        "aliases": [
+          "oesophagus",
+          "esophageal"
+        ],
+        "zipf": 2.91,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "bone",
+        "aliases": [],
+        "zipf": 4.47,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "gallbladder",
+        "aliases": [],
+        "zipf": 2.81,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "thyroid",
+        "aliases": [],
+        "zipf": 3.53,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "head and neck",
+        "aliases": [],
+        "zipf": 4.58,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "glioblastoma",
+        "aliases": [
+          "GBM"
+        ],
+        "zipf": 2.39,
+        "tier": "Rare",
+        "points": 5,
+        "news": true
+      },
+      {
+        "name": "neuroblastoma",
+        "aliases": [],
+        "zipf": 2.37,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "myeloma",
+        "aliases": [
+          "multiple myeloma"
+        ],
+        "zipf": 2.75,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "mesothelioma",
+        "aliases": [],
+        "zipf": 2.74,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "metastatic",
+        "aliases": [],
+        "zipf": 3.0,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "genetic",
+        "aliases": [],
+        "zipf": 4.34,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "survival",
+        "aliases": [],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "clinical",
+        "aliases": [],
+        "zipf": 4.51,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "survivorship",
+        "aliases": [],
+        "zipf": 2.42,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "support",
+        "aliases": [],
+        "zipf": 5.53,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "deadliest",
+        "aliases": [],
+        "zipf": 3.31,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "treat",
+        "aliases": [],
+        "zipf": 4.75,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "forms",
+        "aliases": [],
+        "zipf": 4.73,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "experimental",
+        "aliases": [],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "approach",
+        "aliases": [],
+        "zipf": 4.93,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "nanoparticles",
+        "aliases": [],
+        "zipf": 3.11,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "molecules",
+        "aliases": [],
+        "zipf": 3.92,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "micrornas",
+        "aliases": [],
+        "zipf": 2.24,
+        "tier": "Gem",
+        "points": 10,
+        "news": true
+      },
+      {
+        "name": "multiple",
+        "aliases": [],
+        "zipf": 4.92,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "driving",
+        "aliases": [],
+        "zipf": 4.9,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "fighting",
+        "aliases": [],
+        "zipf": 4.92,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "carbon",
+        "aliases": [],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "monoxide",
+        "aliases": [],
+        "zipf": 3.27,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "selectively",
+        "aliases": [],
+        "zipf": 3.32,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "sparing",
+        "aliases": [],
+        "zipf": 3.01,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "healthy",
+        "aliases": [],
+        "zipf": 4.8,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "safer",
+        "aliases": [],
+        "zipf": 4.09,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "alternatives",
+        "aliases": [],
+        "zipf": 4.04,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "drug",
+        "aliases": [],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "pharmaceutical",
+        "aliases": [],
+        "zipf": 3.9,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "stable",
+        "aliases": [],
+        "zipf": 4.48,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "administered",
+        "aliases": [],
+        "zipf": 3.96,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "intravenous",
+        "aliases": [],
+        "zipf": 3.13,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "reformulated",
+        "aliases": [],
+        "zipf": 2.43,
+        "tier": "Rare",
+        "points": 5,
+        "news": true
+      },
+      {
+        "name": "semiconductors",
+        "aliases": [],
+        "zipf": 2.93,
+        "tier": "Rare",
+        "points": 5,
+        "news": true
+      },
+      {
+        "name": "graphene",
+        "aliases": [],
+        "zipf": 3.02,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "experimenting",
+        "aliases": [],
+        "zipf": 3.53,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "scientific",
+        "aliases": [],
+        "zipf": 4.67,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "promise",
+        "aliases": [],
+        "zipf": 4.71,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      }
+    ],
+    "gem": "micrornas",
+    "gem_from_news": true,
+    "dropped": 10,
+    "added_by_players": 35
+  },
+  "stories": [
+    {
+      "headline": "Ultrasound Fights Brain",
+      "summary": "University of Virginia scientists are testing a new glioblastoma treatment that combines focused ultrasound, nanoparticles, and microRNAs.",
+      "key_points": [
+        "University of Virginia",
+        "glioblastoma",
+        "focused ultrasound",
+        "microRNAs"
+      ],
+      "why_it_matters": "A multi-target approach could open up safer, more effective ways to fight one of the deadliest brain cancers.",
+      "url": "https://www.sciencedaily.com/releases/2026/10/261030003017.htm",
+      "date": "2026-11-01",
+      "image": null,
+      "source": "ScienceDaily"
+    },
+    {
+      "headline": "Tumors Make Their Cure",
+      "summary": "Scientists found a way to use carbon monoxide made by tumor cells to help create drugs inside cancer cells.",
+      "key_points": [
+        "carbon monoxide",
+        "tumor cells",
+        "early laboratory experiments",
+        "healthy cells"
+      ],
+      "why_it_matters": "If the method works in people, it could lead to treatments that attack cancer more selectively and spare healthy tissue.",
+      "url": "https://www.sciencedaily.com/releases/2026/11/261101010552.htm",
+      "date": "2026-11-03",
+      "image": null,
+      "source": "ScienceDaily"
+    },
+    {
+      "headline": "Space Drug Labs Rise",
+      "summary": "Varda Space Industries now has three spacecraft in orbit as it pushes toward manufacturing drug crystals in space.",
+      "key_points": [
+        "California-based Varda Space Industries",
+        "three spacecraft",
+        "1 October",
+        "20 October"
+      ],
+      "why_it_matters": "Space-made crystals could improve medicines and make future drugs easier to use and more effective.",
+      "url": "https://www.theguardian.com/science/2026/nov/04/us-firm-varda-space-industries-manufacturing-drugs-in-space",
+      "date": "2026-11-04",
+      "image": "https://media.guim.co.uk/2a865b49da16365d675cc0d538a0b3ce29ad7b76/53_0_1594_1275/1000.jpg",
+      "source": "The Guardian"
+    },
+    {
+      "headline": "Cancer Vaccine Hope",
+      "summary": "A weekly roundup highlighted a promising skin cancer vaccine among other positive health and environment updates.",
+      "key_points": [
+        "skin cancer vaccine",
+        "Amazon",
+        "UK",
+        "renewed hope"
+      ],
+      "why_it_matters": "Early vaccine progress points to new ways of preventing and treating cancer.",
+      "url": "https://www.positive.news/society/good-news-stories-from-week-44-of-2026/",
+      "date": "2026-10-30",
+      "image": null,
+      "source": "Positive News"
+    }
+  ]
+}

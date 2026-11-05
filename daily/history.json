@@ -21,7 +21,11 @@
     "https://www.theguardian.com/society/2026/nov/03/early-feedback-pilot-community-mental-health-hub-cumbria-whitehaven",
     "https://news.mongabay.com/short-article/2026/11/payment-scheme-in-botswana-pays-communities-to-coexist-with-wildlife/",
     "https://www.positive.news/society/what-if-we-stopped-treating-social-care-like-a-service/",
-    "https://news.mongabay.com/2026/10/given-a-chance-women-led-microenterprises-uplift-nepali-communities-conservation/"
+    "https://news.mongabay.com/2026/10/given-a-chance-women-led-microenterprises-uplift-nepali-communities-conservation/",
+    "https://www.sciencedaily.com/releases/2026/10/261030003017.htm",
+    "https://www.sciencedaily.com/releases/2026/11/261101010552.htm",
+    "https://www.theguardian.com/science/2026/nov/04/us-firm-varda-space-industries-manufacturing-drugs-in-space",
+    "https://www.positive.news/society/good-news-stories-from-week-44-of-2026/"
   ],
   "topics": [
     {
@@ -53,6 +57,11 @@
       "date": "2026-11-04",
       "topic": "Helping communities",
       "answer": "COMMUNE"
+    },
+    {
+      "date": "2026-11-05",
+      "topic": "Cancer breakthroughs",
+      "answer": "CANCER"
     }
   ],
   "reserve": {
