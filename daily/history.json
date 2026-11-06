@@ -28,7 +28,10 @@
     "https://www.positive.news/society/good-news-stories-from-week-44-of-2026/",
     "https://news.mongabay.com/short-article/2026/11/malis-moringa-queen-wins-un-recognition-for-restoring-degraded-land/",
     "https://news.mongabay.com/2026/11/un-recognizes-ongoing-restoration-work-inside-ethiopias-desaa-forest-amid-conflict/",
-    "https://news.mongabay.com/2026/11/amazon-mapping-shows-cacao-expansion-without-deforestation-in-brazil/"
+    "https://news.mongabay.com/2026/11/amazon-mapping-shows-cacao-expansion-without-deforestation-in-brazil/",
+    "https://www.sciencedaily.com/releases/2026/10/261029072142.htm",
+    "https://www.sciencedaily.com/releases/2026/10/261025222538.htm",
+    "https://www.sciencedaily.com/releases/2026/10/261028232659.htm"
   ],
   "topics": [
     {
@@ -70,15 +73,11 @@
       "date": "2026-11-06",
       "topic": "Restoring land",
       "answer": "RECLAIM"
+    },
+    {
+      "date": "2026-11-07",
+      "topic": "Brain clues",
+      "answer": "MIND"
     }
-  ],
-  "reserve": {
-    "made": "2026-11-01",
-    "answer": "MIND",
-    "urls": [
-      "https://www.sciencedaily.com/releases/2026/10/261029072142.htm",
-      "https://www.sciencedaily.com/releases/2026/10/261025222538.htm",
-      "https://www.sciencedaily.com/releases/2026/10/261028232659.htm"
-    ]
-  }
+  ]
 }
