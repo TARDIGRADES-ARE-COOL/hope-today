@@ -1,0 +1,2115 @@
+{
+  "date": "2026-11-06",
+  "topic": "Restoring land",
+  "answer": "RECLAIM",
+  "why": "Each story shows people reviving damaged landscapes into more productive, healthier places.",
+  "puzzle": {
+    "type": "anagram",
+    "instruction": "Today's topic is tucked into this sentence. Can you spot how?",
+    "sentence": "After cleanup, a miracle unfolded as tired fields were won back for wildflowers.",
+    "length": 7,
+    "answer": "RECLAIM",
+    "highlight": [
+      3
+    ],
+    "hints": [
+      {
+        "level": 1,
+        "free": true,
+        "text": "Shuffle the letters hiding in a sentence to uncover the secret word. TONES is just STONE, mixed up."
+      },
+      {
+        "level": 2,
+        "free": false,
+        "text": "\ud83d\udd04 Get back something lost or taken, with a victorious little yoink."
+      },
+      {
+        "level": 3,
+        "free": false,
+        "text": "Try unscrambling \u201cmiracle\u201d\u2026",
+        "highlight": [
+          3
+        ]
+      }
+    ],
+    "solution": {
+      "answer": "RECLAIM",
+      "steps": [
+        "The trick: some letters in the sentence were the answer, mixed up.",
+        "Where: in \u201cmiracle\u201d.",
+        "How: MIRACLE \u2192 rearranged \u2192 RECLAIM"
+      ]
+    }
+  },
+  "branch": {
+    "prompt": "Words linked to RECLAIM",
+    "answers": [
+      {
+        "name": "land",
+        "aliases": [
+          "ground",
+          "earth"
+        ],
+        "zipf": 5.22,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "restore",
+        "aliases": [
+          "restoring"
+        ],
+        "zipf": 4.18,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "recover",
+        "aliases": [
+          "recovery"
+        ],
+        "zipf": 4.58,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "return",
+        "aliases": [
+          "give back"
+        ],
+        "zipf": 5.54,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "repossess",
+        "aliases": [
+          "repossession"
+        ],
+        "zipf": 2.39,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "retake",
+        "aliases": [
+          "take back"
+        ],
+        "zipf": 5.67,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "regain",
+        "aliases": [
+          "win back"
+        ],
+        "zipf": 5.3,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rescue",
+        "aliases": [
+          "rescuing"
+        ],
+        "zipf": 4.48,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "save",
+        "aliases": [
+          "saving"
+        ],
+        "zipf": 5.14,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "renew",
+        "aliases": [
+          "renewal"
+        ],
+        "zipf": 3.84,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "reuse",
+        "aliases": [
+          "reusing"
+        ],
+        "zipf": 3.37,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "recycle",
+        "aliases": [
+          "recycling"
+        ],
+        "zipf": 3.76,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "salvage",
+        "aliases": [
+          "salvaging"
+        ],
+        "zipf": 3.65,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "repair",
+        "aliases": [
+          "mend"
+        ],
+        "zipf": 4.41,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "revive",
+        "aliases": [
+          "revival"
+        ],
+        "zipf": 3.93,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "rehabilitate",
+        "aliases": [
+          "rehab"
+        ],
+        "zipf": 3.79,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "farmland",
+        "aliases": [],
+        "zipf": 3.35,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "soil",
+        "aliases": [
+          "dirt",
+          "topsoil"
+        ],
+        "zipf": 4.42,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "forest",
+        "aliases": [
+          "woods",
+          "woodland"
+        ],
+        "zipf": 4.7,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "water",
+        "aliases": [],
+        "zipf": 5.52,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "waste",
+        "aliases": [
+          "rubbish",
+          "trash"
+        ],
+        "zipf": 4.81,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "desert",
+        "aliases": [
+          "dryland"
+        ],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "erosion",
+        "aliases": [
+          "soil erosion"
+        ],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "drought",
+        "aliases": [
+          "dry spell"
+        ],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "climate",
+        "aliases": [],
+        "zipf": 4.71,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "conservation",
+        "aliases": [
+          "preservation"
+        ],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "nature",
+        "aliases": [
+          "natural world"
+        ],
+        "zipf": 5.04,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "habitat",
+        "aliases": [
+          "ecosystem"
+        ],
+        "zipf": 3.98,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "trees",
+        "aliases": [
+          "tree"
+        ],
+        "zipf": 4.85,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "planting",
+        "aliases": [
+          "plant"
+        ],
+        "zipf": 4.89,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "crops",
+        "aliases": [
+          "crop"
+        ],
+        "zipf": 4.15,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "agriculture",
+        "aliases": [
+          "farming"
+        ],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "community",
+        "aliases": [
+          "local community"
+        ],
+        "zipf": 5.34,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "ownership",
+        "aliases": [
+          "possession"
+        ],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rights",
+        "aliases": [
+          "entitlements"
+        ],
+        "zipf": 5.19,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "property",
+        "aliases": [
+          "real estate"
+        ],
+        "zipf": 5.11,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "mine",
+        "aliases": [
+          "mining site"
+        ],
+        "zipf": 5.04,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "landfill",
+        "aliases": [
+          "dump"
+        ],
+        "zipf": 4.08,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "wetland",
+        "aliases": [
+          "wetlands"
+        ],
+        "zipf": 3.39,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "restoration",
+        "aliases": [
+          "restoring"
+        ],
+        "zipf": 4.11,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "recovery",
+        "aliases": [
+          "getting back"
+        ],
+        "zipf": 5.44,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "renewal",
+        "aliases": [
+          "regeneration"
+        ],
+        "zipf": 3.84,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rehabilitation",
+        "aliases": [
+          "rehab"
+        ],
+        "zipf": 3.99,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "stewardship",
+        "aliases": [
+          "land stewardship"
+        ],
+        "zipf": 3.22,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "regeneration",
+        "aliases": [
+          "regrowth"
+        ],
+        "zipf": 3.61,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "reforestation",
+        "aliases": [
+          "tree planting"
+        ],
+        "zipf": 3.77,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "afforestation",
+        "aliases": [
+          "new forest"
+        ],
+        "zipf": 4.69,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "revegetation",
+        "aliases": [
+          "plant regrowth"
+        ],
+        "zipf": 2.64,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "agroforestry",
+        "aliases": [
+          "forest farming"
+        ],
+        "zipf": 4.09,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "permaculture",
+        "aliases": [
+          "permanent agriculture"
+        ],
+        "zipf": 4.16,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "compost",
+        "aliases": [
+          "composting"
+        ],
+        "zipf": 3.21,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "mulch",
+        "aliases": [
+          "mulching"
+        ],
+        "zipf": 2.9,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "manure",
+        "aliases": [
+          "fertilizer"
+        ],
+        "zipf": 3.42,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "topsoil",
+        "aliases": [
+          "surface soil"
+        ],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "fertility",
+        "aliases": [
+          "soil fertility"
+        ],
+        "zipf": 3.78,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "nutrients",
+        "aliases": [
+          "plant nutrients"
+        ],
+        "zipf": 3.71,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "humus",
+        "aliases": [
+          "organic humus"
+        ],
+        "zipf": 2.38,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "microbes",
+        "aliases": [
+          "microorganisms"
+        ],
+        "zipf": 3.18,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "seedling",
+        "aliases": [
+          "seedlings"
+        ],
+        "zipf": 3.12,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "sapling",
+        "aliases": [
+          "saplings"
+        ],
+        "zipf": 2.54,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "nursery",
+        "aliases": [
+          "plant nursery"
+        ],
+        "zipf": 3.89,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "native plants",
+        "aliases": [
+          "indigenous plants"
+        ],
+        "zipf": 4.4,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "cover crops",
+        "aliases": [
+          "cover crop"
+        ],
+        "zipf": 4.1,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "crop rotation",
+        "aliases": [
+          "rotating crops"
+        ],
+        "zipf": 3.81,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "intercropping",
+        "aliases": [
+          "mixed cropping"
+        ],
+        "zipf": 3.04,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "contour plowing",
+        "aliases": [
+          "contour ploughing"
+        ],
+        "zipf": 2.76,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "terracing",
+        "aliases": [
+          "terraces"
+        ],
+        "zipf": 3.29,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "windbreaks",
+        "aliases": [
+          "windbreak"
+        ],
+        "zipf": 1.86,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "shelterbelts",
+        "aliases": [
+          "shelter belt"
+        ],
+        "zipf": 4.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "hedgerows",
+        "aliases": [
+          "hedges"
+        ],
+        "zipf": 3.27,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "buffer strips",
+        "aliases": [
+          "field margins"
+        ],
+        "zipf": 3.82,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "riparian buffer",
+        "aliases": [
+          "river buffer"
+        ],
+        "zipf": 3.76,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "grassland",
+        "aliases": [
+          "grasslands"
+        ],
+        "zipf": 3.04,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "savanna",
+        "aliases": [
+          "savannah"
+        ],
+        "zipf": 3.62,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "pasture",
+        "aliases": [
+          "pastureland"
+        ],
+        "zipf": 3.36,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "rangeland",
+        "aliases": [],
+        "zipf": 2.12,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "woodland",
+        "aliases": [
+          "woods"
+        ],
+        "zipf": 4.45,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rainforest",
+        "aliases": [],
+        "zipf": 3.39,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "mangrove",
+        "aliases": [
+          "mangroves"
+        ],
+        "zipf": 2.89,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "peatland",
+        "aliases": [
+          "peatlands"
+        ],
+        "zipf": 2.07,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "marsh",
+        "aliases": [
+          "marshland"
+        ],
+        "zipf": 3.87,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "swamp",
+        "aliases": [
+          "swampland"
+        ],
+        "zipf": 3.84,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "bog",
+        "aliases": [
+          "peat bog"
+        ],
+        "zipf": 3.34,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "floodplain",
+        "aliases": [],
+        "zipf": 2.73,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "watershed",
+        "aliases": [
+          "drainage basin"
+        ],
+        "zipf": 3.6,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "catchment",
+        "aliases": [
+          "catchment area"
+        ],
+        "zipf": 3.02,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "river",
+        "aliases": [],
+        "zipf": 5.03,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "stream",
+        "aliases": [
+          "creek"
+        ],
+        "zipf": 4.62,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "lake",
+        "aliases": [],
+        "zipf": 4.83,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "coast",
+        "aliases": [
+          "coastline"
+        ],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "shoreline",
+        "aliases": [
+          "shore"
+        ],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "beach",
+        "aliases": [],
+        "zipf": 4.92,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "dunes",
+        "aliases": [
+          "sand dunes"
+        ],
+        "zipf": 3.37,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "levees",
+        "aliases": [
+          "levee"
+        ],
+        "zipf": 2.79,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "embankment",
+        "aliases": [
+          "bank"
+        ],
+        "zipf": 5.16,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "drainage",
+        "aliases": [
+          "land drainage"
+        ],
+        "zipf": 3.77,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "irrigation",
+        "aliases": [
+          "watering"
+        ],
+        "zipf": 3.69,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "rainwater harvesting",
+        "aliases": [
+          "rain harvesting"
+        ],
+        "zipf": 3.5,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "water reuse",
+        "aliases": [
+          "water recycling"
+        ],
+        "zipf": 3.75,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "greywater",
+        "aliases": [
+          "graywater"
+        ],
+        "zipf": 1.71,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "wastewater",
+        "aliases": [
+          "sewage water"
+        ],
+        "zipf": 3.55,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "stormwater",
+        "aliases": [],
+        "zipf": 2.72,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "groundwater",
+        "aliases": [],
+        "zipf": 3.44,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "aquifer",
+        "aliases": [
+          "water table"
+        ],
+        "zipf": 4.92,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "filtration",
+        "aliases": [
+          "filtering"
+        ],
+        "zipf": 3.56,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "purification",
+        "aliases": [
+          "water purification"
+        ],
+        "zipf": 3.29,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "remediation",
+        "aliases": [
+          "environmental cleanup"
+        ],
+        "zipf": 3.44,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "cleanup",
+        "aliases": [],
+        "zipf": 3.46,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "decontamination",
+        "aliases": [
+          "detoxification"
+        ],
+        "zipf": 2.78,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "bioremediation",
+        "aliases": [],
+        "zipf": 2.1,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "phytoremediation",
+        "aliases": [
+          "plant remediation"
+        ],
+        "zipf": 3.03,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "erosion control",
+        "aliases": [
+          "erosion prevention"
+        ],
+        "zipf": 3.63,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "soil health",
+        "aliases": [
+          "healthy soil"
+        ],
+        "zipf": 4.38,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "soil restoration",
+        "aliases": [
+          "soil repair"
+        ],
+        "zipf": 4.11,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "soil conservation",
+        "aliases": [
+          "soil protection"
+        ],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "land degradation",
+        "aliases": [
+          "degraded soil"
+        ],
+        "zipf": 3.59,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "degraded land",
+        "aliases": [
+          "damaged land"
+        ],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "desertification",
+        "aliases": [
+          "land desertification"
+        ],
+        "zipf": 2.45,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "drought resilience",
+        "aliases": [
+          "drought resistance"
+        ],
+        "zipf": 3.81,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "climate resilience",
+        "aliases": [
+          "climate adaptation"
+        ],
+        "zipf": 3.93,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "carbon storage",
+        "aliases": [
+          "carbon storing"
+        ],
+        "zipf": 4.26,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "carbon sink",
+        "aliases": [
+          "carbon sinks"
+        ],
+        "zipf": 4.05,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "carbon sequestration",
+        "aliases": [
+          "carbon capture"
+        ],
+        "zipf": 4.18,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "ecosystem services",
+        "aliases": [
+          "natural services"
+        ],
+        "zipf": 4.9,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "wildlife corridor",
+        "aliases": [
+          "habitat corridor"
+        ],
+        "zipf": 3.75,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "habitat restoration",
+        "aliases": [
+          "habitat repair"
+        ],
+        "zipf": 3.84,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "species recovery",
+        "aliases": [
+          "wildlife recovery"
+        ],
+        "zipf": 4.39,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rewilding",
+        "aliases": [
+          "wilding"
+        ],
+        "zipf": 2.55,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "conservation area",
+        "aliases": [
+          "conserved area"
+        ],
+        "zipf": 4.3,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "protected area",
+        "aliases": [
+          "protected land"
+        ],
+        "zipf": 4.46,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "national park",
+        "aliases": [
+          "nature park"
+        ],
+        "zipf": 5.0,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "commons",
+        "aliases": [
+          "common land"
+        ],
+        "zipf": 4.91,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "land tenure",
+        "aliases": [
+          "tenure"
+        ],
+        "zipf": 3.93,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "land rights",
+        "aliases": [
+          "property rights"
+        ],
+        "zipf": 4.9,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "squatter",
+        "aliases": [
+          "squatters"
+        ],
+        "zipf": 2.86,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "repossession",
+        "aliases": [
+          "repo"
+        ],
+        "zipf": 3.1,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "foreclosure",
+        "aliases": [
+          "seizure"
+        ],
+        "zipf": 3.74,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "eminent domain",
+        "aliases": [
+          "compulsory purchase"
+        ],
+        "zipf": 3.66,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "homestead",
+        "aliases": [
+          "homesteading"
+        ],
+        "zipf": 3.49,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "indigenous lands",
+        "aliases": [
+          "native lands"
+        ],
+        "zipf": 4.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "ancestral land",
+        "aliases": [
+          "ancestral lands"
+        ],
+        "zipf": 3.42,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "mining",
+        "aliases": [
+          "mines"
+        ],
+        "zipf": 4.56,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "quarry",
+        "aliases": [
+          "quarries"
+        ],
+        "zipf": 3.6,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "tailings",
+        "aliases": [
+          "mine tailings"
+        ],
+        "zipf": 2.69,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "spoil heap",
+        "aliases": [
+          "slag heap"
+        ],
+        "zipf": 3.39,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "mine closure",
+        "aliases": [
+          "pit closure"
+        ],
+        "zipf": 4.06,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "brownfield",
+        "aliases": [
+          "brownfield site"
+        ],
+        "zipf": 2.53,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "contaminated site",
+        "aliases": [
+          "polluted site"
+        ],
+        "zipf": 3.69,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "urban renewal",
+        "aliases": [
+          "urban regeneration"
+        ],
+        "zipf": 3.78,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "adaptive reuse",
+        "aliases": [
+          "building reuse"
+        ],
+        "zipf": 3.37,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "demolition",
+        "aliases": [
+          "teardown"
+        ],
+        "zipf": 3.62,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "rubble",
+        "aliases": [
+          "debris"
+        ],
+        "zipf": 3.92,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "scrapyard",
+        "aliases": [
+          "junkyard"
+        ],
+        "zipf": 2.75,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "salvage yard",
+        "aliases": [
+          "scrap yard"
+        ],
+        "zipf": 3.82,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "upcycling",
+        "aliases": [
+          "creative reuse"
+        ],
+        "zipf": 3.34,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "circular economy",
+        "aliases": [
+          "closed loop"
+        ],
+        "zipf": 4.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "resource recovery",
+        "aliases": [
+          "material recovery"
+        ],
+        "zipf": 4.43,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "materials recovery",
+        "aliases": [
+          "recycling facility"
+        ],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "Amazon",
+        "aliases": [
+          "Amazon rainforest"
+        ],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "Brazil",
+        "aliases": [
+          "Brasil"
+        ],
+        "zipf": 4.58,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "cacao",
+        "aliases": [
+          "cocoa"
+        ],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "cocoa",
+        "aliases": [
+          "cacao beans"
+        ],
+        "zipf": 3.64,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "deforestation",
+        "aliases": [
+          "forest loss"
+        ],
+        "zipf": 4.55,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "land restoration",
+        "aliases": [
+          "land repair"
+        ],
+        "zipf": 4.35,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "rebuild",
+        "aliases": [],
+        "zipf": 3.9,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "reclamation",
+        "aliases": [],
+        "zipf": 3.14,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "retrieve",
+        "aliases": [],
+        "zipf": 3.69,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "redeem",
+        "aliases": [],
+        "zipf": 3.53,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "recapture",
+        "aliases": [],
+        "zipf": 3.2,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "renovate",
+        "aliases": [],
+        "zipf": 3.05,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "remediate",
+        "aliases": [],
+        "zipf": 2.11,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "pollution",
+        "aliases": [],
+        "zipf": 4.2,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "development",
+        "aliases": [],
+        "zipf": 5.31,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "resources",
+        "aliases": [],
+        "zipf": 4.91,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "territory",
+        "aliases": [],
+        "zipf": 4.6,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "environment",
+        "aliases": [],
+        "zipf": 4.87,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "recoup",
+        "aliases": [],
+        "zipf": 2.98,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "revest",
+        "aliases": [],
+        "zipf": 0.0,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "revitalize",
+        "aliases": [],
+        "zipf": 2.87,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "reconstruct",
+        "aliases": [],
+        "zipf": 3.22,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "redevelop",
+        "aliases": [],
+        "zipf": 2.57,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "regenerate",
+        "aliases": [],
+        "zipf": 3.15,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "redemption",
+        "aliases": [],
+        "zipf": 3.82,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "restitution",
+        "aliases": [],
+        "zipf": 3.19,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "justice",
+        "aliases": [],
+        "zipf": 4.97,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "reacquire",
+        "aliases": [],
+        "zipf": 1.97,
+        "tier": "Very rare",
+        "points": 5
+      },
+      {
+        "name": "reform",
+        "aliases": [],
+        "zipf": 4.53,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "repairable",
+        "aliases": [],
+        "zipf": 2.26,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "conserve",
+        "aliases": [],
+        "zipf": 3.37,
+        "tier": "Uncommon",
+        "points": 2
+      },
+      {
+        "name": "preserve",
+        "aliases": [],
+        "zipf": 4.19,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "sustain",
+        "aliases": [],
+        "zipf": 3.93,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "sovereignty",
+        "aliases": [],
+        "zipf": 3.86,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "custody",
+        "aliases": [],
+        "zipf": 4.22,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "compensation",
+        "aliases": [],
+        "zipf": 4.33,
+        "tier": "Common",
+        "points": 1
+      },
+      {
+        "name": "revitalization",
+        "aliases": [],
+        "zipf": 2.89,
+        "tier": "Rare",
+        "points": 3
+      },
+      {
+        "name": "degraded",
+        "aliases": [],
+        "zipf": 3.31,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "sustainable",
+        "aliases": [],
+        "zipf": 4.19,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "moringa",
+        "aliases": [],
+        "zipf": 2.0,
+        "tier": "Gem",
+        "points": 10,
+        "news": true
+      },
+      {
+        "name": "leaves",
+        "aliases": [],
+        "zipf": 4.79,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "flowers",
+        "aliases": [],
+        "zipf": 4.64,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "seeds",
+        "aliases": [],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "herbal",
+        "aliases": [],
+        "zipf": 3.36,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "powder",
+        "aliases": [],
+        "zipf": 4.25,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "honey",
+        "aliases": [],
+        "zipf": 4.37,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "soap",
+        "aliases": [],
+        "zipf": 4.18,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "spices",
+        "aliases": [],
+        "zipf": 3.55,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "dietary",
+        "aliases": [],
+        "zipf": 3.7,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "supplements",
+        "aliases": [],
+        "zipf": 3.77,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "native",
+        "aliases": [],
+        "zipf": 4.69,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "grown",
+        "aliases": [],
+        "zipf": 4.67,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "africa",
+        "aliases": [],
+        "zipf": 4.92,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "deciduous",
+        "aliases": [],
+        "zipf": 3.01,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "edible",
+        "aliases": [],
+        "zipf": 3.63,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "nutritious",
+        "aliases": [],
+        "zipf": 3.18,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "vitamins",
+        "aliases": [],
+        "zipf": 3.59,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "minerals",
+        "aliases": [],
+        "zipf": 3.93,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "proteins",
+        "aliases": [],
+        "zipf": 4.1,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "extract",
+        "aliases": [],
+        "zipf": 4.02,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "residue",
+        "aliases": [],
+        "zipf": 3.53,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "biodiversity",
+        "aliases": [],
+        "zipf": 3.47,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "endangered",
+        "aliases": [],
+        "zipf": 3.86,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "storage",
+        "aliases": [],
+        "zipf": 4.57,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "disappeared",
+        "aliases": [],
+        "zipf": 4.26,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "remaining",
+        "aliases": [],
+        "zipf": 4.63,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "degradation",
+        "aliases": [],
+        "zipf": 3.6,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "agricultural",
+        "aliases": [],
+        "zipf": 4.34,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "deforested",
+        "aliases": [],
+        "zipf": 2.03,
+        "tier": "Very rare",
+        "points": 7,
+        "news": true
+      },
+      {
+        "name": "shade",
+        "aliases": [],
+        "zipf": 4.16,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "monoculture",
+        "aliases": [],
+        "zipf": 2.3,
+        "tier": "Rare",
+        "points": 5,
+        "news": true
+      },
+      {
+        "name": "yields",
+        "aliases": [],
+        "zipf": 3.89,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "vulnerable",
+        "aliases": [],
+        "zipf": 4.21,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "pests",
+        "aliases": [],
+        "zipf": 3.41,
+        "tier": "Uncommon",
+        "points": 4,
+        "news": true
+      },
+      {
+        "name": "disease",
+        "aliases": [],
+        "zipf": 4.9,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "dependent",
+        "aliases": [],
+        "zipf": 4.28,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      },
+      {
+        "name": "maps",
+        "aliases": [],
+        "zipf": 4.42,
+        "tier": "Common",
+        "points": 3,
+        "news": true
+      }
+    ],
+    "gem": "moringa",
+    "gem_from_news": true,
+    "dropped": 15,
+    "added_by_players": 71
+  },
+  "stories": [
+    {
+      "headline": "Mali Land Rebound",
+      "summary": "Rokiatu Traor\u00e9 won UN recognition for a Mali agroforestry effort that restores degraded land and creates jobs.",
+      "key_points": [
+        "Rokiatu Traor\u00e9 was named a Changemaker at the UN Sustainable Development Goals Action Awards.",
+        "Herou Alliance works in Mali to restore degraded land and create jobs for women and youths.",
+        "Since 2021, the group has built value chains around the moringa tree.",
+        "The alliance makes tea, powder, honey, soap, spices, and dietary supplements."
+      ],
+      "why_it_matters": "It shows degraded rural land can be turned into livelihoods and new local value.",
+      "url": "https://news.mongabay.com/short-article/2026/11/malis-moringa-queen-wins-un-recognition-for-restoring-degraded-land/",
+      "date": "2026-11-05",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/11/05180051/10561856364_1b0aab79ee_k-768x512.jpg",
+      "source": "Mongabay"
+    },
+    {
+      "headline": "Desa\u2019a Forest Backed",
+      "summary": "The UN recognized Ethiopia\u2019s Desa\u2019a restoration project as a World Restoration Flagship despite ongoing conflict.",
+      "key_points": [
+        "UNEP and FAO recognized the project on Oct. 29, 2026.",
+        "The project is in Ethiopia\u2019s Tigray region in the Great Rift Valley.",
+        "At the start in 2016, an estimated 74% of Desa\u2019a Forest had already disappeared.",
+        "About 70% of the remaining forest is considered degraded."
+      ],
+      "why_it_matters": "It brings global support to a forest recovery effort that can protect wildlife, carbon storage, and local resilience.",
+      "url": "https://news.mongabay.com/2026/11/un-recognizes-ongoing-restoration-work-inside-ethiopias-desaa-forest-amid-conflict/",
+      "date": "2026-11-03",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/11/03094624/1_20260509_UNEP-Decade-on-Ecosystem-Restoration_Ethiopias-Great-Rift-Valley_Sosina-Mengistu_13-768x512.jpg",
+      "source": "Mongabay"
+    },
+    {
+      "headline": "Amazon Cacao Grows",
+      "summary": "A new study found cacao expanding in Brazil\u2019s Amazon on long-cleared land instead of recent deforestation.",
+      "key_points": [
+        "Embrapa found cacao in Par\u00e1 grew to 116,436 hectares between 2022 and 2024.",
+        "96% of mapped cacao in Par\u00e1 was on areas deforested before 2020.",
+        "98% of mapped cacao in Rond\u00f4nia was on areas deforested before 2020.",
+        "Nearly all the cacao was on old pastures and other previously cleared land."
+      ],
+      "why_it_matters": "It suggests a profitable crop can expand without driving new forest loss.",
+      "url": "https://news.mongabay.com/2026/11/amazon-mapping-shows-cacao-expansion-without-deforestation-in-brazil/",
+      "date": "2026-11-05",
+      "image": "https://imgs.mongabay.com/wp-content/uploads/sites/20/2026/11/05082501/1_Cacao_expansion_Para_degraded_land_Embrapa-768x512.jpg",
+      "source": "Mongabay"
+    }
+  ]
+}

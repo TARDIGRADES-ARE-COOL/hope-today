@@ -25,7 +25,10 @@
     "https://www.sciencedaily.com/releases/2026/10/261030003017.htm",
     "https://www.sciencedaily.com/releases/2026/11/261101010552.htm",
     "https://www.theguardian.com/science/2026/nov/04/us-firm-varda-space-industries-manufacturing-drugs-in-space",
-    "https://www.positive.news/society/good-news-stories-from-week-44-of-2026/"
+    "https://www.positive.news/society/good-news-stories-from-week-44-of-2026/",
+    "https://news.mongabay.com/short-article/2026/11/malis-moringa-queen-wins-un-recognition-for-restoring-degraded-land/",
+    "https://news.mongabay.com/2026/11/un-recognizes-ongoing-restoration-work-inside-ethiopias-desaa-forest-amid-conflict/",
+    "https://news.mongabay.com/2026/11/amazon-mapping-shows-cacao-expansion-without-deforestation-in-brazil/"
   ],
   "topics": [
     {
@@ -62,6 +65,11 @@
       "date": "2026-11-05",
       "topic": "Cancer breakthroughs",
       "answer": "CANCER"
+    },
+    {
+      "date": "2026-11-06",
+      "topic": "Restoring land",
+      "answer": "RECLAIM"
     }
   ],
   "reserve": {
